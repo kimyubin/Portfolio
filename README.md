@@ -61,7 +61,7 @@
 * ```savethechickentower```는 실제 발매된 게임의 이름과 폴더명이 상이합니다.
 
 ### 1. yubintest
-<img src="./Images/yubintest01.PNG" width="60%"></img>
+<img src="./Images/yubintest01.PNG" width="65%"></img>
 
 |프로젝트 명|yubintest|
 |:---|:---|
