@@ -1,0 +1,88 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class WallJump : MonoBehaviour
+{
+    Rigidbody2D rigid;
+    public float fallsVelocity;
+    bool holdButton;
+    Vector3 currentPosition;
+    Vector3 currentPositionButton;
+    Vector3 currentPositionInColl;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        holdButton = false;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        rigid = gameObject.transform.parent.GetComponent<Player>().rigid;
+
+        if(Input.GetButtonDown("Hold"))
+        {
+            holdButton=true;
+            currentPositionButton = rigid.transform.position;
+        }
+        else if (Input.GetButtonUp("Hold"))
+        {
+            holdButton = false;
+            currentPosition = rigid.transform.position;
+            currentPositionInColl= rigid.transform.position;
+        }
+    }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        //들어갈때 위치 초기화. 
+        //없으면 홀드 버튼 누르고 나서 들어갈 때 위치로 초기화 되서 순간이동 됨.
+        currentPositionInColl = gameObject.transform.parent.GetComponent<Player>().transform.position;
+        //홀드 버튼 누를 때 다시 한번 초기화. 
+        if(holdButton)
+            currentPositionInColl = rigid.transform.position;
+    }  
+    void OnTriggerExit2D(Collider2D other)
+    {
+        //벽에서 떨어지면 홀드 해제
+        holdButton = false;
+        currentPosition = rigid.transform.position;
+        currentPositionInColl= rigid.transform.position;
+    }
+
+
+    void OnTriggerStay2D(Collider2D other)
+	{
+
+
+		if(rigid.velocity.y < 0  && !other.isTrigger && !(other.gameObject.tag == "Creature"))
+        {
+            //점프하고 나서 추락이라고 인식 방지. 점프 후 추락상태로 애니메이션 정지됨.
+            gameObject.transform.parent.GetComponent<Player>().animator.SetBool("animJumpState",false);
+
+            if(Input.GetButtonDown("Hold"))
+            {
+                Debug.Log(currentPosition);
+		    	rigid.transform.position = currentPositionInColl;
+                rigid.velocity = new Vector2(rigid.velocity.x,0);//중력 가속도 누적 방지
+
+            }
+            else
+            {                
+                if(rigid.velocity.y < -fallsVelocity)
+                	rigid.velocity = new Vector2(rigid.velocity.x,-fallsVelocity);
+            }
+        }
+        
+        
+        if(!(rigid.transform.position == currentPosition))
+            currentPositionInColl = rigid.transform.position;
+        
+
+	
+    }
+  
+
+
+}

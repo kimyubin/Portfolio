@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option java_package = "com.enoch.proto.test";
+option java_outer_classname = "PTestProto";
+
+message PEcho{
+    string echo = 1;
+};

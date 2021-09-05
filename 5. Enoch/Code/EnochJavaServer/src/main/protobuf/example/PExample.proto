@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_package = "com.enoch.proto.example";
+option java_outer_classname = "PExampleProto";
+
+message PExample{
+    string a = 1;
+    optional string b = 2;
+    repeated string c = 3;
+    int32 d = 4;
+    int64 f = 5;
+    float  g = 6;
+    double  h = 7;
+};

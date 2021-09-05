@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option java_package = "com.enoch.proto";
+option java_outer_classname = "PMessageProto";
+
+message PPacket{
+    //header
+    int32 type = 1; // 패킷타입
+    optional string session_key = 2;//인증된 세션의 세션키
+
+    //body
+    optional bytes body = 3; //해당부분에 들어갈 프로토를 bytes로 변환해서 넣어줌
+}
