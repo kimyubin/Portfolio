@@ -109,9 +109,9 @@
         * 스킬 습득 시스템
 
 ### 3. savethechickentower
-<img src="./Images/BeyondtheSky01.PNG" width="25%"></img>
-<img src="./Images/BeyondtheSky02.PNG" width="25%"></img>
-<img src="./Images/BeyondtheSky03.PNG" width="25%"></img><br/>
+<img src="./Images/BeyondtheSky01.png" width="25%"></img>
+<img src="./Images/BeyondtheSky02.png" width="25%"></img>
+<img src="./Images/BeyondtheSky03.png" width="25%"></img><br/>
 
 |프로젝트 명|BeyondtheSky(하늘 너머로)|
 |:---|:---|
@@ -133,8 +133,8 @@
     * 세팅 메뉴 및 기타 UI 구현
 
 ### 4. FlatformLand
-<img src="./Images/FlatformLand01.PNG" width="65%"></img>
-<img src="./Images/FlatformLand02.PNG" width="65%"></img>
+<img src="./Images/FlatformLand01.png" width="65%"></img>
+<img src="./Images/FlatformLand02.png" width="65%"></img>
 
 
 |프로젝트 명|FlatformLand|
@@ -154,15 +154,15 @@
     * 사망 판정 및 부활
 
 ### 5. Enoch
-<img src="./Images/Enoch01.PNG" width="65%"></img>
-<img src="./Images/Enoch02.PNG" width="65%"></img>
+<img src="./Images/Enoch01.png" width="65%"></img>
+<img src="./Images/Enoch02.png" width="65%"></img>
 
 |프로젝트 명|Enoch|
 |:---|:---|
 |유형|언리얼 팀 프로젝트|
 |개발 인원|기획 1명, 클라이언트 프로그래머 2명, 서버 프로그래머 2명|
 |개발 목적|취미|
-|담당 영역 | UI, Drag&Drop 용병 구매/판매/배치, 데이터 저장/불러오기|
+|담당 영역 | UI, Drag&Drop 용병 구매/판매/배치/합성, 데이터 저장/불러오기|
 |엔진 버전|Unreal Engine 4.26.1|
 
 * 설명 
