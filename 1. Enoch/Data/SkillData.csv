@@ -1,0 +1,34 @@
+﻿ID,이름,형태,사용방법,대상,정화,액션,수치
+20000,방어력 동맹,Passive,Passive,Ally_All,None,DEF,5
+,,,,,,DEF,10
+,,,,,,DEF,20
+20001,공격력 동맹,Passive,Passive,Ally_All,None,ATKDMG,20
+,,,,,,ATKDMG,50
+,,,,,,ATKDMG,100
+20002,체력 동맹,Passive,Passive,Ally_All,None,HP,200
+,,,,,,HP,500
+,,,,,,HP,1000
+20003,체젠 동맹,Passive,Passive,Ally_All,None,HPGEN,1
+,,,,,,HPGEN,3
+,,,,,,HPGEN,10
+20004,공속 동맹,Passive,Passive,Ally_All,None,ATKSPD,20
+,,,,,,ATKSPD,50
+,,,,,,ATKSPD,100
+20005,마젠 동맹,Passive,Passive,Ally_All,None,MPGET,1
+,,,,,,MPGET,3
+,,,,,,MPGET,5
+20006,방깎 동맹,Passive,Passive,Enemy_All,None,DEF,-5
+,,,,,,DEF,-10
+,,,,,,DEF,-20
+20007,공깎 동맹,Passive,Passive,Enemy_All,None,ATKDMG,-20
+,,,,,,ATKDMG,-50
+,,,,,,ATKDMG,-100
+20008,체젠깎 동맹,Passive,Passive,Enemy_All,None,HPGEN,-1
+,,,,,,HPGEN,-3
+,,,,,,HPGEN,-10
+20009,공속깎 동맹,Passive,Passive,Enemy_All,None,ATKSPD,-20
+,,,,,,ATKSPD,-50
+,,,,,,ATKSPD,-100
+20010,마젠깎 동맹,Passive,Passive,Enemy_All,None,MPGET,-1
+,,,,,,MPGET,-2
+,,,,,,MPGET,-3
