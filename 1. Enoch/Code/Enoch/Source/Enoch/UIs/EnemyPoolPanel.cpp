@@ -22,6 +22,13 @@ void UEnemyPoolPanel::SetEnemyPoolData(const int& InMyPanelNum)
 	TArray<UWidget*> FLImageUniformChildren = FLImageUniformPanel->GetAllChildren();
 	TArray<UWidget*> FLNumUniformChildren = FLNumUniformPanel->GetAllChildren();
 	TArray<UWidget*> GradeCountChildren = GradeTotalFLNumVerticalBox->GetAllChildren();
+
+	//이미지, 문자 초기화
+	for (auto& ImageWidPtr : FLImageUniformChildren)
+		ImageWidPtr->SetRenderOpacity(0);
+	for (auto& NumWidPtr : FLNumUniformChildren)		
+		Cast<UTextBlock>(NumWidPtr)->SetText(FText::FromString(""));
+	
 	GradeTotalCount = vector<int>(5, 0);
 	for (int i = 0; i < MyEnemyPoolCountList.size(); ++i)
 	{
@@ -63,7 +70,9 @@ void UEnemyPoolPanel::SetEnemyPoolData(const int& InMyPanelNum)
 			auto modelID = FreeLancerTemplate::GetFreeLancerModelID(MyFLByGrade[grd][i].first);			
 			auto Mat = RecruitSlotDataArr[modelID].Material;
 			Cast<UImage>(FLImageUniformChildren[panelSlotNum])->SetBrushFromMaterial(Mat);
+			Cast<UImage>(FLImageUniformChildren[panelSlotNum])->SetRenderOpacity(1);
 			Cast<UTextBlock>(FLNumUniformChildren[panelSlotNum])->SetText(FText::AsNumber(MyFLByGrade[grd][i].second));
+			
 		}
 	}
 	//유니폼 패널 자식 개수 초과시 리턴

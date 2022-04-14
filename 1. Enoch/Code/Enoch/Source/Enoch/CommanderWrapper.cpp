@@ -83,8 +83,15 @@ bool UCommanderWrapper::ReqNewRecruitList()
 	}
 	return true;
 }
-bool UCommanderWrapper::ReqNewEnemyPool()
+bool UCommanderWrapper::ReqNewEnemyPool(bool IsReroll)
 {
+	if(IsReroll)
+	{
+		if(commander.gold < 5)
+			return false;
+		commander.gold -= 5;
+	}
+		
 	// 3개풀 * 9명 * 적필드
 	commander.EnemyPoolFieldList.clear();
 	std::vector<FLSaveData> Result(commander.MAX_RECRUITSLOT, FLSaveData());
@@ -99,7 +106,7 @@ bool UCommanderWrapper::ReqNewEnemyPool()
 		vector<vector<vector<vector<FLSaveData>>>>
 		(3, vector<vector<vector<FLSaveData>>>
 		 (9, vector<vector<FLSaveData>>
-		  (5, vector<FLSaveData>
+		  (EnochFieldData::GetHeight() / 2, vector<FLSaveData>
 		   (10, FLSaveData()))));
 	for (int pool = 0; pool < 3; ++pool)
 	{

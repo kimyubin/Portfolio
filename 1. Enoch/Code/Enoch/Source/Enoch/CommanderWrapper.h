@@ -151,8 +151,10 @@ public:
 	/**
 	 * 서버에 적 풀 요청해서 받아오는 역할<br>
 	 * 현재는 랜덤으로 채움
+	 * @param IsReroll true면 리롤이라서 돈 차감함. false면 그냥 새로 받아오는 걸로 판단
 	 */
-	bool ReqNewEnemyPool();
+	UFUNCTION(BlueprintCallable)
+	bool ReqNewEnemyPool(bool IsReroll = false);
 	
 	/**
 	 * 적 풀 번호를 바탕으로 전체 용병 정보를 정리해서 리턴

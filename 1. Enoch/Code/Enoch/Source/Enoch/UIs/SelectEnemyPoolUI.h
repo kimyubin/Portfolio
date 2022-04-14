@@ -48,5 +48,6 @@ public:
 	 * @param GradeNum 등급 번호
 	 */
 	void UpdateDetailPanel(const int& PoolNum, int GradeNum);
-	
+	/** 각 풀 패널 번호 셋팅 및 데이터 정리, 이미지 업데이트 처리*/
+	void UpdateEnemyPools();
 };

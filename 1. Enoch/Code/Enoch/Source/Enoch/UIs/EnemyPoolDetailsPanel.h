@@ -36,13 +36,15 @@ public:
 	
 	/** 해당 패널이 속해있는 enemypoolUI 포인터*/
 	UPROPERTY(BlueprintReadOnly)
-	USelectEnemyPoolUI* MyParentSelectEnemyPoolUI;
+	USelectEnemyPoolUI* MyOuterSelectEnemyPoolUI;
 
 	void SetSelectEnemyPoolUI(USelectEnemyPoolUI* InSelectUIPtr);
 	void UpdateDetailData(const int& PoolNum, int GradeNum);
 	/** 적풀 최종 선택*/
 	UFUNCTION(BlueprintCallable)
 	void SelectEnemyPool();
+	UFUNCTION(BlueprintCallable)
+	void RerollButtonDown();
 private:
 	int tempPoolNum;
 	int tempGradeNum;	

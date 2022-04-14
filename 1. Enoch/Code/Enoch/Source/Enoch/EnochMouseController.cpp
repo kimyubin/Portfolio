@@ -129,16 +129,16 @@ void AEnochMouseController::PlayerTick(float DeltaTime)
 			}
 		}
 		else
-			return;	
+			return;
+		
+		//드래그용 정보 업데이트
+		CurrentCellUnderCursor = FieldCellLocation;
+		CurrentFLUnderCursor = EGameInstance->commander->GetFieldFreeLancerList(FieldCellLocation);
 		
 		//틱 간격마다 업데이트 되는 것을 방지. 직전 틱 정보와 같으면 업데이트 안함.
 		if (PrevFLSerialNumber == SN && SN != 0)
 			return;
-		PrevFLSerialNumber = SN;
-
-		//드래그용 정보 업데이트
-		CurrentCellUnderCursor = FieldCellLocation;
-		CurrentFLUnderCursor = EGameInstance->commander->GetFieldFreeLancerList(FieldCellLocation);
+		PrevFLSerialNumber = SN;	
 		
 		//빈 셀 갱신 방지.
 		if (SN != 0)
