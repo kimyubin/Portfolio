@@ -58,19 +58,19 @@
 ----------------------------------------------------------------
 
 ## 게임 목록
-* 개발 시기 역순으로 정렬되어 있습니다. 항목명은 폴더명을 기준으로 작성되어져 있습니다.
+* 최근 프로젝트부터 역순으로 정렬되어 있습니다. 항목명은 폴더명을 기준으로 작성되어져 있습니다.
 * Enoch 프로젝트는 현재 진행 중입니다.
 * ```savethechickentower```는 실제 발매된 게임의 이름과 폴더명이 상이합니다.
 ### 1. Enoch
 <img src="./Images/Enoch01.png" width="65%"></img>
 <img src="./Images/Enoch02.png" width="65%"></img>
-
+[실행 예시 유튜브 영상 링크](https://youtu.be/NPYjiZS8pZE)
 |프로젝트 명|Enoch|
 |:---|:---|
 |유형|언리얼 엔진 팀 프로젝트|
 |개발 인원|기획 1명, 클라이언트 프로그래머 2명, 서버 프로그래머 2명|
 |개발 목적|취미|
-|담당 영역 | UI, Drag&Drop 용병 구매/판매/배치/합성, 데이터 저장/불러오기|
+|담당 영역 | UI, Drag&Drop 용병 구매/판매/배치/합성, 적풀, 데이터 저장/불러오기, 게임모드 등|
 |엔진 버전|Unreal Engine 4.27.2|
 
 * **설명**
@@ -81,11 +81,15 @@
         * 현재 생성되는 적풀의 구성은 모두 랜덤입니다.
     * 폴더 안에는 서버 코드와 언리얼 엔진 코드가 모두 포함되어져 있습니다.
         * 언리얼 엔진 파트는 ```\Portfolio\1. Enoch\Code\Enoch```하위 폴더에 위치해 있습니다.
-        * 언리얼 엔진에서 구동되는 소스는 ```\Portfolio\1. Enoch\Code\Enoch\Source\Enoch```에 위치해 있습니다.
-    * 개발 진행 중
+        * 지원자 구현 코드는 ```\Portfolio\1. Enoch\Code\Enoch\Source\Enoch```에 위치해 있습니다.
+    * 개발 진행 중인 프로젝트   
 
 * **지원자 구현 목록**
     * 메인 화면 및 각 레벨 간 이동
+    * 시스템
+        * GameModeBase, PlayerController, DefaultPawn 등 각 레벨별 월드 세팅
+        * SceneCapture 3D UI
+        * 테스트를 위한 필드 용병 저장 및 불러오기
     * 적풀 전체
         * 적풀 선택화면 UI
         * 적풀 내부 용병 정보 처리 로직
@@ -95,27 +99,26 @@
         * 상점, 인벤토리 내부 로직
         * 상점, 인벤토리 간 용병의 구매/판매
         * 필드 용병의 Drag&Drop 배치/회수
-        * 용병 구매 시, 필드/인벤토리에 있는 용병 자동 합성 구현.
-
+        * 용병 구매 시, 필드/인벤토리에 있는 용병 자동 합성
     * 저장, 체력바, 사망 판정, 전투 결과 UI 구현(우측 골드/레벨 창 및 용병 정보창 제외)
         * 필드 데이터 저장 및 로드(스폰)(좌하단 UI)
     * 마우스 휠을 통한 카메라 각도 조정 및 필드 용병 각도 조정
-    <br>
-    * 구현 소스 목록(`\Source\`)
+   
+    * **구현 소스 목록**(`\Source\`)
         |\Enoch|\Enoch\UIs|\Enoch\Commons|
         |:---|:---|:---|
         |CommanderWrapper|EnemyPoolDetailSlot|Commander(일부 제외)|
         |DragImage|EnemyPoolDetailsPanel|`- EnochCommander()`|
         |EnochDragDropOP|EnemyPoolPanel|`- uint32 addExp(uint32)`|
-        |EnochField(일부)|EnochFightResultUI|`- uint16 getExpForNextLevel(uint8) `|
+        |EnochField(일부 구현)|EnochFightResultUI|`- uint16 getExpForNextLevel(uint8) `|
         |`- GenerateField()`|FieldDragDetector|`- uint16 getMaxFreeLancerNumber(uint8)`|
         |EnochFieldDropProtector|FreeLancerDeathUI||
         |EnochFieldSaveSlot|FreeLancerUnifiedUpperUI||
-        |EnochFreeLancer(일부)|PlayMenuUIManager||
+        |EnochFreeLancer(일부 구현)|PlayMenuUIManager||
         |`- UI 컴포넌트`|SelectEnemyPoolUI||
         |`- RotatorSetforCamera()`|UniformSlot||
-        |`- SetDragDetectOnOff(bool OnOff)`|||
-        |`- SetImageVisualOnOff(bool OnOff)`|||
+        |`- SetDragDetectOnOff(bool)`|||
+        |`- SetImageVisualOnOff(bool)`|||
         |EnochGameModeBase|||
         |EnochGameModeBaseEnemyPool|||
         |EnochGameModeBasePlay|||
