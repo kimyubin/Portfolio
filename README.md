@@ -105,17 +105,20 @@
         * 필드 데이터 저장 및 로드(스폰)(좌하단 UI)
     * 마우스 휠을 통한 카메라 각도 조정 및 필드 용병 각도 조정
    
-    * **구현 소스 목록**(`\Source\`)
+    * **구현 소스 목록**(`\Source\`)    
+        ><b id="fn1">A.</b> 해당 파일은 다음 항목에 있는 함수만 구현했습니다. [↩](#f1)
+        ><b id="fn2">B.</b> 해당 파일은 다음 항목에 있는 함수를 제외하고 나머지 부분을 구현했습니다. [↩](#f2)
+
         |\Enoch|\Enoch\UIs|\Enoch\Commons|
         |:---|:---|:---|
-        |CommanderWrapper|EnemyPoolDetailSlot|Commander(일부 제외)|
+        |CommanderWrapper|EnemyPoolDetailSlot|Commander<sup id="f2">[B](#fn2)</sup>|
         |DragImage|EnemyPoolDetailsPanel|`- EnochCommander()`|
         |EnochDragDropOP|EnemyPoolPanel|`- uint32 addExp(uint32)`|
-        |EnochField(일부 구현)|EnochFightResultUI|`- uint16 getExpForNextLevel(uint8) `|
+        |EnochField<sup id="f1">[A](#fn1)</sup>|EnochFightResultUI|`- uint16 getExpForNextLevel(uint8) `|
         |`- GenerateField()`|FieldDragDetector|`- uint16 getMaxFreeLancerNumber(uint8)`|
         |EnochFieldDropProtector|FreeLancerDeathUI||
         |EnochFieldSaveSlot|FreeLancerUnifiedUpperUI||
-        |EnochFreeLancer(일부 구현)|PlayMenuUIManager||
+        |EnochFreeLancer<sup id="f1">[A](#fn1)</sup>|PlayMenuUIManager||
         |`- UI 컴포넌트`|SelectEnemyPoolUI||
         |`- RotatorSetforCamera()`|UniformSlot||
         |`- SetDragDetectOnOff(bool)`|||
@@ -128,7 +131,6 @@
         |EnochSaveField|||
         |EnochSaveGameState|||
         |PlayDefaultPawn|||
-
 
 
 ### 2. FlatformLand
@@ -222,8 +224,6 @@
         * 근거리/대시/원거리 공격(X, Z키), 점프(Space), 벽 점프, 벽 고정(Shift), 피격 구현        
     * 몬스터 
         * 순찰, 플레이어 감지, 원거리 공격 구현
-    
 
- 
 
-    
+
