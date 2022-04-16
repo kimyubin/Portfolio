@@ -1,0 +1,848 @@
+<!DOCTYPE html><html><head>
+      <title>README</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:///c:\Users\YubinKim\.vscode\extensions\shd101wyy.markdown-preview-enhanced-0.6.2\node_modules\@shd101wyy\mume\dependencies\katex\katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <style>
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}
+
+/* highlight */
+pre[data-line] {
+  position: relative;
+  padding: 1em 0 1em 3em;
+}
+pre[data-line] .line-highlight-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  display: block;
+  width: 100%;
+}
+
+pre[data-line] .line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+  background: hsla(24, 20%, 50%,.08);
+  background: linear-gradient(to right, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
+  pointer-events: none;
+  line-height: inherit;
+  white-space: pre;
+}
+
+pre[data-line] .line-highlight:before, 
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-start);
+  position: absolute;
+  top: .4em;
+  left: .6em;
+  min-width: 1em;
+  padding: 0 .5em;
+  background-color: hsla(24, 20%, 50%,.4);
+  color: hsl(24, 20%, 95%);
+  font: bold 65%/1.5 sans-serif;
+  text-align: center;
+  vertical-align: .3em;
+  border-radius: 999px;
+  text-shadow: none;
+  box-shadow: 0 1px white;
+}
+
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-end);
+  top: auto;
+  bottom: .4em;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview  ">
+      <h1>&#xD3EC;&#xD2B8;&#xD3F4;&#xB9AC;&#xC624;</h1>
+<h2 class="mume-header" id="%EB%AA%A9%EC%B0%A8">&#xBAA9;&#xCC28;</h2>
+
+<ol>
+<li><a href="#%EA%B0%9C%EC%9A%94">&#xAC1C;&#xC694;</a></li>
+<li><a href="#%EC%86%8C%EA%B0%9C">&#xC18C;&#xAC1C;</a></li>
+<li><a href="#%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D">&#xAE30;&#xC220; &#xC2A4;&#xD0DD;</a>
+<ol>
+<li><a href="#Languages">Languages</a></li>
+<li><a href="#Game-Engines">Game Engines</a></li>
+<li><a href="#Tools">Tools</a></li>
+</ol>
+</li>
+<li><a href="#%EA%B2%8C%EC%9E%84-%EB%AA%A9%EB%A1%9D">&#xAC8C;&#xC784; &#xBAA9;&#xB85D;</a>
+<ol>
+<li><a href="#1-Enoch">Enoch</a></li>
+<li><a href="#2-FlatformLand">FlatformLand</a></li>
+<li><a href="#3-savethechickentower">savethechickentower(BeyondtheSky)</a></li>
+<li><a href="#4-tentacles">tentacles</a></li>
+<li><a href="#5-yubintest">yubintest</a></li>
+</ol>
+</li>
+</ol>
+<h2 class="mume-header" id="%EA%B0%9C%EC%9A%94">&#xAC1C;&#xC694;</h2>
+
+<ul>
+<li>&#xD3EC;&#xD2B8;&#xD3F4;&#xB9AC;&#xC624; &#xBC0F; &#xAE43;&#xD5C8;&#xBE0C; &#xB9AC;&#xD3EC;&#xC9C0;&#xD1A0;&#xB9AC;&#xC5D0; &#xB300;&#xD55C; &#xC124;&#xBA85;&#xC785;&#xB2C8;&#xB2E4;.</li>
+<li><strong>PDF&#xD30C;&#xC77C;</strong>&#xACFC; <strong>README.html</strong>, <strong><a href="http://README.md">README.md</a></strong>&#xC758; &#xB0B4;&#xC6A9;&#xC740; &#xB3D9;&#xC77C;&#xD569;&#xB2C8;&#xB2E4;.</li>
+<li><a href="https://github.com/kimyubin/Portfolio">&#xD3EC;&#xD2B8;&#xD3F4;&#xB9AC;&#xC624; &#xB9AC;&#xD3EC;&#xC9C0;&#xD1A0;&#xB9AC; &#xB9C1;&#xD06C;</a></li>
+</ul>
+<h2 class="mume-header" id="%EC%86%8C%EA%B0%9C">&#xC18C;&#xAC1C;</h2>
+
+<ul>
+<li>&#xC804;&#xC0B0;&#xD559; &#xC9C0;&#xC2DD;
+<ul>
+<li>
+<p>&#xAE30;&#xCD08; &#xCEF4;&#xD4E8;&#xD130; &#xACFC;&#xD559; &#xBC0F; &#xACF5;&#xD559; &#xC218;&#xC5C5;&#xC744; &#xC774;&#xC218;&#xD588;&#xC2B5;&#xB2C8;&#xB2E4;.<br>
+( &#xCEF4;&#xD4E8;&#xD130; &#xAD6C;&#xC870;, &#xC6B4;&#xC601;&#xCCB4;&#xC81C;, &#xC790;&#xB8CC;&#xAD6C;&#xC870;, &#xC54C;&#xACE0;&#xB9AC;&#xC998;, &#xD504;&#xB85C;&#xADF8;&#xB798;&#xBC0D; &#xC5B8;&#xC5B4;&#xB860;, &#xAC1D;&#xCCB4;&#xC9C0;&#xD5A5;, &#xD615;&#xC2DD;&#xC5B8;&#xC5B4; &#xBC0F; &#xC624;&#xD1A0;&#xB9C8;&#xD0C0;, &#xC120;&#xD615;&#xB300;&#xC218;&#xD559;, &#xB370;&#xC774;&#xD130; &#xBCA0;&#xC774;&#xC2A4;, &#xB124;&#xD2B8;&#xC6CC;&#xD06C; &#xB4F1; )</p>
+</li>
+<li>
+<p>&#xAE30;&#xBCF8;&#xC801;&#xC778; &#xC790;&#xB8CC;&#xAD6C;&#xC870;, &#xC54C;&#xACE0;&#xB9AC;&#xC998;&#xC744; &#xC774;&#xD574;&#xD558;&#xACE0; &#xC788;&#xACE0; &#xB808;&#xD37C;&#xB7F0;&#xC2A4;&#xB97C; &#xCC38;&#xACE0;&#xD558;&#xC5EC; &#xC791;&#xC131;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</p>
+</li>
+<li>
+<p>&#xCEF4;&#xD4E8;&#xD130;&#xC758; &#xAE30;&#xBCF8; &#xAD6C;&#xC870;&#xC640; &#xC791;&#xB3D9; &#xBA54;&#xCEE4;&#xB2C8;&#xC998;&#xC744; &#xC774;&#xD574;&#xD558;&#xACE0; &#xC788;&#xACE0;, &#xC774;&#xB97C; &#xACE0;&#xB824;&#xD558;&#xC5EC; &#xCF54;&#xB529;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</p>
+</li>
+<li>
+<p>&#xAC1D;&#xCCB4;&#xC9C0;&#xD5A5;</p>
+<ul>
+<li>&#xCEA1;&#xC290;&#xD654;, &#xC815;&#xBCF4;&#xC740;&#xB2C9;, &#xC0C1;&#xC18D; &#xB4F1; &#xAC1D;&#xCCB4;&#xC9C0;&#xD5A5; &#xC124;&#xACC4; &#xC0AC;&#xC0C1;&#xC758; &#xC774;&#xC720;&#xC640; &#xC911;&#xC694;&#xC131;&#xC744; &#xC774;&#xD574;&#xD558;&#xACE0; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>&#xAC1D;&#xCCB4;&#xC758; &#xCD94;&#xC0C1;&#xD654; &#xC218;&#xC900;&#xC744; &#xB192;&#xD600;, &#xD611;&#xC5C5;&#xC2DC; &#xCEE4;&#xD50C;&#xB9C1;&#xC774; &#xC801;&#xB3C4;&#xB85D; &#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>&#xC911;&#xBCF5;&#xB3C4;&#xAC00; &#xB192;&#xACE0; &#xD30C;&#xD3B8;&#xD654;&#xB41C; &#xCF54;&#xB4DC;&#xB97C; &#xC0C1;&#xC18D;&#xAD00;&#xACC4;&#xB85C; &#xC815;&#xB9AC;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>&#xC0C1;&#xC18D;&#xC744; &#xD1B5;&#xD574; &#xAC1D;&#xCCB4;&#xC758; &#xCC45;&#xC784;&#xC744; &#xBD84;&#xC0B0;&#xC2DC;&#xD0AC; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>&#xAC1C;&#xBC1C;
+<ul>
+<li>&#xD300; &#xD504;&#xB85C;&#xC81D;&#xD2B8;&#xC5D0; &#xAFB8;&#xC900;&#xD788; &#xCC38;&#xC5EC;&#xD558;&#xACE0; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>&#xC720;&#xB2C8;&#xD2F0;, &#xC5B8;&#xB9AC;&#xC5BC; &#xC5D4;&#xC9C4; &#xB4F1; &#xC0C1;&#xC6A9; &#xC5D4;&#xC9C4;&#xC744; &#xC775;&#xD614;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>&#xAD6C;&#xAE00; &#xD50C;&#xB808;&#xC774; &#xC2A4;&#xD1A0;&#xC5B4;&#xC5D0; &#xAC8C;&#xC784;&#xC744; &#xCD9C;&#xC2DC;&#xD55C; &#xACBD;&#xD5D8;&#xC774; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.(<code>Beyond the Sky</code>)</li>
+</ul>
+</li>
+</ul>
+<h2 class="mume-header" id="%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D">&#xAE30;&#xC220; &#xC2A4;&#xD0DD;</h2>
+
+<h3 class="mume-header" id="languages">Languages</h3>
+
+<ul>
+<li>
+<p><strong>C++</strong></p>
+<ul>
+<li>&#xAE30;&#xBCF8; &#xBB38;&#xBC95;&#xC744; &#xC774;&#xD574;&#xD558;&#xACE0; &#xC788;&#xC73C;&#xBA70;, STL&#xACFC; &#xADF8;&#xC5D0; &#xD3EC;&#xD568;&#xB41C; &#xCEE8;&#xD14C;&#xC774;&#xB108;, &#xD568;&#xC218;&#xB97C; &#xD65C;&#xC6A9;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>&#xB77C;&#xC774;&#xBE0C;&#xB7EC;&#xB9AC;&#xC5D0; &#xD3EC;&#xD568;&#xB41C; &#xC790;&#xB8CC;&#xAD6C;&#xC870;&#xC640; &#xC54C;&#xACE0;&#xB9AC;&#xC998;&#xC758; &#xAD6C;&#xC870;&#xB97C; &#xD30C;&#xC545;&#xD558;&#xACE0; &#xC788;&#xC73C;&#xBA70;, &#xC774;&#xB97C; &#xC5C5;&#xBB34;&#xC5D0; &#xD65C;&#xC6A9;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>Unreal Engine &#xAC1C;&#xBC1C;&#xC5D0; &#xC0AC;&#xC6A9;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+</ul>
+</li>
+<li>
+<p><strong>C#</strong></p>
+<ul>
+<li>&#xBB38;&#xBC95;&#xC5D0; &#xB300;&#xD55C; &#xAE30;&#xCD08;&#xC801;&#xC778; &#xC9C0;&#xC2DD;&#xC774; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>&#xC720;&#xB2C8;&#xD2F0; &#xC2A4;&#xD06C;&#xB9BD;&#xD2B8; &#xC5B8;&#xC5B4;&#xB85C; &#xD65C;&#xC6A9;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+</ul>
+</li>
+<li>
+<p><strong>JAVA</strong></p>
+<ul>
+<li>&#xAE30;&#xBCF8; &#xBB38;&#xBC95;&#xC744; &#xC774;&#xD574;&#xD558;&#xACE0; &#xD65C;&#xC6A9;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+</ul>
+</li>
+</ul>
+<h3 class="mume-header" id="game-engines">Game Engines</h3>
+
+<ul>
+<li>
+<p><strong>Unreal Engine</strong></p>
+<ul>
+<li>&#xAE30;&#xBCF8;&#xC801;&#xC778; &#xAE30;&#xB2A5; &#xC0AC;&#xC6A9;&#xC774; &#xAC00;&#xB2A5;&#xD558;&#xACE0;, &#xC5D4;&#xC9C4; &#xAD6C;&#xC870;&#xC5D0; &#xB300;&#xD55C; &#xAC1C;&#xAD04;&#xC801;&#xC778; &#xC774;&#xD574;&#xB97C; &#xAC16;&#xCD94;&#xACE0; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>C++ &#xAE30;&#xBC18; &#xD504;&#xB85C;&#xADF8;&#xB798;&#xBC0D;&#xC774; &#xAC00;&#xB2A5;&#xD569;&#xB2C8;&#xB2E4;.</li>
+<li>UMG(UI)&#xB97C; C++ &#xAE30;&#xBC18;&#xC73C;&#xB85C; &#xAC1C;&#xBC1C;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>UI&#xC5D0; 3D &#xBAA8;&#xB378;&#xC744; &#xC801;&#xC6A9;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>C++&#xCF54;&#xB4DC;&#xC640; &#xBE14;&#xB8E8;&#xD504;&#xB9B0;&#xD2B8;&#xC758; &#xCC28;&#xC774;&#xB97C; &#xC774;&#xD574;&#xD558;&#xACE0; &#xC788;&#xACE0;, &#xAC01;&#xC790;&#xC758; &#xC5ED;&#xD560;&#xC5D0; &#xB530;&#xB77C; &#xC0AC;&#xC6A9;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>&#xBE14;&#xB8E8;&#xD504;&#xB9B0;&#xD2B8;&#xB85C; &#xC9DC;&#xC5EC;&#xC9C4; &#xB85C;&#xC9C1;&#xC744; C++&#xB85C; &#xC7AC;&#xAD6C;&#xC131;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>&#xC5D4;&#xC9C4; &#xCF54;&#xB4DC;&#xB97C; &#xCC38;&#xACE0;&#xD558;&#xACE0;, &#xAD6C;&#xC870;&#xB97C; &#xD30C;&#xC545;&#xD558;&#xBA74;&#xC11C; &#xCF54;&#xB529;&#xD560; &#xC218; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>&#xD604;&#xC7AC; &#xCDE8;&#xBBF8;&#xC6A9; &#xD300; &#xD504;&#xB85C;&#xC81D;&#xD2B8;&#xB97C; &#xC9C4;&#xD589;&#xD558;&#xACE0; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+</ul>
+</li>
+<li>
+<p><strong>Unity</strong></p>
+<ul>
+<li>&#xAE30;&#xBCF8;&#xC801;&#xC778; &#xAE30;&#xB2A5; &#xD65C;&#xC6A9; &#xBC0F; &#xAC8C;&#xC784; &#xAC1C;&#xBC1C;&#xC774; &#xAC00;&#xB2A5;&#xD569;&#xB2C8;&#xB2E4;.</li>
+<li>UGUI&#xB97C; &#xD65C;&#xC6A9;&#xD55C; UI&#xAD6C;&#xC131;, &#xAC1C;&#xBC1C;&#xC774; &#xAC00;&#xB2A5;&#xD569;&#xB2C8;&#xB2E4;.</li>
+<li>&#xAC04;&#xB2E8;&#xD55C; &#xC810;&#xD504; &#xAC8C;&#xC784;&#xC744; &#xAD6C;&#xAE00; &#xD50C;&#xB808;&#xC774; &#xC2A4;&#xD1A0;&#xC5B4;&#xC5D0; &#xCD9C;&#xC2DC;&#xD55C; &#xACBD;&#xD5D8;&#xC774; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.
+<ul>
+<li>&#xAC8C;&#xC784;&#xBA85; : <code>Beyond the Sky</code></li>
+<li>&#xD3F4;&#xB354;&#xBA85; : <code>3. savethechickentower</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 class="mume-header" id="tools">Tools</h3>
+
+<ul>
+<li><strong>Visual Studio Code</strong> : &#xAE30;&#xBCF8; &#xCF54;&#xB529; &#xBC0F; Unity &#xAC1C;&#xBC1C;&#xC6A9;</li>
+<li><strong>Jetbrains Rider(for Unreal Engine)</strong> : &#xC5B8;&#xB9AC;&#xC5BC; &#xC5D4;&#xC9C4; &#xAC1C;&#xBC1C;&#xC6A9;</li>
+<li><strong>Visual Studio 2022</strong> : &#xC5B8;&#xB9AC;&#xC5BC; &#xC5D4;&#xC9C4; &#xAC1C;&#xBC1C;&#xC6A9;</li>
+<li><strong>Sourcetree</strong> : GUI&#xAE30;&#xBC18; Git &#xBC84;&#xC804;&#xAD00;&#xB9AC; &#xD504;&#xB85C;&#xADF8;&#xB7A8;</li>
+</ul>
+<hr>
+<h2 class="mume-header" id="%EA%B2%8C%EC%9E%84-%EB%AA%A9%EB%A1%9D">&#xAC8C;&#xC784; &#xBAA9;&#xB85D;</h2>
+
+<ul>
+<li>&#xCD5C;&#xADFC; &#xD504;&#xB85C;&#xC81D;&#xD2B8;&#xBD80;&#xD130; &#xC5ED;&#xC21C;&#xC73C;&#xB85C; &#xC815;&#xB82C;&#xB418;&#xC5B4; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;. &#xD56D;&#xBAA9;&#xBA85;&#xC740; &#xD3F4;&#xB354;&#xBA85;&#xC744; &#xAE30;&#xC900;&#xC73C;&#xB85C; &#xC791;&#xC131;&#xB418;&#xC5B4;&#xC838; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>Enoch &#xD504;&#xB85C;&#xC81D;&#xD2B8;&#xB294; &#xD604;&#xC7AC; &#xC9C4;&#xD589; &#xC911;&#xC785;&#xB2C8;&#xB2E4;.</li>
+<li><code>savethechickentower</code> &#xD3F4;&#xB354;&#xB294; &#xC2E4;&#xC81C; &#xBC1C;&#xB9E4;&#xB41C; &#xAC8C;&#xC784;&#xC758; &#xC774;&#xB984;&#xACFC; &#xD3F4;&#xB354;&#xBA85;&#xC774; &#xC0C1;&#xC774;&#xD569;&#xB2C8;&#xB2E4;. &#xC2E4;&#xC81C; &#xBC1C;&#xB9E4;&#xB41C; &#xAC8C;&#xC784;&#xC740; <code>BeyondtheSky(&#xD558;&#xB298; &#xB108;&#xBA38;&#xB85C;)</code>&#xC785;&#xB2C8;&#xB2E4;.</li>
+</ul>
+<h3 class="mume-header" id="1-enoch">1. Enoch</h3>
+
+<p><img src="./Images/Enoch01.png" width="65%"><br>
+<img src="./Images/Enoch02.png" width="65%"></p>
+<p><a href="https://youtu.be/NPYjiZS8pZE">&#xC2E4;&#xD589; &#xC608;&#xC2DC; &#xC720;&#xD29C;&#xBE0C; &#xC601;&#xC0C1; &#xB9C1;&#xD06C;</a> | <a href="https://youtu.be/NPYjiZS8pZE">https://youtu.be/NPYjiZS8pZE</a></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">&#xD504;&#xB85C;&#xC81D;&#xD2B8; &#xBA85;</th>
+<th style="text-align:left">Enoch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">&#xC720;&#xD615;</td>
+<td style="text-align:left">&#xC5B8;&#xB9AC;&#xC5BC; &#xC5D4;&#xC9C4; &#xD300; &#xD504;&#xB85C;&#xC81D;&#xD2B8;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xAC1C;&#xBC1C; &#xC778;&#xC6D0;</td>
+<td style="text-align:left">&#xAE30;&#xD68D; 1&#xBA85;, &#xD074;&#xB77C;&#xC774;&#xC5B8;&#xD2B8; &#xD504;&#xB85C;&#xADF8;&#xB798;&#xBA38; 2&#xBA85;, &#xC11C;&#xBC84; &#xD504;&#xB85C;&#xADF8;&#xB798;&#xBA38; 2&#xBA85;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xAC1C;&#xBC1C; &#xBAA9;&#xC801;</td>
+<td style="text-align:left">&#xCDE8;&#xBBF8;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xB2F4;&#xB2F9; &#xC601;&#xC5ED;</td>
+<td style="text-align:left">UI, Drag&amp;Drop &#xC6A9;&#xBCD1; &#xAD6C;&#xB9E4;/&#xD310;&#xB9E4;/&#xBC30;&#xCE58;/&#xD569;&#xC131;, &#xC801;&#xD480;, &#xB370;&#xC774;&#xD130; &#xC800;&#xC7A5;/&#xBD88;&#xB7EC;&#xC624;&#xAE30;, &#xAC8C;&#xC784;&#xBAA8;&#xB4DC; &#xB4F1;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xC5D4;&#xC9C4; &#xBC84;&#xC804;</td>
+<td style="text-align:left">Unreal Engine 4.27.2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>&#xC124;&#xBA85;</strong></p>
+<ul>
+<li>&#xC624;&#xD1A0;&#xCCB4;&#xC2A4;&#xB958; &#xAC8C;&#xC784;(&#xC624;&#xD1A0;&#xBC30;&#xD2C0;&#xB7EC;)
+<ul>
+<li>&#xBE44;&#xB3D9;&#xAE30; &#xAE30;&#xBC18; &#xC624;&#xD1A0;&#xCCB4;&#xC2A4; &#xAC8C;&#xC784;&#xC744; &#xBAA9;&#xD45C;&#xB85C; &#xB9CC;&#xB4E4;&#xACE0; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>&#xC0C1;&#xC810;&#xC5D0;&#xC11C; &#xC6A9;&#xBCD1;&#xC774; &#xB4F1;&#xC7A5;&#xD560; &#xD655;&#xB960;&#xC740;, &#xAC19;&#xC740; &#xAC8C;&#xC784;&#xC5D0; &#xC788;&#xB294; &#xD50C;&#xB808;&#xC774;&#xC5B4; &#xAE30;&#xBC18;&#xC774; &#xC544;&#xB2CC; &#xC774;&#xC804;&#xC5D0; &#xD50C;&#xB808;&#xC774;&#xD588;&#xB358; &#xAE30;&#xB85D;&#xC744; &#xBC14;&#xD0D5;&#xC73C;&#xB85C; &#xC0DD;&#xC131;&#xB41C; &#xC801;&#xB4E4;&#xC758; &#xD480;(&#xC774;&#xD558; &#xC801;&#xD480;. Enemy Pool)&#xC744; &#xAE30;&#xBC18;&#xC73C;&#xB85C; &#xC815;&#xD574;&#xC9D1;&#xB2C8;&#xB2E4;.</li>
+<li>&#xAC01; 9&#xBA85;&#xC73C;&#xB85C; &#xC774;&#xB8E8;&#xC5B4;&#xC9C4; &#xC801;&#xD480; 3&#xAC1C; &#xC911; 1&#xAC1C;&#xB97C; &#xD50C;&#xB808;&#xC774;&#xC5B4;&#xAC00; &#xACE0;&#xB974;&#xBA74;, &#xC774;&#xB97C; &#xBC14;&#xD0D5;&#xC73C;&#xB85C; &#xC0C1;&#xC810;&#xC774; &#xAD6C;&#xC131;&#xB420; &#xC608;&#xC815;&#xC785;&#xB2C8;&#xB2E4;.</li>
+<li>&#xD604;&#xC7AC; &#xC0DD;&#xC131;&#xB418;&#xB294; &#xC801;&#xD480;&#xC758; &#xAD6C;&#xC131;&#xC740; &#xBAA8;&#xB450; &#xB79C;&#xB364;&#xC785;&#xB2C8;&#xB2E4;.</li>
+</ul>
+</li>
+<li>&#xD3F4;&#xB354; &#xC548;&#xC5D0;&#xB294; &#xC11C;&#xBC84; &#xCF54;&#xB4DC;&#xC640; &#xC5B8;&#xB9AC;&#xC5BC; &#xC5D4;&#xC9C4; &#xCF54;&#xB4DC;&#xAC00; &#xBAA8;&#xB450; &#xD3EC;&#xD568;&#xB418;&#xC5B4;&#xC838; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.
+<ul>
+<li>&#xC5B8;&#xB9AC;&#xC5BC; &#xC5D4;&#xC9C4; &#xD30C;&#xD2B8;&#xB294; <code>\Portfolio\1. Enoch\Code\Enoch</code>&#xD558;&#xC704; &#xD3F4;&#xB354;&#xC5D0; &#xC704;&#xCE58;&#xD574; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+<li>&#xC9C0;&#xC6D0;&#xC790; &#xAD6C;&#xD604; &#xCF54;&#xB4DC;&#xB294; <code>\Portfolio\1. Enoch\Code\Enoch\Source\Enoch</code>&#xC5D0; &#xC704;&#xCE58;&#xD574; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+</ul>
+</li>
+<li>&#xAC1C;&#xBC1C; &#xC9C4;&#xD589; &#xC911;&#xC778; &#xD504;&#xB85C;&#xC81D;&#xD2B8;</li>
+</ul>
+</li>
+<li>
+<p><strong>&#xC9C0;&#xC6D0;&#xC790; &#xAD6C;&#xD604; &#xBAA9;&#xB85D;</strong></p>
+<ul>
+<li>
+<p>&#xBA54;&#xC778; &#xD654;&#xBA74; &#xBC0F; &#xAC01; &#xB808;&#xBCA8; &#xAC04; &#xC774;&#xB3D9;</p>
+</li>
+<li>
+<p>&#xC2DC;&#xC2A4;&#xD15C;</p>
+<ul>
+<li>GameModeBase, PlayerController, DefaultPawn &#xB4F1; &#xAC01; &#xB808;&#xBCA8;&#xBCC4; &#xC6D4;&#xB4DC; &#xC138;&#xD305;</li>
+<li>SceneCapture 3D UI</li>
+<li>&#xD14C;&#xC2A4;&#xD2B8;&#xB97C; &#xC704;&#xD55C; &#xD544;&#xB4DC; &#xC6A9;&#xBCD1; &#xC800;&#xC7A5; &#xBC0F; &#xBD88;&#xB7EC;&#xC624;&#xAE30;</li>
+</ul>
+</li>
+<li>
+<p>&#xC801;&#xD480; &#xC804;&#xCCB4;</p>
+<ul>
+<li>&#xC801;&#xD480; &#xC120;&#xD0DD;&#xD654;&#xBA74; UI</li>
+<li>&#xC801;&#xD480; &#xB0B4;&#xBD80; &#xC6A9;&#xBCD1; &#xC815;&#xBCF4; &#xCC98;&#xB9AC; &#xB85C;&#xC9C1;</li>
+<li>&#xB9AC;&#xB864;, &#xC120;&#xD0DD; &#xB4F1; &#xB0B4;&#xBD80; &#xB85C;&#xC9C1;</li>
+<li>&#xC801;&#xD480; &#xC120;&#xD0DD; &#xD6C4; &#xC801; &#xC6A9;&#xBCD1;&#xC758; &#xD544;&#xB4DC; &#xC2A4;&#xD3F0;</li>
+</ul>
+</li>
+<li>
+<p>&#xC0C1;&#xC810;, &#xC778;&#xBCA4;&#xD1A0;&#xB9AC; &#xBC0F; Drag&amp;Drop &#xAE30;&#xB2A5; &#xC804;&#xCCB4;</p>
+<ul>
+<li>&#xC0C1;&#xC810;, &#xC778;&#xBCA4;&#xD1A0;&#xB9AC; &#xB0B4;&#xBD80; &#xB85C;&#xC9C1;</li>
+<li>&#xC0C1;&#xC810;, &#xC778;&#xBCA4;&#xD1A0;&#xB9AC; &#xAC04; &#xC6A9;&#xBCD1;&#xC758; &#xAD6C;&#xB9E4;/&#xD310;&#xB9E4;</li>
+<li>&#xB378;&#xB9AC;&#xAC8C;&#xC774;&#xD2B8; &#xBC14;&#xC778;&#xB529;&#xC744; &#xD1B5;&#xD55C; &#xD544;&#xB4DC; &#xC6A9;&#xBCD1;&#xC758; Drag&amp;Drop &#xBC30;&#xCE58;/&#xC7AC;&#xBC30;&#xCE58;/&#xD68C;&#xC218;</li>
+<li>&#xC6A9;&#xBCD1; &#xAD6C;&#xB9E4; &#xC2DC;, &#xD544;&#xB4DC;/&#xC778;&#xBCA4;&#xD1A0;&#xB9AC;&#xC5D0; &#xC788;&#xB294; &#xC6A9;&#xBCD1; &#xC790;&#xB3D9; &#xD569;&#xC131;</li>
+</ul>
+</li>
+<li>
+<p>&#xC800;&#xC7A5;, &#xCCB4;&#xB825;&#xBC14;, &#xC0AC;&#xB9DD; &#xD310;&#xC815;, &#xC804;&#xD22C; &#xACB0;&#xACFC; UI &#xAD6C;&#xD604;(&#xC6B0;&#xCE21; &#xACE8;&#xB4DC;/&#xB808;&#xBCA8; &#xCC3D; &#xBC0F; &#xC6A9;&#xBCD1; &#xC815;&#xBCF4;&#xCC3D; &#xC81C;&#xC678;)</p>
+<ul>
+<li>&#xD544;&#xB4DC; &#xB370;&#xC774;&#xD130; &#xC800;&#xC7A5; &#xBC0F; &#xB85C;&#xB4DC;(&#xC2A4;&#xD3F0;)(&#xC88C;&#xD558;&#xB2E8; UI)</li>
+</ul>
+</li>
+<li>
+<p>&#xB9C8;&#xC6B0;&#xC2A4; &#xD720;&#xC744; &#xD1B5;&#xD55C; &#xCE74;&#xBA54;&#xB77C; &#xAC01;&#xB3C4; &#xC870;&#xC815; &#xBC0F; &#xD544;&#xB4DC; &#xC6A9;&#xBCD1; &#xAC01;&#xB3C4; &#xC870;&#xC815;</p>
+</li>
+<li>
+<p><strong>&#xAD6C;&#xD604; &#xC18C;&#xC2A4; &#xBAA9;&#xB85D;</strong>(<code>\Source\</code>)</p>
+<blockquote>
+<p><b id="fn1">A.</b> &#xD574;&#xB2F9; &#xD30C;&#xC77C;&#xC740; &#xB2E4;&#xC74C; &#xD56D;&#xBAA9;&#xB9CC; &#xAD6C;&#xD604;&#xD588;&#xC2B5;&#xB2C8;&#xB2E4;. <a href="#f1">&#x21A9;</a><br>
+<b id="fn2">B.</b> &#xD574;&#xB2F9; &#xD30C;&#xC77C;&#xC740; &#xB2E4;&#xC74C; &#xD56D;&#xBAA9;&#xC744; &#xC81C;&#xC678;&#xD558;&#xACE0; &#xB098;&#xBA38;&#xC9C0; &#xBD80;&#xBD84;&#xC744; &#xAD6C;&#xD604;&#xD588;&#xC2B5;&#xB2C8;&#xB2E4;. <a href="#f2">&#x21A9;</a></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">\Enoch</th>
+<th style="text-align:left">\Enoch\UIs</th>
+<th style="text-align:left">\Enoch\Commons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">CommanderWrapper</td>
+<td style="text-align:left">EnemyPoolDetailSlot</td>
+<td style="text-align:left">Commander<sup id="f2"><a href="#fn2">B</a></sup></td>
+</tr>
+<tr>
+<td style="text-align:left">DragImage</td>
+<td style="text-align:left">EnemyPoolDetailsPanel</td>
+<td style="text-align:left"><code>- EnochCommander()</code></td>
+</tr>
+<tr>
+<td style="text-align:left">EnochDragDropOP</td>
+<td style="text-align:left">EnemyPoolPanel</td>
+<td style="text-align:left"><code>- uint32 addExp(uint32)</code></td>
+</tr>
+<tr>
+<td style="text-align:left">EnochField<sup id="f1"><a href="#fn1">A</a></sup></td>
+<td style="text-align:left">EnochFightResultUI</td>
+<td style="text-align:left"><code>- uint16 getExpForNextLevel(uint8)</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>- GenerateField()</code></td>
+<td style="text-align:left">FieldDragDetector</td>
+<td style="text-align:left"><code>- uint16 getMaxFreeLancerNumber(uint8)</code></td>
+</tr>
+<tr>
+<td style="text-align:left">EnochFieldDropProtector</td>
+<td style="text-align:left">FreeLancerDeathUI</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">EnochFieldSaveSlot</td>
+<td style="text-align:left">FreeLancerUnifiedUpperUI</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">EnochFreeLancer<sup id="f1"><a href="#fn1">A</a></sup></td>
+<td style="text-align:left">PlayMenuUIManager</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>- UI &#xCEF4;&#xD3EC;&#xB10C;&#xD2B8;</code></td>
+<td style="text-align:left">SelectEnemyPoolUI</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>- RotatorSetforCamera()</code></td>
+<td style="text-align:left">UniformSlot</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>- SetDragDetectOnOff(bool)</code></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>- SetImageVisualOnOff(bool)</code></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">EnochGameModeBase</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">EnochGameModeBaseEnemyPool</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">EnochGameModeBasePlay</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">EnochGameModeBaseStart</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">EnochMouseController</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">EnochSaveField</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">EnochSaveGameState</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">PlayDefaultPawn</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+<h3 class="mume-header" id="2-flatformland">2. FlatformLand</h3>
+
+<p><img src="./Images/FlatformLand01.png" width="65%"><br>
+<img src="./Images/FlatformLand02.png" width="65%"></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">&#xD504;&#xB85C;&#xC81D;&#xD2B8; &#xBA85;</th>
+<th style="text-align:left">FlatformLand</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">&#xC720;&#xD615;</td>
+<td style="text-align:left">&#xC720;&#xB2C8;&#xD2F0; &#xAC1C;&#xC778; &#xD504;&#xB85C;&#xC81D;&#xD2B8;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xAC1C;&#xBC1C; &#xC778;&#xC6D0;</td>
+<td style="text-align:left">1&#xBA85;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xAC1C;&#xBC1C; &#xBAA9;&#xC801;</td>
+<td style="text-align:left">&#xCDE8;&#xBBF8;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xC5D4;&#xC9C4; &#xBC84;&#xC804;</td>
+<td style="text-align:left">Unity 2019.3.0f3</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>&#xC124;&#xBA85;</strong>
+<ul>
+<li>&#xB85C;&#xD504;&#xB97C; &#xC774;&#xC6A9;&#xD55C; 2D &#xD50C;&#xB7AB;&#xD3EC;&#xBA38; &#xAC8C;&#xC784;</li>
+</ul>
+</li>
+<li><strong>&#xC9C0;&#xC6D0;&#xC790; &#xAD6C;&#xD604; &#xBAA9;&#xB85D;</strong>
+<ul>
+<li>&#xC790;&#xC5F0;&#xC2A4;&#xB7EC;&#xC6B4; &#xC548;&#xD2F0; &#xC5D0;&#xC77C;&#xB9AC;&#xC5B4;&#xC2F1;&#xC744; &#xC704;&#xD574; 3D &#xBAA8;&#xB378;&#xB85C; &#xAD6C;&#xD604;</li>
+<li>&#xB85C;&#xD504; &#xC870;&#xC900;(c&#xD0A4;), &#xB85C;&#xD504; &#xBC1C;&#xC0AC; &#xBC0F; &#xB2F9;&#xAE40;(v&#xD0A4;)</li>
+<li>&#xC7A5;&#xC560;&#xBB3C;&#xC5D0; &#xB300;&#xD55C; &#xB85C;&#xD504; &#xAEBD;&#xC784; &#xAD6C;&#xD604;.</li>
+<li>&#xC720;&#xB2C8;&#xD2F0; &#xC560;&#xB2C8;&#xBA54;&#xC774;&#xC158;&#xC774; &#xC544;&#xB2CC;, FSM&#xB97C; &#xD1B5;&#xD55C; &#xCE90;&#xB9AD;&#xD130; &#xC560;&#xB2C8;&#xBA54;&#xC774;&#xC158; &#xAD6C;&#xD604;(&#xC624;&#xBE0C;&#xC81D;&#xD2B8;&#xB97C; &#xC9C1;&#xC811; &#xD68C;&#xC804; &#xC2DC;&#xD0A4;&#xB294; &#xBC29;&#xC2DD;)</li>
+<li>&#xC0AC;&#xB9DD; &#xD310;&#xC815; &#xBC0F; &#xBD80;&#xD65C;</li>
+</ul>
+</li>
+</ul>
+<h3 class="mume-header" id="3-savethechickentower">3. savethechickentower</h3>
+
+<p><img src="./Images/BeyondtheSky01.png" width="25%"> <img src="./Images/BeyondtheSky02.png" width="25%"> <img src="./Images/BeyondtheSky03.png" width="25%"><br></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">&#xD504;&#xB85C;&#xC81D;&#xD2B8; &#xBA85;</th>
+<th style="text-align:left">BeyondtheSky(&#xD558;&#xB298; &#xB108;&#xBA38;&#xB85C;)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">&#xC720;&#xD615;</td>
+<td style="text-align:left">&#xC720;&#xB2C8;&#xD2F0; &#xAC1C;&#xC778; &#xD504;&#xB85C;&#xC81D;&#xD2B8;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xAC1C;&#xBC1C; &#xC778;&#xC6D0;</td>
+<td style="text-align:left">1&#xBA85;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xAC1C;&#xBC1C; &#xBAA9;&#xC801;</td>
+<td style="text-align:left">&#xAD6C;&#xAE00; &#xD50C;&#xB808;&#xC774; &#xC2A4;&#xD1A0;&#xC5B4; &#xCD9C;&#xC2DC;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xC5D4;&#xC9C4; &#xBC84;&#xC804;</td>
+<td style="text-align:left">Unity 2019.3.0f3</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xB2E4;&#xC6B4;&#xB85C;&#xB4DC; &#xB9C1;&#xD06C;</td>
+<td style="text-align:left"><a href="https://play.google.com/store/apps/details?id=com.KimFriedChicken.beyondthesky">&#xAD6C;&#xAE00; &#xD50C;&#xB808;&#xC774;&#xC2A4;&#xD1A0;&#xC5B4;</a></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://youtu.be/IIDG5cgJkTY">&#xD50C;&#xB808;&#xC774; &#xC601;&#xC0C1; &#xC720;&#xD29C;&#xBE0C; &#xB9C1;&#xD06C;</a></td>
+<td style="text-align:left"><a href="https://youtu.be/IIDG5cgJkTY">https://youtu.be/IIDG5cgJkTY</a></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>&#xC124;&#xBA85;</strong>
+<ul>
+<li>&#xCD08;&#xAE30; &#xCEE8;&#xC0D9;&#xC774; &#xBCC0;&#xACBD;&#xB418;&#xC5B4; &#xD3F4;&#xB354;&#xBA85;&#xACFC; &#xC2E4;&#xC81C; &#xD504;&#xB85C;&#xC81D;&#xD2B8;&#xBA85;&#xC774; &#xB2E4;&#xB985;&#xB2C8;&#xB2E4;.</li>
+<li>&#xB450;&#xB4E4; &#xC810;&#xD504;&#xC640; &#xBE44;&#xC2B7;&#xD55C; &#xC810;&#xD504; &#xAC8C;&#xC784;&#xC774;&#xBA70;, &#xC5B4;&#xB9B0;&#xC655;&#xC790;&#xC640; &#xC0AC;&#xB9C9; &#xC5EC;&#xC6B0; &#xC774;&#xC57C;&#xAE30;&#xB97C; &#xAC01;&#xC0C9;&#xD588;&#xC2B5;&#xB2C8;&#xB2E4;.</li>
+</ul>
+</li>
+<li><strong>&#xAD6C;&#xD604; &#xBAA9;&#xB85D;</strong>
+<ul>
+<li>&#xAE30;&#xC6B8;&#xAE30; &#xC13C;&#xC11C; &#xB300;&#xC2E0; &#xD130;&#xCE58;&#xB85C; &#xC88C;&#xC6B0; &#xC774;&#xB3D9;</li>
+<li>&#xD50C;&#xB7AB;&#xD3FC;(&#xBC1C;&#xD310;) &#xBC0F; &#xC544;&#xC774;&#xD15C; &#xC790;&#xB3D9; &#xC0DD;&#xC131; &#xAD6C;&#xD604;</li>
+<li>&#xAC8C;&#xC784; &#xC624;&#xBC84;, &#xD074;&#xB9AC;&#xC5B4;, &#xCD5C;&#xACE0; &#xAE30;&#xB85D;, &#xC911;&#xAC04;&#xC800;&#xC7A5; &#xAE30;&#xB2A5; &#xAD6C;&#xD604;</li>
+<li>Json &#xAE30;&#xBC18; &#xC554;&#xD638;&#xD654;&#xB41C; &#xB370;&#xC774;&#xD130; &#xC800;&#xC7A5; &#xAD6C;&#xD604;</li>
+<li>&#xAD11;&#xACE0; &#xC0BD;&#xC785;</li>
+<li>&#xC138;&#xD305; &#xBA54;&#xB274; &#xBC0F; &#xAE30;&#xD0C0; UI &#xAD6C;&#xD604;</li>
+</ul>
+</li>
+</ul>
+<h3 class="mume-header" id="4-tentacles">4. tentacles</h3>
+
+<p><img src="./Images/tentacles01.PNG" width="65%"><br>
+<img src="./Images/tentacles02.PNG" width="65%"></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">&#xD504;&#xB85C;&#xC81D;&#xD2B8; &#xBA85;</th>
+<th style="text-align:left">tentacles</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">&#xC720;&#xD615;</td>
+<td style="text-align:left">&#xC720;&#xB2C8;&#xD2F0; &#xD300; &#xD504;&#xB85C;&#xC81D;&#xD2B8;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xAC1C;&#xBC1C; &#xC778;&#xC6D0;</td>
+<td style="text-align:left">&#xAE30;&#xD68D; 1&#xBA85;, &#xD504;&#xB85C;&#xADF8;&#xB798;&#xBC0D; 2&#xBA85;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xAC1C;&#xBC1C; &#xBAA9;&#xC801;</td>
+<td style="text-align:left">&#xCDE8;&#xBBF8;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xB2F4;&#xB2F9; &#xC601;&#xC5ED;</td>
+<td style="text-align:left">&#xCE90;&#xB9AD;&#xD130; &#xC2A4;&#xD0AC; &#xC77C;&#xBD80;, UI, &#xB9F5;, &#xC2DC;&#xC2A4;&#xD15C; &#xAE30;&#xB2A5; &#xD504;&#xB85C;&#xADF8;&#xB798;&#xBC0D;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xC5D4;&#xC9C4; &#xBC84;&#xC804;</td>
+<td style="text-align:left">Unity 2019.1.0f2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>&#xC124;&#xBA85;</strong>
+<ul>
+<li>2D &#xD50C;&#xB7AB;&#xD3EC;&#xBA38; &#xAC8C;&#xC784;</li>
+</ul>
+</li>
+<li><strong>&#xC9C0;&#xC6D0;&#xC790; &#xAD6C;&#xD604; &#xBAA9;&#xB85D;</strong>
+<ul>
+<li>&#xD53D;&#xC140; &#xD37C;&#xD399;&#xD2B8;/&#xC2DC;&#xB124;&#xBA38;&#xC2E0;&#xC744; &#xC0AC;&#xC6A9;&#xD574; &#xC790;&#xC5F0;&#xC2A4;&#xB7EC;&#xC6B4; &#xD654;&#xBA74;&#xACFC; &#xCE74;&#xBA54;&#xB77C; &#xC6CC;&#xD06C; &#xC801;&#xC6A9;</li>
+<li>&#xB9F5; &#xC804;&#xCCB4; &#xAD6C;&#xD604;</li>
+<li>UI &#xC804;&#xCCB4; &#xAD6C;&#xD604;</li>
+<li>&#xC2DC;&#xC2A4;&#xD15C; &#xAE30;&#xB2A5; &#xAD6C;&#xD604;
+<ul>
+<li>&#xC800;&#xC7A5;/&#xBD88;&#xB7EC;&#xC624;&#xAE30;(Json &#xAE30;&#xBC18;)</li>
+<li>&#xD654;&#xBA74; &#xC804;&#xD658;/&#xAC8C;&#xC784; &#xC885;&#xB8CC;</li>
+<li>&#xC77C;&#xC2DC;&#xC815;&#xC9C0;(ESC) &#xBC0F; &#xBA54;&#xB274; &#xD654;&#xBA74;</li>
+</ul>
+</li>
+<li>&#xD50C;&#xB808;&#xC774;&#xC5B4; &#xCE90;&#xB9AD;&#xD130; &#xC2A4;&#xD0AC; &#xC77C;&#xBD80; &#xAD6C;&#xD604;
+<ul>
+<li>&#xC0C1;&#xD558; &#xBC84;&#xD2BC;&#xC73C;&#xB85C; &#xC0C1;&#xD558; &#xC2DC;&#xC57C; &#xD655;&#xBCF4;</li>
+<li>&#xCD09;&#xC218; &#xC810;&#xD504;(c&#xD0A4;). &#xACF5;&#xC911; &#xD639;&#xC740; &#xBCBC;&#xB791; &#xB05D;&#xC5D0;&#xC11C; &#xC6D0;&#xAC70;&#xB9AC; &#xC810;&#xD504; &#xAC00;&#xB2A5;.</li>
+<li>&#xB2E4;&#xB9AC;(bridge) &#xC544;&#xB798;&#xB85C; &#xD1B5;&#xACFC;. &#xC810;&#xD504;&#xD0A4;(z)+&#x2193;&#xD0A4;&#xB85C; &#xD1B5;&#xACFC;.</li>
+<li>&#xCCB4;&#xB825; &#xAD00;&#xB9AC;</li>
+<li>&#xC2A4;&#xD0AC; &#xC2B5;&#xB4DD; &#xC2DC;&#xC2A4;&#xD15C;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 class="mume-header" id="5-yubintest">5. yubintest</h3>
+
+<p><img src="./Images/yubintest01.PNG" width="65%"></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">&#xD504;&#xB85C;&#xC81D;&#xD2B8; &#xBA85;</th>
+<th style="text-align:left">yubintest</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">&#xC720;&#xD615;</td>
+<td style="text-align:left">&#xC720;&#xB2C8;&#xD2F0; &#xAC1C;&#xC778; &#xD504;&#xB85C;&#xC81D;&#xD2B8;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xAC1C;&#xBC1C; &#xC778;&#xC6D0;</td>
+<td style="text-align:left">1&#xBA85;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xAC1C;&#xBC1C; &#xBAA9;&#xC801;</td>
+<td style="text-align:left">&#xC720;&#xB2C8;&#xD2F0; &#xC785;&#xBB38; &#xACF5;&#xBD80;&#xC6A9; &#xD504;&#xB85C;&#xC81D;&#xD2B8;</td>
+</tr>
+<tr>
+<td style="text-align:left">&#xC5D4;&#xC9C4; &#xBC84;&#xC804;</td>
+<td style="text-align:left">Unity 2018.3.2f1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>&#xC124;&#xBA85;</strong>
+<ul>
+<li>2D &#xD50C;&#xB7AB;&#xD3EC;&#xBA38; &#xAC8C;&#xC784;</li>
+</ul>
+</li>
+<li><strong>&#xAD6C;&#xD604; &#xBAA9;&#xB85D;</strong>
+<ul>
+<li>&#xD53D;&#xC140; &#xD37C;&#xD399;&#xD2B8;/&#xC2DC;&#xB124;&#xBA38;&#xC2E0;&#xC744; &#xC0AC;&#xC6A9;&#xD574; &#xC790;&#xC5F0;&#xC2A4;&#xB7EC;&#xC6B4; &#xD654;&#xBA74;&#xACFC; &#xCE74;&#xBA54;&#xB77C; &#xC6CC;&#xD06C; &#xC801;&#xC6A9;</li>
+<li>&#xD50C;&#xB808;&#xC774;&#xC5B4;
+<ul>
+<li>&#xADFC;&#xAC70;&#xB9AC;/&#xB300;&#xC2DC;/&#xC6D0;&#xAC70;&#xB9AC; &#xACF5;&#xACA9;(X, Z&#xD0A4;), &#xC810;&#xD504;(Space), &#xBCBD; &#xC810;&#xD504;, &#xBCBD; &#xACE0;&#xC815;(Shift), &#xD53C;&#xACA9; &#xAD6C;&#xD604;</li>
+</ul>
+</li>
+<li>&#xBAAC;&#xC2A4;&#xD130;
+<ul>
+<li>&#xC21C;&#xCC30;, &#xD50C;&#xB808;&#xC774;&#xC5B4; &#xAC10;&#xC9C0;, &#xC6D0;&#xAC70;&#xB9AC; &#xACF5;&#xACA9; &#xAD6C;&#xD604;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    </body></html>

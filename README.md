@@ -17,7 +17,7 @@
 
 ## 개요
 * 포트폴리오 및 깃허브 리포지토리에 대한 설명입니다.
-* **PDF파일**과 **README.md**의 내용은 동일합니다.
+* **PDF파일**과 **README.html**, **README.md**의 내용은 동일합니다.
 * [포트폴리오 리포지토리 링크](https://github.com/kimyubin/Portfolio)      
 ## 소개
 * 전산학 지식
@@ -177,9 +177,7 @@
     * 사망 판정 및 부활
 
 ### 3. savethechickentower
-<img src="./Images/BeyondtheSky01.png" width="25%"></img>
-<img src="./Images/BeyondtheSky02.png" width="25%"></img>
-<img src="./Images/BeyondtheSky03.png" width="25%"></img><br/>
+<img src="./Images/BeyondtheSky01.png" width="25%"> </img><img src="./Images/BeyondtheSky02.png" width="25%"></img> <img src="./Images/BeyondtheSky03.png" width="25%"></img><br/>
 
 |프로젝트 명|BeyondtheSky(하늘 너머로)|
 |:---|:---|
@@ -188,6 +186,7 @@
 |개발 목적| 구글 플레이 스토어 출시 |
 |엔진 버전 | Unity 2019.3.0f3|
 |다운로드 링크|[구글 플레이스토어](https://play.google.com/store/apps/details?id=com.KimFriedChicken.beyondthesky)|
+[플레이 영상 유튜브 링크](https://youtu.be/IIDG5cgJkTY) | https://youtu.be/IIDG5cgJkTY
 
 * **설명**
     * 초기 컨샙이 변경되어 폴더명과 실제 프로젝트명이 다릅니다.
