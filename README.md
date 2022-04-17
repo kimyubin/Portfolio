@@ -43,6 +43,7 @@
     * 팀 프로젝트에 꾸준히 참여하고 있습니다.
     * 유니티, 언리얼 엔진 등 상용 엔진을 익혔습니다.  
     * 구글 플레이 스토어에 게임을 출시한 경험이 있습니다.(`Beyond the Sky`)
+<br><div style="page-break-after: always;"></div>
 
 ---
 ## 기술 스택
@@ -87,6 +88,8 @@
 * **Visual Studio 2022** : 언리얼 엔진 개발용
 * **Sourcetree** : GUI기반 Git 버전관리 프로그램
 
+<br><br><div style="page-break-after: always;"></div>
+
 ----------------------------------------------------------------
 
 ## 게임 목록
@@ -94,9 +97,11 @@
 * Enoch 프로젝트는 현재 진행 중입니다.
 * ```savethechickentower``` 폴더는 실제 발매된 게임의 이름과 폴더명이 상이합니다. 실제 발매된 게임은 `BeyondtheSky(하늘 너머로)`입니다.
 
+<br>
+
 ### 1. Enoch
 <img src="./Images/Enoch01.png" width="65%"></img>
-<img src="./Images/Enoch02.png" width="65%"></img>
+<img src="./Images/Enoch02.png" width="65%"></img><br>
 
 **[실행 예시 유튜브 영상 링크](https://youtu.be/NPYjiZS8pZE)** | https://youtu.be/NPYjiZS8pZE
 
@@ -108,6 +113,8 @@
 |담당 영역 | UI, Drag&Drop 용병 구매/판매/배치/합성, 적풀, 데이터 저장/불러오기, 게임모드 등|
 |엔진 버전|Unreal Engine 4.27.2|
 
+<br>
+
 * **설명**
     * 오토체스류 게임(오토배틀러)
         * 비동기 기반 오토체스 게임을 목표로 만들고 있습니다.
@@ -118,7 +125,7 @@
         * 언리얼 엔진 파트는 ```\Portfolio\1. Enoch\Code\Enoch```하위 폴더에 위치해 있습니다.
         * 지원자 구현 코드는 ```\Portfolio\1. Enoch\Code\Enoch\Source\Enoch```에 위치해 있습니다.
     * 개발 진행 중인 프로젝트   
-
+<br>
 * **지원자 구현 목록**
     * 메인 화면 및 각 레벨 간 이동
     * 시스템
@@ -138,34 +145,36 @@
     * 저장, 체력바, 사망 판정, 전투 결과 UI 구현(우측 골드/레벨 창 및 용병 정보창 제외)
         * 필드 데이터 저장 및 로드(스폰)(좌하단 UI)
     * 마우스 휠을 통한 카메라 각도 조정 및 필드 용병 각도 조정
-   
-    * **구현 소스 목록**(`\Source\`)    
-        ><b id="fn1">A.</b> 해당 파일은 다음 항목만 구현했습니다. [↩](#f1)       
-        ><b id="fn2">B.</b> 해당 파일은 다음 항목을 제외하고 나머지 부분을 구현했습니다. [↩](#f2)
+<br>
 
-        |\Enoch|\Enoch\UIs|\Enoch\Commons|
-        |:---|:---|:---|
-        |CommanderWrapper|EnemyPoolDetailSlot|Commander<sup id="f2">[B](#fn2)</sup>|
-        |DragImage|EnemyPoolDetailsPanel|`- EnochCommander()`|
-        |EnochDragDropOP|EnemyPoolPanel|`- uint32 addExp(uint32)`|
-        |EnochField<sup id="f1">[A](#fn1)</sup>|EnochFightResultUI|`- uint16 getExpForNextLevel(uint8) `|
-        |`- GenerateField()`|FieldDragDetector|`- uint16 getMaxFreeLancerNumber(uint8)`|
-        |EnochFieldDropProtector|FreeLancerDeathUI||
-        |EnochFieldSaveSlot|FreeLancerUnifiedUpperUI||
-        |EnochFreeLancer<sup id="f1">[A](#fn1)</sup>|PlayMenuUIManager||
-        |`- UI 컴포넌트`|SelectEnemyPoolUI||
-        |`- RotatorSetforCamera()`|UniformSlot||
-        |`- SetDragDetectOnOff(bool)`|||
-        |`- SetImageVisualOnOff(bool)`|||
-        |EnochGameModeBase|||
-        |EnochGameModeBaseEnemyPool|||
-        |EnochGameModeBasePlay|||
-        |EnochGameModeBaseStart|||
-        |EnochMouseController|||
-        |EnochSaveField|||
-        |EnochSaveGameState|||
-        |PlayDefaultPawn|||
+* **구현 소스 목록**(`\Source\`)    
+    ><b id="fn1">A.</b> 해당 파일은 다음 항목만 구현했습니다. [↩](#f1)       
+    ><b id="fn2">B.</b> 해당 파일은 다음 항목을 제외하고 나머지 부분을 구현했습니다. [↩](#f2)
 
+    |\Enoch|\Enoch\UIs|\Enoch\Commons|
+    |:---|:---|:---|
+    |CommanderWrapper|EnemyPoolDetailSlot|Commander<sup id="f2">[B](#fn2)</sup>|
+    |DragImage|EnemyPoolDetailsPanel|`- EnochCommander()`|
+    |EnochDragDropOP|EnemyPoolPanel|`- uint32 addExp(uint32)`|
+    |EnochField<sup id="f1">[A](#fn1)</sup>|EnochFightResultUI|`- uint16 getExpForNextLevel(uint8) `|
+    |`- GenerateField()`|FieldDragDetector|`- uint16 getMaxFreeLancerNumber(uint8)`|
+    |EnochFieldDropProtector|FreeLancerDeathUI||
+    |EnochFieldSaveSlot|FreeLancerUnifiedUpperUI||
+    |EnochFreeLancer<sup id="f1">[A](#fn1)</sup>|PlayMenuUIManager||
+    |`- UI 컴포넌트`|SelectEnemyPoolUI||
+    |`- RotatorSetforCamera()`|UniformSlot||
+    |`- SetDragDetectOnOff(bool)`|||
+    |`- SetImageVisualOnOff(bool)`|||
+    |EnochGameModeBase|||
+    |EnochGameModeBaseEnemyPool|||
+    |EnochGameModeBasePlay|||
+    |EnochGameModeBaseStart|||
+    |EnochMouseController|||
+    |EnochSaveField|||
+    |EnochSaveGameState|||
+    |PlayDefaultPawn|||
+
+<br><br><div style="page-break-after: always;"></div>
 
 ### 2. FlatformLand
 <img src="./Images/FlatformLand01.png" width="65%"></img>
@@ -188,8 +197,11 @@
     * 유니티 애니메이션이 아닌, FSM를 통한 캐릭터 애니메이션 구현(오브젝트를 직접 회전 시키는 방식)
     * 사망 판정 및 부활
 
+<br><br><div style="page-break-after: always;"></div>
+
 ### 3. savethechickentower
-<img src="./Images/BeyondtheSky00.png" width="75%"></img><br/>
+<img src="./Images/BeyondtheSky000.png" width="60%"></img>
+<img src="./Images/BeyondtheSky001.png" width="60%"></img>
 
 **[플레이 영상 유튜브 링크](https://youtu.be/IIDG5cgJkTY)** | https://youtu.be/IIDG5cgJkTY
 
@@ -212,6 +224,8 @@
     * Json 기반 암호화된 데이터 저장 구현
     * 광고 삽입
     * 세팅 메뉴 및 기타 UI 구현
+
+<br><br><div style="page-break-after: always;"></div>
 
 ### 4. tentacles
 <img src="./Images/tentacles01.PNG" width="65%"></img>
@@ -241,6 +255,8 @@
         * 다리(bridge) 아래로 통과. 점프키(z)+↓키로 통과.
         * 체력 관리
         * 스킬 습득 시스템
+
+<br><br>
 
 ### 5. yubintest
 <img src="./Images/yubintest01.PNG" width="65%"></img>
