@@ -17,8 +17,13 @@
 
 ## 개요
 * 포트폴리오 및 깃허브 리포지토리에 대한 설명입니다.
+* 용량 문제로 인해, 첨부된 압축파일에는 언리얼 프로젝트 `Enoch`의 소스 코드와 포트폴리오만 첨부되어 있습니다. 
+  전체 프로젝트는 [깃허브 리포지토리](https://github.com/kimyubin/Portfolio)에서 확인하실 수 있습니다.
 * **PDF파일**과 **README.html**, **README.md**의 내용은 동일합니다.
-* [포트폴리오 리포지토리 링크](https://github.com/kimyubin/Portfolio)      
+* `1. Enoch_Source.zip` 파일 안에는 `Enoch 언리얼 프로젝트`의 소스 코드만 따로 첨부되어 있습니다.
+* [포트폴리오 리포지토리 링크](https://github.com/kimyubin/Portfolio) (https://github.com/kimyubin/Portfolio) 
+   
+
 ## 소개
 * 이름 : 김유빈
 * 학력 : 숭실대학교 국어국문학과/컴퓨터학부(복수전공) 졸업
@@ -38,6 +43,8 @@
     * 팀 프로젝트에 꾸준히 참여하고 있습니다.
     * 유니티, 언리얼 엔진 등 상용 엔진을 익혔습니다.  
     * 구글 플레이 스토어에 게임을 출시한 경험이 있습니다.(`Beyond the Sky`)
+
+---
 ## 기술 스택
 
 ### Languages
@@ -86,11 +93,13 @@
 * 최근 프로젝트부터 역순으로 정렬되어 있습니다. 항목명은 폴더명을 기준으로 작성되어져 있습니다.
 * Enoch 프로젝트는 현재 진행 중입니다.
 * ```savethechickentower``` 폴더는 실제 발매된 게임의 이름과 폴더명이 상이합니다. 실제 발매된 게임은 `BeyondtheSky(하늘 너머로)`입니다.
+
 ### 1. Enoch
 <img src="./Images/Enoch01.png" width="65%"></img>
 <img src="./Images/Enoch02.png" width="65%"></img>
 
-[실행 예시 유튜브 영상 링크](https://youtu.be/NPYjiZS8pZE) | https://youtu.be/NPYjiZS8pZE
+**[실행 예시 유튜브 영상 링크](https://youtu.be/NPYjiZS8pZE)** | https://youtu.be/NPYjiZS8pZE
+
 |프로젝트 명|Enoch|
 |:---|:---|
 |유형|언리얼 엔진 팀 프로젝트|
@@ -180,7 +189,9 @@
     * 사망 판정 및 부활
 
 ### 3. savethechickentower
-<img src="./Images/BeyondtheSky01.png" width="25%"> </img><img src="./Images/BeyondtheSky02.png" width="25%"></img> <img src="./Images/BeyondtheSky03.png" width="25%"></img><br/>
+<img src="./Images/BeyondtheSky00.png" width="75%"></img><br/>
+
+**[플레이 영상 유튜브 링크](https://youtu.be/IIDG5cgJkTY)** | https://youtu.be/IIDG5cgJkTY
 
 |프로젝트 명|BeyondtheSky(하늘 너머로)|
 |:---|:---|
@@ -189,7 +200,7 @@
 |개발 목적| 구글 플레이 스토어 출시 |
 |엔진 버전 | Unity 2019.3.0f3|
 |다운로드 링크|[구글 플레이스토어](https://play.google.com/store/apps/details?id=com.KimFriedChicken.beyondthesky)|
-[플레이 영상 유튜브 링크](https://youtu.be/IIDG5cgJkTY) | https://youtu.be/IIDG5cgJkTY
+
 
 * **설명**
     * 초기 컨샙이 변경되어 폴더명과 실제 프로젝트명이 다릅니다.
