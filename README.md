@@ -17,10 +17,8 @@
 
 ## 개요
 * 포트폴리오 및 깃허브 리포지토리에 대한 설명입니다.
-* 용량 문제로 인해, 첨부된 압축파일에는 언리얼 프로젝트 `Enoch`의 소스 코드와 포트폴리오만 첨부되어 있습니다. 
-  전체 프로젝트는 [깃허브 리포지토리](https://github.com/kimyubin/Portfolio)에서 확인하실 수 있습니다.
+* 용량 문제로 인해, 전체 프로젝트는 [깃허브 리포지토리](https://github.com/kimyubin/Portfolio)에서 확인하실 수 있습니다.
 * **PDF파일**과 **README.html**, **README.md**의 내용은 동일합니다.
-* `1. Enoch_Source.zip` 파일 안에는 `Enoch 언리얼 프로젝트`의 소스 코드만 따로 첨부되어 있습니다.
 * [포트폴리오 리포지토리 링크](https://github.com/kimyubin/Portfolio) (https://github.com/kimyubin/Portfolio) 
    
 
