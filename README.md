@@ -139,6 +139,7 @@
         * 적풀 선택 후 적 용병의 필드 스폰
     * 상점, 인벤토리 및 Drag&Drop 기능 전체
         * 상점, 인벤토리 내부 로직
+        * UI 구성 및 공용 슬롯 이미지 적용
         * 상점, 인벤토리 간 용병의 구매/판매
         * 델리게이트 바인딩을 통한 필드 용병의 Drag&Drop 배치/재배치/회수        
         * 용병 구매 시, 필드/인벤토리에 있는 용병 자동 합성
@@ -172,7 +173,9 @@
     |EnochMouseController|||
     |EnochSaveField|||
     |EnochSaveGameState|||
+    |LevelDefaultMainUI|||
     |PlayDefaultPawn|||
+    |PulicSlotImgArr|||
 
 <br><br><div style="page-break-after: always;"></div>
 
