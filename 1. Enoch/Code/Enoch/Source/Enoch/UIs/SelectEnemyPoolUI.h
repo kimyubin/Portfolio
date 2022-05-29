@@ -14,7 +14,7 @@ class UEnemyPoolDetailsPanel;
  * 
  */
 UCLASS()
-class ENOCH_API USelectEnemyPoolUI : public UUserWidget
+class ENOCH_API USelectEnemyPoolUI : public ULevelDefaultMainUI
 {
 	GENERATED_BODY()
 public:
@@ -28,21 +28,11 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UEnemyPoolDetailsPanel* EnemyPoolDetailsPanel;
 	
-	//하위 패널에서 사용할 용병 이미지
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProfileImg")
-	TArray<FFreeLancerSlotData> SelectEnemySlotDataArr;
 
 	static USelectEnemyPoolUI* SelectEnemyPoolUIPtr;
 	static USelectEnemyPoolUI* GetSelectEnemyPoolUIPtr(){return SelectEnemyPoolUIPtr;}
 	
-		
-	/** 숫자로 용병 머티리얼 반환
-	*@return 용병 이미지 머티리얼*/
-	UMaterialInterface* GetSlotImg(const int FreeLancerNum);
-	/** TID로 용병 머티리얼 반환
-	 *@return 용병 이미지 머티리얼*/
-	UMaterialInterface* GetSlotImg(const uint8 FreeLancerTID);
-
+	
 	/** 디테일 패널 업데이트
 	 * @param PoolNum 풀 패널 번호
 	 * @param GradeNum 등급 번호

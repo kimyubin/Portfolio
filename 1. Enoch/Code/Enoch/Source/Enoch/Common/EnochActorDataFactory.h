@@ -63,6 +63,7 @@ public:
 		if (isEnemy)	return allianceEnemy;
 		else			return allianceAlly;
 	}
+	// 얼라이언스 레벨은 1부터 시작...
 	uint8_t GetAllianceLevel(bool isEnemy, uint8_t allianceID);
 	wstring strAlly, strEnemy;
 };

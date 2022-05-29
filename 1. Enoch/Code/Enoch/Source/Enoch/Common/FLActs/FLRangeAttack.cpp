@@ -8,6 +8,7 @@
 void FLRangeAttack::_End()
 {
 	auto targetData = data->GetTarget();
+	if (targetData == nullptr) return;
 	data->direction = targetData->locationOnFight - data->locationOnFight;
 	auto factory = EnochActorDataFactory::instance;
 	auto SN_PJ = factory->SpawnProjectile();
@@ -22,13 +23,4 @@ void FLRangeAttack::_End()
 	data->SetState(FreeLancerState::PostAttack);
 	time = 0;
 	
-}
-
-void FLRangeAttack::_Tick(float delta_time)
-{
-	;
-}
-void FLRangeAttack::_Begin()
-{
-
 }

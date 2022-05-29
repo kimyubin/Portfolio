@@ -33,6 +33,7 @@ enum class SimulateInfoType : uint8 {
 	MeleeAttack,
 	ChangeState,
 	RangeAttack,
+	Skill,
 	PJAttack,
 	RemovePJ,
 	Debug,

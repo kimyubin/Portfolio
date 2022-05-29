@@ -22,6 +22,7 @@
 #include "FLActs/FLDelay.h"
 #include "FLActs/FLMeleeAttack.h"
 #include "FLActs/FLRangeAttack.h"
+#include "FLActs/FLRangeSkill.h"
 
 #include <memory>
 using namespace std;
@@ -32,7 +33,10 @@ uint8 AllianceID::Num = 0;
 static map<uint8, shared_ptr<FreeLancerTemplate>> mFreeLancerTemplate;
 static map<uint8, shared_ptr<AllianceTemplate>> mAllianceTemplate;
 
-const FreeLancerTemplate* FreeLancerTemplate::GetFreeLancerTemplate(uint8 ID)
+#define	MACRO_MAP_ELEM(STRUCT, STR)	{L#STR, STRUCT::STR}
+#define MACROFIND(MAP, CONTENT, DEFAULT) MAP.find(CONTENT) != MAP.end() ? MAP.find(CONTENT)->second : DEFAULT
+
+const FreeLancerTemplate* FreeLancerTemplate::GetFreeLancerTemplate(FLTEMPLATE_ID ID)
 {
 	auto it = mFreeLancerTemplate.find(ID); 
 	if(it != mFreeLancerTemplate.end())
@@ -113,7 +117,7 @@ bool FreeLancerTemplate::InitFreeLancerTemplate(wstring path)
 			auto &row_tmp = content[row_first+j];
 			if(row_tmp[COLUMN_ALLIANCE].empty())
 				break;
-			uint8 allianceID = stoi(row_tmp[COLUMN_ALLIANCE]);
+			ALLIANCE_ID allianceID = stoi(row_tmp[COLUMN_ALLIANCE]);
 			elem->alliance.push_back(allianceID);
 		}
 		
@@ -190,6 +194,9 @@ void FLBattleData::EndPlay()
 
 void FLBattleData::Act(float deltaTime)
 {
+	//체력 마력 회복. 임시로 놔둠.
+	hpNow += hpRegeneration*deltaTime;
+	mpNow += mpRegeneration*deltaTime;
 	//동작이 없었던 경우 초기화
 	if (actDelay <= 0) {
 		EnochFiniteStateMachine::Decide(this);
@@ -199,7 +206,7 @@ void FLBattleData::Act(float deltaTime)
 		//EnochSimulator::logs.push({SimulateInfoType::Debug, 1,1,actDelay});
 		//EnochSimulator::logs.push({ SimulateInfoType::Debug, 1,1,deltaTime });
 		auto timeUsed = std::min(actDelay, deltaTime);
-		if (GetState() != FreeLancerState::None && GetState() != FreeLancerState::Skill)
+		if (GetState() != FreeLancerState::None)
 			if (actMap == nullptr) EnochSimulator::logs.push({ SimulateInfoType::Debug, 1,1,100 });
 			else
 			actMap->at((int)state)->Tick(deltaTime);
@@ -215,11 +222,6 @@ void FLBattleData::BeginSimulate()
 {
 	locationOnFight = location;
 	//act.Init();
-}
-
-uint8 FLBattleData::GetTID()
-{
-	return templateID;
 }
 
 FreeLancerState FLBattleData::GetState()
@@ -267,9 +269,6 @@ bool FLBattleData::CanUseSpell()
 
 bool FLBattleData::CanAttack()
 {
-	// 일단 원거리 고려 안함
-	if (attackRange > 1)
-		return true;
 	return nextAttackTime <= EnochSimulator::simulateTime;
 }
 
@@ -283,9 +282,9 @@ void FLBattleData::DoAttack(FLBattleData* attacker, FLBattleData* defender)
 	if (!attacker || !defender)
 		return;
 	//데미지 계산
-	auto damage = (int)(attacker->attackDamage - defender->defense);
-	EnochSimulator::logs.push({ SimulateInfoType::MeleeAttack, attacker->SerialNumber, defender->SerialNumber, (int)damage });
-	CalculateDamage(damage, defender);
+	float damage = CalculateDamage(attacker->attackDamage, defender);
+	
+	EnochSimulator::logs.push({ SimulateInfoType::MeleeAttack, attacker->SerialNumber, defender->SerialNumber, (int)damage });	
 
 	attacker->nextAttackTime = EnochSimulator::simulateTime + attacker->timeForOneAttack;
 }
@@ -295,14 +294,21 @@ void FLBattleData::DoAttack(EnochProjectileData* attacker, FLBattleData* defende
 	if (!attacker || !defender)
 		return;
 	//데미지 계산
-	auto damage = (int)(attacker->attackDamage - defender->defense);
+	float damage = CalculateDamage(attacker->attackDamage, defender);
+
 	EnochSimulator::logs.push({ SimulateInfoType::PJAttack, attacker->SerialNumber, defender->SerialNumber, (int)damage });
-	CalculateDamage(damage, defender);
 }
 
-void FLBattleData::CalculateDamage(int damage, FLBattleData* defender)
+float FLBattleData::CalculateDamage(int attackDamage, FLBattleData* defender, bool isPhysicalAtk)
 {
-	if (damage >= defender->hpNow) {
+	float CalDamage;
+	//물공 마공 판단.
+	if(isPhysicalAtk)	
+		CalDamage = attackDamage * defender->physicalReduce;
+	else	
+		CalDamage = attackDamage * defender->magicRegist;
+	
+	if (CalDamage >= defender->hpNow) {
 		defender->hpNow = 0;
 		//이후 체력 0에서 안죽는 스킬이 추가된다면 여기에 조건문 추가해야할듯
 
@@ -310,11 +316,11 @@ void FLBattleData::CalculateDamage(int damage, FLBattleData* defender)
 		defender->state = FreeLancerState::None;
 		defender->SetState(FreeLancerState::Dead);
 		defender->SetTarget(-1);
-
 		//EnochFieldData::GetData(defender->locationOnFight)->SetFreeLancerOnFight(nullptr);
 	}
-	else
-		defender->hpNow -= damage;
+	else	
+		defender->hpNow -= CalDamage;
+	return CalDamage;
 }
 
 //return target address or nullptr. do not store return value
@@ -324,6 +330,10 @@ FLMove &FLBattleData::GetMove()
 	return *static_pointer_cast<FLMove>(actMap->at((int)FreeLancerState::PreMove));
 }
 
+FLMove& FLBattleData::GetJump()
+{
+	return *static_pointer_cast<FLJump>(actMap->at((int)FreeLancerState::PreJump));
+}
 
 //기본스탯 템플릿 사용
 void FLBattleData::InitStatus(uint8 TID, uint8 levelIn, int SN, bool isEnemy_)
@@ -345,17 +355,14 @@ void FLBattleData::InitStatus(uint8 TID, uint8 levelIn, int SN, bool isEnemy_)
 	actMap = make_unique< vector<shared_ptr<FreeLancerAct>> >();
 	actMap->resize((int)FreeLancerState::Dead + 1, nullptr);
 	actMap->at((int)FreeLancerState::Idle) = make_shared<FLIdle>();
-	/*
+	
 	if (tmp->name.length() > 8 && tmp->name.substr(0, 8) == L"Assassin") {
-		actMap->at((int)FreeLancerState::PreMove) = make_shared<FLJump>();
 		canJump = true;
 	}
-	
-	else {
-	*/
-		actMap->at((int)FreeLancerState::PreMove) = make_shared<FLMove>();
+	else
 		canJump = false;
-	//}
+	actMap->at((int)FreeLancerState::PreJump) = make_shared<FLJump>();
+	actMap->at((int)FreeLancerState::PreMove) = make_shared<FLMove>();
 	actMap->at((int)FreeLancerState::PostMove) = make_shared<FLDelay>();
 	if(tmp->attackRange > 1)
 		actMap->at((int)FreeLancerState::PreAttack) = make_shared<FLRangeAttack>();
@@ -364,6 +371,8 @@ void FLBattleData::InitStatus(uint8 TID, uint8 levelIn, int SN, bool isEnemy_)
 	actMap->at((int)FreeLancerState::PostAttack) = make_shared<FLDelay>();
 	actMap->at((int)FreeLancerState::Dead) = make_shared<FLIdle>();
 	actMap->at((int)FreeLancerState::Victory) = make_shared<FLIdle>();
+	actMap->at((int)FreeLancerState::PreSkill) = make_shared<FLRangeSkill>();
+	actMap->at((int)FreeLancerState::PostSkill) = make_shared<FLDelay>();
 	// ////////////////////////
 	// 레벨 관련
 	auto &levelData = tmp->levelData[level]; 
@@ -380,6 +389,7 @@ void FLBattleData::InitStatus(uint8 TID, uint8 levelIn, int SN, bool isEnemy_)
 	actMap->at((int)FreeLancerState::Idle)->length = 0.1f;
 	actMap->at((int)FreeLancerState::PreAttack)->length = tmp->attackDelayBefore;
 	actMap->at((int)FreeLancerState::PostAttack)->length = tmp->attackDelayAfter;
+	actMap->at((int)FreeLancerState::PostSkill)->length = 0.5;	//일단 아무값
 	isMelee = attackRange == 1;
 	
 	hpNow = hpMax;
@@ -394,26 +404,23 @@ void FLBattleData::InitStatus(uint8 TID, uint8 levelIn, int SN, bool isEnemy_)
 
 void FLBattleData::UpdateStat(StatFlag flag)
 {
-	const auto& tmp = FreeLancerTemplate::GetFreeLancerTemplate(templateID);
-	auto& levelData = tmp->levelData[level];
+}
 
+void FLBattleData::UpdateBaseStat() {
 	// 효과 별 버프/너프 모아서 계산해야함
 	unordered_map<SkillEffect, list<float>> effects;
+	auto& affected_list = affectedList[AffectedSituation::Always];
 
-	// 동맹 부터 모으기
-	for (uint8_t allianceID : tmp->alliance)
-	{
-		uint8_t AllianceLevel = EnochActorDataFactory::instance->GetAllianceLevel(isEnemy, allianceID);
-		if (AllianceLevel == 0) continue;
-		uint16_t skillID = AllianceTemplate::GetAllianceTemplate(allianceID)->skillID;
-		const auto& skillTmp = SkillData::GetSkillTemplate(skillID);
-		for (auto& effectPair : skillTmp->level[AllianceLevel].effects)
-		{
-			auto& effect = effectPair.first;
-			float value = effectPair.second;
-			if(effects.find(effect) == effects.end())
-				effects[effect] = list<float>();
-			effects[effect].push_back(value);
+	for (AffectedSkill& as : affected_list) {
+		const SkillData* sd = SkillData::GetSkillTemplate(as.skillID);
+		uint8_t level_ = as.reason == AffectedReason::Alliance ? as.level - 1 : as.level;
+			// 동맹은 0이 비활성화, 1이 활성화 및 0레벨
+		const SkillLevelData& ld = sd->levelData[level_];
+		for (auto& elem : ld.effects) {
+			// elem : pair<SkillEffect, float>
+			if (effects.find(elem.first) == effects.end())
+				effects[elem.first] = list<float>();
+			effects[elem.first].push_back(elem.second);
 		}
 	}
 
@@ -444,63 +451,36 @@ void FLBattleData::UpdateStat(StatFlag flag)
 				value_ *= value;
 	};
 
-	if (flag & StatFlag::HPMAX) {
-		int hpMaxBack = hpMax;
+	const auto& tmp = FreeLancerTemplate::GetFreeLancerTemplate(templateID);
+	auto& levelData = tmp->levelData[level];
+
+	{
+		unsigned hpMax_ = hpMax;
 		addIntValue(hpMax, levelData.hp, SkillEffect::HP);
-
-		// 현재 체력 변경
-		if (hpMax == hpMaxBack)
+		float hpRatio = hpNow / hpMax_;
+		if (hpMax == hpMax_)
 			;
-		else if (hpNow == hpMaxBack)
-			hpNow = hpMax;
-		else if (hpNow <= 0)
-			;
-		else
-		{
-			float ratio = hpMax / hpMaxBack;
-			hpNow = hpNow * ratio;
+		else {
+			hpNow = hpMax * hpRatio;
 		}
 	}
-
-	// MP를 변경할거 같지는 않지만 일단 구현
-	if (flag & StatFlag::MPMAX) {	
-		int mpMaxBack = mpMax;
-		addIntValue(mpMax, levelData.mp, SkillEffect::MP);
-
-		// 현재 MP 변경
-		if (mpMax == mpMaxBack)
-			;
-		else if (mpNow == mpMaxBack)
-			mpNow = mpMax;
-		else if (mpNow <= 0)
-			;
-		else
-		{
-			float ratio = mpMax / mpMaxBack;
-			mpNow = mpNow * ratio;
-		}
-	}
-
-	if (flag & StatFlag::HPGEN) addFloatValue(hpRegeneration, levelData.hpGen, SkillEffect::HPGEN);
-	if (flag & StatFlag::MPGEN) addFloatValue(mpRegeneration, levelData.mpGen, SkillEffect::MPGEN);
-	if (flag & StatFlag::ATKDMG) addIntValue(attackDamage, levelData.atkDamage, SkillEffect::ATKDMG);
-
-	if (flag & StatFlag::ATKSPD) {
+	addIntValue(mpMax, levelData.mp, SkillEffect::MP);
+	addFloatValue(hpRegeneration, levelData.hpGen, SkillEffect::HPGEN);
+	addFloatValue(mpRegeneration, levelData.mpGen, SkillEffect::MPGEN);
+	addIntValue(attackDamage, levelData.atkDamage, SkillEffect::ATKDMG);
+	{
 		addIntValue(attackSpeed, (int)levelData.attackSpeed, SkillEffect::ATKSPD);
 		const static float BaseAttackTime = 1.7f;
-		timeForOneAttack = BaseAttackTime / (1 + attackSpeed / 100);
+		timeForOneAttack = BaseAttackTime / (1 + attackSpeed / 100.f);
 		// Attack Time = BAT / ( 1 + IAS/100 )
 	}
-
-	if (flag & StatFlag::ATKRNG) addIntValue(attackRange, tmp->attackRange, SkillEffect::ATKRNG);
-
-	if (flag & StatFlag::DEF) {
-		addIntValue(defense, levelData.armor, SkillEffect::ATKRNG);
-		const static float ArmorFactor = 0.1;
-		physicalReduce = ArmorFactor * defense / (1 + ArmorFactor * abs(defense));
+	addIntValue(attackRange, tmp->attackRange, SkillEffect::ATKRNG);
+	{
+		addIntValue(defense, levelData.armor, SkillEffect::DEF);
+		const static float ArmorFactor = 0.1f;
+		physicalReduce = 1.f - ArmorFactor * defense / (1 + ArmorFactor * abs(defense));
 	}
-
-	if (flag & StatFlag::MAGREG) {
+	{
 		// 마법 저항력은 0일때 100% 데미지를 얻으므로, 1에서 뺀다
 		magicRegist = (1-levelData.magicArmor);
 		if (effects.find(SkillEffect::MAGREG) != effects.end())
@@ -511,13 +491,21 @@ void FLBattleData::UpdateStat(StatFlag flag)
 	// TODO : MAGDMG, PUREDMG 등은 아직 구현이 안됬으니 넘어가자
 }
 
-const AllianceTemplate* AllianceTemplate::GetAllianceTemplate(uint8 ID)
+const AllianceTemplate* AllianceTemplate::GetAllianceTemplate(ALLIANCE_ID ID)
 {
 	auto it = mAllianceTemplate.find(ID);
 	if (it != mAllianceTemplate.end())
 		return it->second.get();
 	return nullptr;
 }
+
+#define MACROSCOPE(STR) MACRO_MAP_ELEM(AllianceScope, STR)
+static const map<wstring, AllianceScope> ScopeInit =
+{
+	MACROSCOPE(Alliance),
+	MACROSCOPE(AllyAll),
+	MACROSCOPE(EnemyAll),
+};
 
 bool AllianceTemplate::InitAllianceTemplate(wstring path)
 {
@@ -548,13 +536,14 @@ bool AllianceTemplate::InitAllianceTemplate(wstring path)
 			;
 		const uint8 level = tail - idx;
 		elem->maxLevel = level;
-		elem->ID = static_cast<uint8>(stoi(content[idx][0]));
+		elem->ID = static_cast<ALLIANCE_ID>(stoi(content[idx][0]));
 		elem->name = content[idx][1];
-		elem->skillID = static_cast<uint16>(stoi(content[idx][2]));
+		elem->skillID = static_cast<SKILL_ID>(stoi(content[idx][2]));
 		for (uint8 i = 0; i < level; i++)
 		{
-			const uint8 num = static_cast<uint8>(stoi(content[idx+i][3]));
-			elem->level.push_back(num);
+			const uint8 num = static_cast<uint8>(stoi(content[idx + i][3]));
+			const AllianceScope scope = MACROFIND(ScopeInit, content[idx + i][4], AllianceScope::Alliance);
+			elem->levelData.push_back(make_pair(num, scope));
 		}
 
 		mAllianceTemplate.insert(make_pair(elem->ID, elem));

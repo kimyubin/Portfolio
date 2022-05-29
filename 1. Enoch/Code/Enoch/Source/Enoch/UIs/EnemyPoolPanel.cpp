@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#pragma once
 
 #include "EnemyPoolPanel.h"
 
@@ -16,7 +17,7 @@ void UEnemyPoolPanel::SetEnemyPoolData(const int& InMyPanelNum)
 	MyEnemyPoolCountList.clear();
 	EGameInstance->commander->GetEnemyPoolFLCount(InMyPanelNum, MyEnemyPoolCountList);
 
-	//현재 적풀 내부 용병을 등급별로 정리 후 Commander에 넘겨줌
+	//현재 적풀 내부 용병을 등급별로 정리 후 Commander에 넘겨줌. first : Tid, second : Cound
 	vector<vector<pair<uint8,int>>> MyFLByGrade = vector<vector<pair<uint8, int>>>(5, vector<pair<uint8, int>>());
 
 	TArray<UWidget*> FLImageUniformChildren = FLImageUniformPanel->GetAllChildren();
@@ -67,11 +68,11 @@ void UEnemyPoolPanel::SetEnemyPoolData(const int& InMyPanelNum)
 			if (panelSlotNum > FLImageUniformPanel->GetChildrenCount())
 				continue;
 
-			auto modelID = FreeLancerTemplate::GetFreeLancerModelID(MyFLByGrade[grd][i].first);			
-			auto Mat = RecruitSlotDataArr[modelID].Material;
+			auto GradTID = MyFLByGrade[grd][i];
+			auto Mat = GetSlotImg(GradTID.first);
 			Cast<UImage>(FLImageUniformChildren[panelSlotNum])->SetBrushFromMaterial(Mat);
 			Cast<UImage>(FLImageUniformChildren[panelSlotNum])->SetRenderOpacity(1);
-			Cast<UTextBlock>(FLNumUniformChildren[panelSlotNum])->SetText(FText::AsNumber(MyFLByGrade[grd][i].second));
+			Cast<UTextBlock>(FLNumUniformChildren[panelSlotNum])->SetText(FText::AsNumber(GradTID.second));
 			
 		}
 	}

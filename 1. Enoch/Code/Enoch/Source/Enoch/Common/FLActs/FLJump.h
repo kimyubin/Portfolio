@@ -4,6 +4,6 @@
 class ENOCH_API FLJump : public FLMove
 {
 public :
-	void _Tick(float deltaTime);
+//	void _Tick(float deltaTime);
 };
 

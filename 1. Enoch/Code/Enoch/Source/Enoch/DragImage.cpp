@@ -7,8 +7,6 @@
 
 void UDragImage::SetDragImg(uint8 FLTID)
 {
-	UEnochGameInstance* EGameInstance = Cast<UEnochGameInstance>(GetGameInstance());
-	auto modelID = FreeLancerTemplate::GetFreeLancerModelID(FLTID);
-	DragFreelancerImg -> SetBrushFromMaterial(EGameInstance->MyPlayMenuUI->	 RecruitSlotDataArr[modelID].Material);
-
+	UEnochGameInstance* EGameInstance = Cast<UEnochGameInstance>(GetGameInstance());	
+	DragFreelancerImg -> SetBrushFromMaterial(EGameInstance->MyPlayMenuUI->GetSlotImg(FLTID));
 }

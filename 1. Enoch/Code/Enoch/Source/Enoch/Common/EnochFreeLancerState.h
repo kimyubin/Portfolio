@@ -9,9 +9,12 @@ enum class FreeLancerState : uint8 {
 	Idle,
 	PreMove,
 	PostMove,
+	PreJump,
+	PostJump,
 	PreAttack,
 	PostAttack,
-	Skill,
+	PreSkill,
+	PostSkill,
 	Victory,
 	Dead,
 };//마지막 State를 Dead로 고정할 예정

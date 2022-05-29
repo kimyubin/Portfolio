@@ -7,22 +7,33 @@
 #include "EnochFieldData.h"
 #include "EnochFreeLancerState.h"
 #include "FLActs/EnochFreeLancerAct.h"
+#include "SkillData.h"
 #include <string>
 #include <array>
 #include <vector>
+#include <list>
 
+typedef uint8_t FLTEMPLATE_ID;
 class FreeLancerTemplateID {
 public:
-	const static uint8 None = 0;
-	const static uint8 ALLY_DEFAULT = 1;
-	const static uint8 ENEMY_DEFAULT = 2;
+	const static FLTEMPLATE_ID None = 0;
+	const static FLTEMPLATE_ID ALLY_DEFAULT = 1;
+	const static FLTEMPLATE_ID ENEMY_DEFAULT = 2;
 	static uint8 Num;
 };
 
+typedef uint8_t ALLIANCE_ID;
 class AllianceID {
 public:
-	const static uint8 None = 0;
-	static uint8 Num;
+	const static ALLIANCE_ID None = 0;
+	static ALLIANCE_ID Num;
+};
+
+enum class AllianceScope : uint8_t
+{
+	Alliance,
+	AllyAll,
+	EnemyAll,
 };
 
 UENUM()
@@ -49,7 +60,7 @@ public:
 		FLTemplateID = FLTID;
 		FLLevel = Level;
 	}	
-	uint8 FLTemplateID;
+	FLTEMPLATE_ID FLTemplateID;
 	uint8 FLLevel;		// 1 ~ 5 레벨, 0 은 없음
 	//합성에 필요한 데이터만 비교. 아이템 등은 비교X
 	inline bool operator == (const FLSaveData& rFL) { return ((FLTemplateID == rFL.FLTemplateID) && (FLLevel == rFL.FLLevel));}
@@ -138,11 +149,11 @@ public:
 
 	FreeLancerTemplate();
 	
-	uint8 ID;
+	FLTEMPLATE_ID ID;
 	wstring name;
 	uint8 grade;
 	uint8 modelID;
-	std::vector<uint8> alliance;
+	std::vector<ALLIANCE_ID> alliance;
 	AIType AiType;
 	
 	uint16 attackRange;
@@ -155,7 +166,7 @@ public:
 	
 	std::array<FreeLancerLevelTemplate, LEVEL_MAX> levelData;
 
-	static const FreeLancerTemplate* GetFreeLancerTemplate(uint8 ID);
+	static const FreeLancerTemplate* GetFreeLancerTemplate(FLTEMPLATE_ID ID);
 	//TID기반 ModelID 검색
 	static const uint8 GetFreeLancerModelID(uint8 TID);
 	static bool InitFreeLancerTemplate(wstring path);
@@ -188,16 +199,17 @@ public :
 	void Act(float deltaTime);
 	unique_ptr<vector<shared_ptr<FreeLancerAct>>> actMap;
 	FreeLancerState state;	//현재 상태 (수행중인 동작)
-	uint8 GetTID(); // 용병 정보 업데이트용
+	FLTEMPLATE_ID GetTID() { return templateID; }; // 용병 정보 업데이트용
 	uint8 GetLevel() { return level; }
 private :
-	uint8 templateID;	//프리랜서 종류
+	FLTEMPLATE_ID templateID;	//프리랜서 종류
 	uint8 level;	// 0 ~ 4 레벨
 
 public:
 	Vector2D direction;			//바라보고 있는 방향
 	float actDelay = 0;
 	class FLMove &GetMove();
+	class FLMove& GetJump();
 	float stateDuration;	//현재 수행하고 있는 모션의 점유 예정시간(남은시간이 아닌 전체시간)
 	bool CanUseSpell();	//스킬을 쓸 수 있는 상태인가?
 	bool CanAttack();
@@ -210,7 +222,7 @@ public:
 	void InitStatus(uint8 TID, uint8 level, int SN, bool isEnemy);	//스테이터스 초기화
 	static void DoAttack(class FLBattleData* attacker, class FLBattleData* defender); //실제 타격시점에 호출되는 함수(근접유닛)
 	static void DoAttack(class EnochProjectileData* attacker, class FLBattleData* defender); //실제 타격시점에 호출되는 함수(원거리유닛) -> 추후 위 함수와 통합예정. 사용금지
-	static void CalculateDamage(int damage, class FLBattleData* defender);	//데미지 계산 및 적용 함수
+	static float CalculateDamage(int attackDamage, class FLBattleData* defender, bool isPhysicalAtk = true);	//데미지 계산 및 적용 함수. isPhysicalAtk로 물공 마공 판단. 현재는 기본으로 물공으로 판단. 리턴
 
 	int hpMax;	//최대체력
 	float hpNow;	//현재체력
@@ -226,13 +238,14 @@ public:
 	
 	bool isMelee;	//true일경우 근접유닛, false일경우 원거리유닛
 	int defense;	//방어력
-	float physicalReduce;	// 방어력에 따른 물리 감소율
-	float magicRegist;	// 마법 방어력 (1 이하)
+	float physicalReduce;	// 방어력에 따른 받는 물리 데미지 비율
+	float magicRegist;		// 마법저항력에 따른 받는 마법 데미지 비율
 
 	float timeForOneAttack;
 	float nextAttackTime;
 	bool canJump;
 
+	// 스탯 업데이트 관련
 	enum StatFlag : uint32_t {
 		ALL		= (unsigned)-1,
 		HPMAX	= 1 << 1,
@@ -245,8 +258,11 @@ public:
 		DEF		= 1 << 8,
 		MAGREG	= 1 << 9,
 	};
-	// 스탯 변경 후 부가적인 스탯 맞추기
+
+	void UpdateBaseStat();
 	void UpdateStat(StatFlag flag = StatFlag::ALL);
+
+	array<list<AffectedSkill>, AffectedSituation::Count> affectedList;
 
 public: //시뮬레이션 관련
 	void BeginSimulate();
@@ -266,13 +282,13 @@ private:
 struct AllianceTemplate
 {
 public:
-	uint8 ID;
+	ALLIANCE_ID ID;
 	wstring name;
 	uint8 maxLevel;
-	uint16 skillID;
-	vector <uint8> level;
+	SKILL_ID skillID;
+	vector <pair<uint8_t, AllianceScope>> levelData;	// 최소 구성 인원, 영향 범위
 
 	static bool InitAllianceTemplate(wstring path);
-	static const AllianceTemplate* GetAllianceTemplate(uint8 ID);
+	static const AllianceTemplate* GetAllianceTemplate(ALLIANCE_ID ID);
 	static void UninitAllianceTemplate();
 };

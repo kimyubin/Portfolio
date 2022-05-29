@@ -5,6 +5,7 @@
 #include "EnochFreeLancerData.h"
 #include "EnochProjectileData.h"
 #include "EnochFieldCellData.h"
+#include "SkillData.h"
 
 EnochActorDataFactory* EnochActorDataFactory::instance;
 
@@ -27,7 +28,7 @@ void EnochActorDataFactory::BeginPlay()
 	_SerialNumber_Projectile = 1;
 	instance = this;
 }
-
+  
 int EnochActorDataFactory::SpawnFreeLancer()
 {
 	_FreeLancerMap[_SerialNumber_FreeLancer] = std::make_shared<FLBattleData>(_SerialNumber_FreeLancer);
@@ -87,8 +88,20 @@ void EnochActorDataFactory::UpdateAllianceAll()
 		}
 	}
 
+	// 용병에 효과 넣기
+	// Scope는 총 4개 : AllyAlliance, AllyAll, Enemy, EnemyAll
+	enum ScopeTemp {
+		AllyAlliance,
+		AllyAll,
+		EnemyAlliance,
+		EnemyAll,
+		Count,
+	};
+	typedef pair<uint8_t, uint8_t>	alliPair;	// alliance, level
+	array<vector<alliPair>, ScopeTemp::Count>	effectList;	// [Scope][alliPair]
+
 	// 멤버 수 확인하고 레벨 설정
-	auto levelSet = [](auto &alliMap, wstring& str)->void
+	auto levelSet = [&](auto &alliMap, wstring& str, bool isEnemy)->void
 	{
 		for (auto& elem : alliMap)
 		{
@@ -96,8 +109,9 @@ void EnochActorDataFactory::UpdateAllianceAll()
 			uint8_t count = elem.second.second->size();
 			auto alliTmp = AllianceTemplate::GetAllianceTemplate(alliID);
 			uint8_t level = 0;
-			for (auto& lv : alliTmp->level)
+			for (auto& elemSub : alliTmp->levelData)
 			{
+				auto& lv = elemSub.first;
 				if (count < lv)
 					break;
 				level++;
@@ -107,21 +121,94 @@ void EnochActorDataFactory::UpdateAllianceAll()
 			{
 				if (!str.empty()) str += '\n';
 				str += alliTmp->name + L"(" + to_wstring(level) + L")";
+
+				// 동맹 별 스코프에 넣기 처리
+				AllianceScope scope = alliTmp->levelData[level - 1].second;
+				if (!isEnemy)
+				{
+					switch (scope) {
+					case AllianceScope::Alliance:
+						effectList[ScopeTemp::AllyAlliance].push_back(make_pair(alliID, level));
+						break;
+					case AllianceScope::AllyAll:
+						effectList[ScopeTemp::AllyAll].push_back(make_pair(alliID, level));
+						break;
+					case AllianceScope::EnemyAll:
+						effectList[ScopeTemp::EnemyAll].push_back(make_pair(alliID, level));
+						break;
+					}
+				}
+				else {
+					switch (scope) {
+					case AllianceScope::Alliance:
+						effectList[ScopeTemp::EnemyAlliance].push_back(make_pair(alliID, level));
+						break;
+					case AllianceScope::AllyAll:
+						effectList[ScopeTemp::EnemyAll].push_back(make_pair(alliID, level));
+						break;
+					case AllianceScope::EnemyAll:
+						effectList[ScopeTemp::AllyAll].push_back(make_pair(alliID, level));
+						break;
+					}
+				}
 			}
 		}
 	};
 
 	strAlly.clear();
 	strEnemy.clear();
-	levelSet(allianceAlly, strAlly);
-	levelSet(allianceEnemy, strEnemy);
+	levelSet(allianceAlly, strAlly, false);
+	levelSet(allianceEnemy, strEnemy, true);
+
+	// 용병 별 스코프에 맞춰 처리
+	auto insertSkill = [&](auto& elem, auto& data, auto& tmp, bool ally) {
+		uint8_t alliID = elem.first;
+		uint8_t level = elem.second;
+		auto alliTmp = AllianceTemplate::GetAllianceTemplate(alliID);
+		if (ally) {
+			bool find = false;
+			for(auto alliID_ : tmp->alliance) {
+				if (alliID == alliID_) {
+					find = true;
+					break;
+				}
+			}
+			if (!find)
+				return;
+		}
+
+		data->affectedList[AffectedSituation::Always].push_back(
+			AffectedSkill(
+				alliTmp->skillID, level,
+				AffectedReason::Alliance, alliID
+			)
+		);
+	};
+
+	for (auto& elem : _FreeLancerMap) {
+		auto& data = elem.second;
+		auto tmp = FreeLancerTemplate::GetFreeLancerTemplate(data->GetTID());
+		data->affectedList[AffectedSituation::Always].clear();
+		if (!data->isEnemy) {
+			for (auto& elem_ : effectList[ScopeTemp::AllyAll])
+				insertSkill(elem_, data, tmp, false);
+			for (auto& elem_ : effectList[ScopeTemp::AllyAlliance])
+				insertSkill(elem_, data, tmp, true);
+		}
+		else {
+			for (auto& elem_ : effectList[ScopeTemp::EnemyAll])
+				insertSkill(elem_, data, tmp, false);
+			for (auto& elem_ : effectList[ScopeTemp::EnemyAlliance])
+				insertSkill(elem_, data, tmp, true);
+		}
+		data->UpdateBaseStat();
+	}
 }
 
 void EnochActorDataFactory::UpdateFLAll() {
 	for (auto &fl : _FreeLancerMap) {
 		fl.second->UpdateStat();
 	}
-
 }
 
 uint8_t EnochActorDataFactory::GetAllianceLevel(bool isEnemy, uint8_t allianceID)

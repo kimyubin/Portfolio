@@ -169,17 +169,12 @@ void AEnochActorFactory::Release(AEnochProjectile* actor)
 		return;
 	}
 
-	//액터를 제거
 	actor->SetActive(false);
 	auto data = actor->GetData();
 	if (data != nullptr) {
-		Factory->CommonFactory->DeleteProjectile(actor->SerialNumber);	//데이터 제거
+		Factory->CommonFactory->DeleteProjectile(actor->SerialNumber);	//remove data
 	}
-	Factory->ProjectileMap.Remove(actor->SerialNumber);	//액터 제거
-	//if(actor->Destroy())
-	//	ENLOG(Warning, TEXT("디스트로이!"))
-	//else
-	//	ENLOG(Warning, TEXT("외안댐"))
+	Factory->ProjectileMap.Remove(actor->SerialNumber);	//remove actor
 }
 
 AEnochFreeLancer* AEnochActorFactory::GetFreeLancer(int32 SerialNumber)

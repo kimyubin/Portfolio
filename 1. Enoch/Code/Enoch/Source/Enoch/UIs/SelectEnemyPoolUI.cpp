@@ -15,18 +15,6 @@ void USelectEnemyPoolUI::NativeConstruct()
 	UpdateEnemyPools();	
 }
 
-UMaterialInterface* USelectEnemyPoolUI::GetSlotImg(const int FreeLancerNum)
-{
-	auto modelID = FreeLancerTemplate::GetFreeLancerModelID(FreeLancerNum);
-	return SelectEnemySlotDataArr[modelID].Material;
-}
-
-UMaterialInterface* USelectEnemyPoolUI::GetSlotImg(const uint8 FreeLancerTID)
-{
-	auto modelID = FreeLancerTemplate::GetFreeLancerModelID(FreeLancerTID);
-	return SelectEnemySlotDataArr[modelID].Material;
-}
-
 void USelectEnemyPoolUI::UpdateDetailPanel(const int& PoolNum, int GradeNum)
 {
 	EnemyPoolDetailsPanel->UpdateDetailData(PoolNum, GradeNum);

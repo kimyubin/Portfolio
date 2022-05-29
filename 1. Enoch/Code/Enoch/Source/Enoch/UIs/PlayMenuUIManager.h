@@ -10,27 +10,15 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Image.h"
 #include "Enoch/DragImage.h"
+#include "Components/WidgetSwitcher.h"
+#include "Enoch/LevelDefaultMainUI.h"
 
 #include "PlayMenuUIManager.generated.h"
 
 using namespace std;
 
-USTRUCT(BlueprintType)
-struct FFreeLancerSlotData
-{
-	GENERATED_USTRUCT_BODY()
-public:
-	FFreeLancerSlotData():FreeLancerT(FreeLancerTemplateID::None),Material(nullptr) {};
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	uint8 FreeLancerT;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UMaterialInterface* Material;
-
-};
-
 UCLASS()
-class ENOCH_API UPlayMenuUIManager : public UUserWidget
+class ENOCH_API UPlayMenuUIManager : public ULevelDefaultMainUI
 {
 	GENERATED_BODY()
 
@@ -40,12 +28,7 @@ public:
 	virtual void NativeOnDragEnter(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 	virtual void NativeOnDragLeave(const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 
-	/**
-	* 상점 슬롯 이미지 저장하는 배열<br>
-	* 엔진 BP 프로퍼티에서 이미지 교체 가능
-	*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProfileImg")
-	TArray<FFreeLancerSlotData> RecruitSlotDataArr;
+	
 	//드래그용 이미지. 별도의 블루프린트 위젯으로 만듦.
 	UPROPERTY(meta = (BindWidget))
 	UDragImage* DragImage;
@@ -67,6 +50,20 @@ public:
 	class UEnochFieldDropProtector* RecruitFieldDropProtector;
 	UPROPERTY(meta = (BindWidget))
 	class UEnochFieldDropProtector* InvenFieldDropProtector;
+
+	// 배속 관련
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FString txtCur;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FString txtSlow;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FString txtFast;
+	UPROPERTY(meta = (BindWidget))
+	UWidgetSwitcher* Switcher_Buttons;
+	UFUNCTION(BlueprintCallable)
+	void ChangeBattleSpeed(bool fast);
+	void InitBattleSpeed();
+
 	
 	FTimerHandle TimeHandler;
 	/** 블루프린터에서 리롤함수 접근 기능 + 슬롯 이미지 업데이트 */
@@ -89,9 +86,6 @@ public:
 	/** 인벤 단일 슬롯 이미지 변경. 리스트 데이터를 바탕으로 자동으로 변경
 	 * @param ChangeSlot 슬롯 번호*/
 	void SetInvenSlotMat(const int& ChangeSlot);
-	// /** 현재 선택된 용병 이미지 머티리얼 자동 업데이트*/
-	// UFUNCTION(BlueprintCallable, Category = "SelectedFreeLancer")
-	// void SetSelectedFreeLancerMat();
 
 	/** 드래그 이미지 숨김*/
 	void DragImageHide();

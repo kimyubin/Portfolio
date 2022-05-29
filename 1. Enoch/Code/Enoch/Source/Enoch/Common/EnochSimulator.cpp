@@ -82,9 +82,19 @@ void EnochSimulator::EndPlay()
 		{
 			auto cell = EnochFieldData::GetData({ i,j });
 			if (!cell) continue;
+			auto data = EnochActorDataFactory::instance->GetFreeLancerData(cell->FreeLancerOnFight);
 			cell->FreeLancerOnFight = -1;
+			if (data) {
+				data->nextAttackTime = 0;
+				data->SetState(FreeLancerState::Idle);
+			}
 		}
 	}
+
+	for (auto it_pj = ProjectileQueue->begin();
+		it_pj != ProjectileQueue->end();
+		it_pj = ProjectileQueue->erase(it_pj))
+		EnochSimulator::logs.push({ SimulateInfoType::RemovePJ, *it_pj });
 }
 
 void EnochSimulator::BeginTick(float DeltaTime)

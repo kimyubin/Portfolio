@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 
 #include <vector>
-
-#include "PlayMenuUIManager.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/UniformGridPanel.h"
 #include "Components/VerticalBox.h"
+
+#include "Enoch/LevelDefaultMainUI.h"
 #include "Enoch/Common/Commander.h"
 
 #include "EnemyPoolPanel.generated.h"
@@ -22,7 +22,7 @@ using namespace std;
  * 
  */
 UCLASS()
-class ENOCH_API UEnemyPoolPanel : public UUserWidget
+class ENOCH_API UEnemyPoolPanel : public ULevelDefaultMainUI
 {
 	GENERATED_BODY()
 public:
@@ -41,13 +41,7 @@ public:
 	static constexpr int MAX_GRADE_SLOTS = 4;
 	/**등급별 총 숫자*/
 	vector<int> GradeTotalCount;
-	/**
-	* 상점 슬롯 이미지 저장하는 배열
-	* <br>엔진 BP 프로퍼티에서 이미지 교체 가능
-	*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProfileImg")
-	TArray<FFreeLancerSlotData> RecruitSlotDataArr;
-	
+		
 	UPROPERTY(BlueprintReadWrite)
 	int MyPanelNum;
 	

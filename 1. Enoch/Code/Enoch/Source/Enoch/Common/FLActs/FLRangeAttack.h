@@ -12,7 +12,5 @@ using namespace std;
 class ENOCH_API FLRangeAttack : public FreeLancerAct
 {
 public:
-	void _Begin();
 	void _End();
-	void _Tick(float deltaTime);
 };

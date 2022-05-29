@@ -14,9 +14,9 @@
 20004,공속 동맹,Passive,Passive,Ally_All,None,ATKSPD,20
 ,,,,,,ATKSPD,50
 ,,,,,,ATKSPD,100
-20005,마젠 동맹,Passive,Passive,Ally_All,None,MPGET,1
-,,,,,,MPGET,3
-,,,,,,MPGET,5
+20005,마젠 동맹,Passive,Passive,Ally_All,None,MPGEN,1
+,,,,,,MPGEN,3
+,,,,,,MPGEN,5
 20006,방깎 동맹,Passive,Passive,Enemy_All,None,DEF,-5
 ,,,,,,DEF,-10
 ,,,,,,DEF,-20
@@ -29,6 +29,6 @@
 20009,공속깎 동맹,Passive,Passive,Enemy_All,None,ATKSPD,-20
 ,,,,,,ATKSPD,-50
 ,,,,,,ATKSPD,-100
-20010,마젠깎 동맹,Passive,Passive,Enemy_All,None,MPGET,-1
-,,,,,,MPGET,-2
-,,,,,,MPGET,-3
+20010,마젠깎 동맹,Passive,Passive,Enemy_All,None,MPGEN,-1
+,,,,,,MPGEN,-2
+,,,,,,MPGEN,-3

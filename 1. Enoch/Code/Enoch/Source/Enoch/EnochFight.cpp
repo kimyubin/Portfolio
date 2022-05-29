@@ -8,6 +8,7 @@
 #include "EnochField.h"
 #include "EnochFieldCell.h"
 #include "EnochGameModeBasePlay.h"
+#include "EnochGameInstance.h"
 
 bool AEnochFight::simulated = false;
 // Sets default values
@@ -28,6 +29,8 @@ void AEnochFight::BeginPlay()
 		Destroy();
 		return;
 	}
+	Cast<UEnochGameInstance>(GetGameInstance())->MyPlayMenuUI->Switcher_Buttons->SetActiveWidgetIndex(1);
+	Cast<UEnochGameInstance>(GetGameInstance())->MyPlayMenuUI->InitBattleSpeed();
 	simulated = true;
 	//이함수 호출 전에 원래 상대팀이 추가되는 이펙트와 함께, 상대유닛들이 상대진영에 소환되어야함.
 	StartFight();
@@ -37,9 +40,11 @@ void AEnochFight::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	if (Simulator.result == GameResult::None) return;
 	Simulator.EndPlay();
+	processLog();
 	
 	AEnochActorFactory::resetAll();
 
+	Cast<UEnochGameInstance>(GetGameInstance())->MyPlayMenuUI->Switcher_Buttons->SetActiveWidgetIndex(0);
 	simulated = false;
 }
 
@@ -67,46 +72,59 @@ void AEnochFight::Tick(float DeltaTime)
 	while(delay >= 100) {
 		delay -= 100;
 		Simulator.Tick(DeltaTime);
-		AEnochFreeLancer* freelancer;
-		while (!EnochSimulator::logs.empty())
-		{
-			auto& log = EnochSimulator::logs.front();
-			switch (log.type)
-			{//추후 제대로된 로그 클래스를 구현하고, 다이나믹 캐스트로 읽어내도록 변경해야할듯..
-			case SimulateInfoType::MeleeAttack:
-				ENLOG(Warning, TEXT("%d번 프리랜서가 %d번 프리랜서를 공격했다! 데미지는 %d였다!"), log.val1, log.val2, log.val3);
-				break;
-			case SimulateInfoType::Debug:
-				ENLOG(Warning, TEXT("Debug Log, %d, %d, %d"), log.val1, log.val2, log.val3);
-				break;
-			case SimulateInfoType::ChangeState:
-				freelancer = AEnochActorFactory::GetFreeLancer(log.val1);
-				ENLOG(Warning, TEXT("%d번 프리랜서가 상태를 %d번으로 변경했다! %f"), log.val1, log.val2, log.val3);
-				if (freelancer != nullptr)
-					freelancer->ActInit();
-				else
-					ENLOG(Warning, TEXT("근데 왜 널?"));
-				break;
-			case SimulateInfoType::Move:
-				freelancer = AEnochActorFactory::GetFreeLancer(log.val1);
-				freelancer->SetActorLocation(AEnochField::GetCell(FVector2D(log.val2, log.val3))->GetActorLocation());
-				ENLOG(Warning, TEXT("%d번 프리랜서가 %d,%d로 이동했다!"), log.val1, log.val2, log.val3);
-				break;
-			case SimulateInfoType::RangeAttack: {
-				AEnochActorFactory::GetProjectile(log.val1);
-				ENLOG(Warning, TEXT("%d번 프리랜서가 %d번 프리랜서에게 원거리 공격을 시도했다! 생성된 투사체 %d"), log.val1, log.val2, log.val3);
-				auto pj = AEnochActorFactory::SpawnProjectile(log.val3);
-				pj->ActInit();
-			}
-											  break;
-			case SimulateInfoType::RemovePJ: {
-				auto projectile = AEnochActorFactory::GetProjectile(log.val1);
-				ENLOG(Warning, TEXT("%d번 투사체가 제거된다!"), log.val1);
-				AEnochActorFactory::Release(projectile);
-			}
-										   break;
-			}
-			EnochSimulator::logs.pop();
+		processLog();
+	}
+}
+
+void AEnochFight::processLog()
+{
+	while (!EnochSimulator::logs.empty())
+	{
+		auto& log = EnochSimulator::logs.front();
+		switch (log.type)
+		{//추후 제대로된 로그 클래스를 구현하고, 다이나믹 캐스트로 읽어내도록 변경해야할듯..
+		case SimulateInfoType::MeleeAttack:
+			ENLOG(Warning, TEXT("%d번 프리랜서가 %d번 프리랜서를 공격했다! 데미지는 %d였다!"), log.val1, log.val2, log.val3);
+			break;
+		case SimulateInfoType::Debug:
+			ENLOG(Warning, TEXT("Debug Log, %d, %d, %d"), log.val1, log.val2, log.val3);
+			break;
+		case SimulateInfoType::ChangeState: {
+			auto freelancer = AEnochActorFactory::GetFreeLancer(log.val1);
+			ENLOG(Warning, TEXT("%d번 프리랜서가 상태를 %d번으로 변경했다! %f"), log.val1, log.val2, log.val3);
+			if (freelancer != nullptr)
+				freelancer->ActInit();
+			else
+				ENLOG(Warning, TEXT("근데 왜 널?"));
 		}
+										  break;
+		case SimulateInfoType::Move: {
+			auto freelancer = AEnochActorFactory::GetFreeLancer(log.val1);
+			freelancer->SetActorLocation(AEnochField::GetCell(FVector2D(log.val2, log.val3))->GetActorLocation());
+			ENLOG(Warning, TEXT("%d번 프리랜서가 %d,%d로 이동했다!"), log.val1, log.val2, log.val3);
+		}
+								   break;
+		case SimulateInfoType::RangeAttack: {
+			AEnochActorFactory::GetProjectile(log.val1);
+			ENLOG(Warning, TEXT("%d번 프리랜서가 %d번 프리랜서에게 원거리 공격을 시도했다! 생성된 투사체 %d"), log.val1, log.val2, log.val3);
+			auto pj = AEnochActorFactory::SpawnProjectile(log.val3);
+			pj->ActInit();
+		}
+										  break;
+		case SimulateInfoType::RemovePJ: {
+			auto projectile = AEnochActorFactory::GetProjectile(log.val1);
+			ENLOG(Warning, TEXT("%d번 투사체가 제거된다!"), log.val1);
+			AEnochActorFactory::Release(projectile);
+		}
+									   break;
+		case SimulateInfoType::Skill : {
+			AEnochActorFactory::GetProjectile(log.val1);
+			ENLOG(Warning, TEXT("%d번 프리랜서가 %d번 프리랜서에게 스킬 원거리 공격을 시도했다! 생성된 투사체 %d"), log.val1, log.val2, log.val3);
+			auto pj = AEnochActorFactory::SpawnProjectile(log.val3);
+			pj->ActInit();
+		}
+		break;
+		}
+		EnochSimulator::logs.pop();
 	}
 }

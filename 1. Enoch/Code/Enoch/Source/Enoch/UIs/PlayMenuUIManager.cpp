@@ -16,6 +16,8 @@
 #include "Enoch/EnochFieldDropProtector.h"
 #include "Enoch/EnochFieldSaveSlot.h"
 #include "Enoch/EnochSaveField.h"
+#include "../EnochFight.h"
+#include "Kismet/GameplayStatics.h"
 
 using namespace std;
 
@@ -87,10 +89,9 @@ void UPlayMenuUIManager::InitRecruitSlot()
 		//현재 슬롯이 보유한 용병의 FreelanceTID 부여
 		Cast<UUniformSlot>(RecruitChildren[i])->SetMyFreeLancerInfo(MyRecruitSlotFreeLancerInfo);
 		
-		//현재 슬롯이 가진 용병 이미지 가져오기
-		auto modelID = FreeLancerTemplate::GetFreeLancerModelID(MyRecruitSlotFreeLancerInfo.FLTemplateID);
+		//현재 슬롯이 가진 용병 이미지 가져오기		
 		Cast<UUniformSlot>(RecruitChildren[i])->
-			SetMat(RecruitSlotDataArr[modelID].Material);
+			SetMat(GetSlotImg(MyRecruitSlotFreeLancerInfo.FLTemplateID));
 	}
 }
 void UPlayMenuUIManager::InitInvenSlot()
@@ -113,9 +114,7 @@ void UPlayMenuUIManager::InitInvenSlot()
 		Cast<UUniformSlot>(InvenChildren[i])->SetMyFreeLancerInfo(MyInvenSlotFreeLancerInfo);
 		
 		//현재 슬롯이 가진 용병 이미지 가져오기
-		auto modelID = FreeLancerTemplate::GetFreeLancerModelID(MyInvenSlotFreeLancerInfo.FLTemplateID);
-		Cast<UUniformSlot>(InvenChildren[i])->
-			SetMat(RecruitSlotDataArr[modelID].Material);
+		Cast<UUniformSlot>(InvenChildren[i])->SetMat(GetSlotImg(MyInvenSlotFreeLancerInfo.FLTemplateID));
 	}
 }
 void UPlayMenuUIManager::SetRecruitSlotMat(const int& ChangeSlot)
@@ -126,10 +125,10 @@ void UPlayMenuUIManager::SetRecruitSlotMat(const int& ChangeSlot)
 	
 	//현재 슬롯이 보유한 용병 정보 갱신
 	Cast<UUniformSlot>(RecruitChildren[ChangeSlot])->SetMyFreeLancerInfo(MyRecruitSlotFreeLancer);
-	//해당 갱신된 용병 이미지 업데이트
-	auto modelID = FreeLancerTemplate::GetFreeLancerModelID(MyRecruitSlotFreeLancer.FLTemplateID);
+
+	//해당 갱신된 용병 이미지 업데이트	
 	Cast<UUniformSlot>(RecruitChildren[ChangeSlot])->
-		SetMat(RecruitSlotDataArr[modelID].Material);
+		SetMat(GetSlotImg(MyRecruitSlotFreeLancer.FLTemplateID));
 }
 void UPlayMenuUIManager::SetInvenSlotMat(const int& ChangeSlot)
 {
@@ -139,9 +138,8 @@ void UPlayMenuUIManager::SetInvenSlotMat(const int& ChangeSlot)
 
 	//현재 슬롯이 보유한 용병 정보 갱신
 	Cast<UUniformSlot>(InvenChild[ChangeSlot])->SetMyFreeLancerInfo(MyInvenSlotFreeLancer);
-	//해당 갱신된 용병 이미지 업데이트
-	auto modelID = FreeLancerTemplate::GetFreeLancerModelID(MyInvenSlotFreeLancer.FLTemplateID);
-	Cast<UUniformSlot>(InvenChild[ChangeSlot])->SetMat(RecruitSlotDataArr[modelID].Material);	
+	//해당 갱신된 용병 이미지 업데이트	
+	Cast<UUniformSlot>(InvenChild[ChangeSlot])->SetMat(GetSlotImg(MyInvenSlotFreeLancer.FLTemplateID));
 }
 
 void UPlayMenuUIManager::RerollButtonRun()
@@ -207,4 +205,43 @@ void UPlayMenuUIManager::UpdateAllianceText(wstring ally, wstring enemy)
 {
 	txtAllianceAlly->SetText(FText::FromString(ally.c_str()));
 	txtAllianceEnemy->SetText(FText::FromString(enemy.c_str()));
+}
+
+void UPlayMenuUIManager::InitBattleSpeed()
+{
+	txtCur = TEXT("x1");
+	txtSlow = TEXT("x0.5");
+	txtFast = TEXT("x2");
+}
+
+void UPlayMenuUIManager::ChangeBattleSpeed(bool fast)
+{
+	TArray<AActor*> ActorsToFind;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnochFight::StaticClass(), ActorsToFind);
+	if (ActorsToFind.Num() < 1)
+		return;
+	AEnochFight *fight = Cast<AEnochFight>(ActorsToFind[0]);
+
+	int speed = fight->getSpeed();
+	if (fast) {
+		if (speed >= 1600) return;
+		speed *= 2;
+		txtCur = FString::Printf(TEXT("x%.2g"), (float)speed / 100);
+		txtSlow = FString::Printf(TEXT("x%.2g"), (float)speed / 2 / 100);
+		if (speed >= 1600)
+			txtFast = TEXT("X");
+		else
+			txtFast = FString::Printf(TEXT("x%.2g"), (float)speed * 2 / 100);
+	}
+	else {
+		if (speed <= 25) return;
+		speed /= 2;
+		txtCur = FString::Printf(TEXT("x%.2g"), (float)speed / 100);
+		txtFast = FString::Printf(TEXT("x%.2g"), (float)speed * 2 / 100);
+		if (speed <= 25)
+			txtSlow = TEXT("X");
+		else
+			txtSlow = FString::Printf(TEXT("x%.2g"), (float)speed / 2 / 100);
+	}
+	fight->setSpeed(speed);
 }

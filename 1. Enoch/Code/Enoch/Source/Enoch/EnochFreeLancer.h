@@ -65,7 +65,7 @@ private:
 	float actTime = 0;
 	//Move동작시 Tick에서 호출
 	void MoveTick(float DeltaTime);
-
+	void JumpTick(float DeltaTime);
 
 	//내부데이터에 접근
 	int SerialNumber;

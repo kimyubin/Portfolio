@@ -20,12 +20,20 @@ public:
 private:
 	
 	/*
-	* 가장 가까운 목표물의 좌표를 얻음. 필요에 따라 constraint를 통해 조건을 걸 수도 있음.
+	* 가장 가깝거나 먼 목표물의 좌표를 얻음. 필요에 따라 constraint를 통해 조건을 걸 수도 있음.
 	* contraint가 false를 리턴하는 목표물은 탐색에서 제외함
 	* default는 모든 대상을 리턴하므로, 적어도 아군/적군을 가리는 constraint를 걸어야함
 	*/
-	static Vector2D GetClosest(class FLBattleData* freeLancer, int owner, std::function<bool(FLBattleData *)>constraint = [](FLBattleData*) {return true; });
+	static Vector2D GetTarget(FLBattleData *freeLancer, std::function<bool(FLBattleData *)>constraint = [](FLBattleData*) {return true; }, bool closest=true);
+	
+	static bool trySpell(FLBattleData* freeLancer);
+	static bool tryAttack(FLBattleData* freeLancer);
+	static bool tryJump(FLBattleData* freeLancer);
+	static bool tryMove(FLBattleData* freeLancer);
+	
+	// 가장 먼 목표물의 좌표를 얻음
+	//static Vector2D GetFarthest(FLBattleData* freeLancer);
 	static inline int CalculateDistance(Vector2D src, Vector2D dst);
 	static Vector2D FindPath(class FLBattleData* freeLancer, Vector2D dst);
-	static Vector2D FindJumpPath(class FLBattleData* freeLancer);
+	static Vector2D FindJumpPath(class FLBattleData* freeLancer, FLBattleData* freeLancer2);
 };

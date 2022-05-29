@@ -32,7 +32,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	static bool simulated;
+	int getSpeed() { return speed; }
+	void setSpeed(int speed_) { speed = speed_; }
 private :
+	void processLog();
 	EnochSimulator Simulator;
 	int delay;
 	int speed;	//percent

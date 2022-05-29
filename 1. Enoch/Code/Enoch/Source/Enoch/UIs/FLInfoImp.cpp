@@ -37,8 +37,9 @@ void UFLInfoImp::UpdateFLInfo()
 		//필드용병인 경우 SN기반으로 정보 불러옴
 		if (isFieldFreeLancer)
 		{
-			SelectedID = FreeLancerData->GetTID();
-			SelectedLevel = FreeLancerData->GetLevel() + 1;		// 필드에서는 레벨이 0 ~ 4
+			// Unreal 들어가는 변수는 typedef 타입을 못쓴다!!
+			SelectedID = (uint8_t)FreeLancerData->GetTID();
+			SelectedLevel = FreeLancerData->GetLevel();		// 필드에서는 레벨이 0 ~ 4 이므로 그대로 쓴다
 		}
 
 		auto tmp = FreeLancerTemplate::GetFreeLancerTemplate(SelectedID);
@@ -48,16 +49,16 @@ void UFLInfoImp::UpdateFLInfo()
 		Name = WCHAR_TO_TCHAR(tmp->name.c_str());
 
 		//이미지 세팅
-		auto modelID = FreeLancerTemplate::GetFreeLancerModelID(SelectedID);
 		auto brush = Cast<UEnochGameInstance>(GetGameInstance())
-			->MyPlayMenuUI->RecruitSlotDataArr[modelID];
-		SlotImg->SetBrushFromMaterial(brush.Material);
+			->MyPlayMenuUI->GetSlotImg(SelectedID);
+		SlotImg->SetBrushFromMaterial(brush);
 		
 		// Star 세팅
 		{
 			// lv = 별 갯수, grade = 별 색깔
 			std::wstring star = L"";
-			for( int i = 0; i < SelectedLevel; i++ )
+			// 필드에서는 레벨이 0 ~ 4 이므로 하나 더한다
+			for( int i = 0; i < SelectedLevel + 1; i++ )
 				star += L"★";
 			FString fstrStar = star.c_str();
 			FText starText = FText::FromString(fstrStar);
@@ -99,14 +100,17 @@ void UFLInfoImp::UpdateFLInfo()
 		// HP, MP 세팅
 		if (FreeLancerData)
 		{
-			floatHP = (float)FreeLancerData->hpNow / FreeLancerData->hpMax;
-			strHP = FString::Printf(TEXT("%d/%d"), FreeLancerData->hpNow, FreeLancerData->hpMax);
+			floatHP = FreeLancerData->hpNow / FreeLancerData->hpMax;
+			strHP = FString::Printf(TEXT("%d/%d %+.2g"), (int)FreeLancerData->hpNow, FreeLancerData->hpMax
+				, FreeLancerData->hpRegeneration);
+			
 
 			if(FreeLancerData->mpMax != 0)
-				floatMP = (float)FreeLancerData->mpNow / FreeLancerData->mpMax;
+				floatMP = FreeLancerData->mpNow / FreeLancerData->mpMax;
 			else
 				floatMP = 0.0f;
-			strMP = FString::Printf(TEXT("%d/%d"), FreeLancerData->mpNow, FreeLancerData->mpMax);
+			strMP = FString::Printf(TEXT("%d/%d %+.2g"), (int)FreeLancerData->mpNow, FreeLancerData->mpMax
+				, FreeLancerData->mpRegeneration);
 		}
 		else
 		{
@@ -116,25 +120,46 @@ void UFLInfoImp::UpdateFLInfo()
 			strMP = FString::Printf(TEXT("0/%d"), lvData.mp);
 
 		}
-		
-		Range = FString::Printf(TEXT("%d"), tmp->attackRange);
 
-		DmgBase = FString::Printf(TEXT("%d"), lvData.atkDamage);
-		ASBase  = FString::Printf(TEXT("%d"), lvData.attackSpeed);
-		MSBase  = FString::Printf(TEXT("%d"), tmp->moveSpeed);
-		MSPercent = FString::Printf(TEXT("%d%%"), 100);
-		Reduce	= FString::Printf(TEXT("%d%%"), 0);
-		ArmBase = FString::Printf(TEXT("%d"), lvData.armor);
-		MRBase  = FString::Printf(TEXT("%d"), lvData.magicArmor);
+		if (FreeLancerData) {
+			Range = FString::Printf(TEXT("%d"), FreeLancerData->attackRange);
+			DmgBase = FString::Printf(TEXT("%d"), FreeLancerData->attackDamage);
+			ASBase = FString::Printf(TEXT("%d"), FreeLancerData->attackSpeed);
+			MSBase = FString::Printf(TEXT("%d"), tmp->moveSpeed);
+			MSPercent = FString::Printf(TEXT("%d%%"), 100);
+			Reduce = FString::Printf(TEXT("%d%%"), 0);
+			ArmBase = FString::Printf(TEXT("%d"), FreeLancerData->defense);
+			MRBase = FString::Printf(TEXT("%d"), FreeLancerData->magicRegist);
 
-		// DPS등은 임시로 계산
-		float AtkPerSec = 1.7 / (1.0 + lvData.attackSpeed / 100);
-		DPS = FString::Printf(TEXT("%.2f"), AtkPerSec * lvData.atkDamage);
-		APS = FString::Printf(TEXT("%.2f"), AtkPerSec);
-		float pdef = 0.1 * lvData.armor / (1.0 + 0.1 * (lvData.armor < 0 ? -lvData.armor : lvData.armor));
-		PDef = FString::Printf(TEXT("%.2f%%"), pdef);
-		MDef = FString::Printf(TEXT("%.2f%%"), ((float)lvData.magicArmor)/100.0);
+			float AtkPerSec = 1 / FreeLancerData->timeForOneAttack;
+			DPS = FString::Printf(TEXT("%.2f"), AtkPerSec * FreeLancerData->attackDamage);
+			APS = FString::Printf(TEXT("%.2f"), AtkPerSec);
+			// physicalReduce, magicRegist 는 받는 데미지 비율 이므로, 1 - 값을 해야 저항력이 나옴
+			PDef = FString::Printf(TEXT("%.2f%%"), (FreeLancerData->physicalReduce - 1.f) * 100);
+			MDef = FString::Printf(TEXT("%.2f%%"), (FreeLancerData->magicRegist - 1.f) * 100);
+		}
+		else {
+			Range = FString::Printf(TEXT("%d"), tmp->attackRange);
+			DmgBase = FString::Printf(TEXT("%d"), lvData.atkDamage);
+			ASBase = FString::Printf(TEXT("%d"), lvData.attackSpeed);
+			MSBase = FString::Printf(TEXT("%d"), tmp->moveSpeed);
+			MSPercent = FString::Printf(TEXT("%d%%"), 100);
+			Reduce = FString::Printf(TEXT("%d%%"), 0);
+			ArmBase = FString::Printf(TEXT("%d"), lvData.armor);
+			MRBase = FString::Printf(TEXT("%d"), lvData.magicArmor);
 
+			// DPS등은 임시로 계산
+			const static float BaseAttackTime = 1.7f;
+			float timeForOneAttack = BaseAttackTime / (1 + lvData.attackSpeed / 100);
+			float AtkPerSec = 1 / timeForOneAttack;
+			DPS = FString::Printf(TEXT("%.2f"), AtkPerSec * lvData.atkDamage);
+			APS = FString::Printf(TEXT("%.2f"), AtkPerSec);
+			float pdef = 0.1 * lvData.armor / (1.0 + 0.1 * abs(lvData.armor));
+			PDef = FString::Printf(TEXT("%.2f%%"), pdef * 100);
+			MDef = FString::Printf(TEXT("%.2f%%"), ((float)lvData.magicArmor) / 100.0);
+		}
+
+		/*
 		// 임시로 추가/감소 데미지 표시
 		static int add = 0;
 		if (add)
@@ -153,6 +178,7 @@ void UFLInfoImp::UpdateFLInfo()
 			ArmAdd.Empty();
 			MRAdd.Empty();
 		}
+		*/
 	}
 }
 
@@ -168,7 +194,8 @@ void UFLInfoImp::SetFLID(uint8 ID, uint8 level)
 {
 	SelectedSN = 0;
 	SelectedID = ID;
-	SelectedLevel = level;
+	// UniformSlot 에서 온 레벨은 1~5 이므로 하나 빼준다.
+	SelectedLevel = level - 1;
 	UpdateFLInfo();
 }
 

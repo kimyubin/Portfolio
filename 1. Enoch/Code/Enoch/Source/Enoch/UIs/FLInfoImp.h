@@ -42,7 +42,7 @@ public:
 	uint8 SelectedID;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	uint8 SelectedLevel;
+	uint8 SelectedLevel;	// 0 ~ 4
 	
 	UPROPERTY(meta = (BindWidget))
 	UImage* SlotImg;

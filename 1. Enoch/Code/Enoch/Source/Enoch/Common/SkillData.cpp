@@ -6,6 +6,8 @@
 #include <map>
 #include <memory>
 
+const float AffectedSkill::INFINITE = 99999;
+
 #define	MACRO_MAP_ELEM(STRUCT, STR)	{L#STR, STRUCT::STR}
 
 #define MACROEFFECT(STR) MACRO_MAP_ELEM(SkillEffect, STR)
@@ -28,6 +30,7 @@ static const map<wstring, SkillEffect> EffectInit =
 static const map<wstring, SkillShape> ShapeInit =
 {
 	MACROSHAPE(Passive),
+	MACROSHAPE(Projectile),
 };
 
 #define MACROTARGET(STR) MACRO_MAP_ELEM(SkillTarget, STR)
@@ -72,7 +75,7 @@ bool SkillData::InitSkillTemplate(wstring path)
 			;
 		const uint8_t level = tail - idx;
 		elem->maxLevel = level;
-		elem->ID = static_cast<uint16_t>(stoi(content[idx][0]));
+		elem->ID = static_cast<SKILL_ID>(stoi(content[idx][0]));
 		elem->name = content[idx][1];
 
 #define MACROFIND(MAP, CONTENT, DEFAULT) MAP.find(CONTENT) != MAP.end() ? MAP.find(CONTENT)->second : DEFAULT
@@ -88,7 +91,7 @@ bool SkillData::InitSkillTemplate(wstring path)
 			const float value = stof(content[idx + i][7]);
 			SkillLevelData data;
 			data.effects.push_back(make_pair(effect, value));
-			elem->level.push_back(data);
+			elem->levelData.push_back(data);
 		}
 
 		mSkillTemplate.insert(make_pair(elem->ID, elem));
@@ -105,7 +108,7 @@ void SkillData::UninitSkillTemplate()
 	return;
 }
 
-const SkillData* SkillData::GetSkillTemplate(uint16_t ID)
+const SkillData* SkillData::GetSkillTemplate(SKILL_ID ID)
 {
 	auto it = mSkillTemplate.find(ID);
 	if (it != mSkillTemplate.end())

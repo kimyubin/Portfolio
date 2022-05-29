@@ -173,7 +173,12 @@ void AEnochFreeLancer::ActInit()
 		return;
 	auto AnimInstance = Cast<UFLAnimInstance>(MeshComponent->GetAnimInstance());
 	auto a = data->direction;
-	if(AnimInstance != nullptr) {
+	if (data->GetState() == FreeLancerState::PostMove ||
+		data->GetState() == FreeLancerState::PostJump ||
+		data->GetState() == FreeLancerState::PostAttack)
+		;
+	else if(AnimInstance != nullptr) { //deprecated
+		
 		//ENCHECK(AnimInstance != nullptr);
 
 		if(data->GetState() == FreeLancerState::PreAttack || data->GetState() == FreeLancerState::PostAttack)
@@ -218,10 +223,14 @@ void AEnochFreeLancer::Reset()
 	auto data = GetData();
 	if (data == nullptr) return;
 	data->SetState(FreeLancerState::Idle);
+	data->SetTarget(nullptr);
+
+	Flipbook->SetRelativeRotation(UKismetMathLibrary::MakeRotFromX(FVector(0, 1, 0)));
 	ActInit();
 	data->hpNow = data->hpMax;
 	data->mpNow = 0;
 	auto cell = AEnochField::GetCell( FVector2D((int32)data->location.x,(int32)data->location.y ));
+
 	if (!cell) return;
 	cell->AttachFreeLancer(this);
 
@@ -241,14 +250,16 @@ void AEnochFreeLancer::Tick(float DeltaTime)
 	case FreeLancerState::Idle :
 		break;
 	case FreeLancerState::PreMove:
-		MoveTick(DeltaTime);
-		break;
 	case FreeLancerState::PostMove :
 		MoveTick(DeltaTime);
 		break;
+	case FreeLancerState::PreJump:
+	case FreeLancerState::PostJump:
+		JumpTick(DeltaTime);
+		break;
 	case FreeLancerState::PostAttack :
 		break;
-	case FreeLancerState::Skill :
+	case FreeLancerState::PreSkill :
 		break;
 	case FreeLancerState::Dead:
 		break;
@@ -262,13 +273,6 @@ void AEnochFreeLancer::Tick(float DeltaTime)
 
 void AEnochFreeLancer::MoveTick(float DeltaTime)
 {
-	/*
-	auto& moveInst = data->GetMove();
-	auto srcLocation = AEnochField::GetCell(FVector2D(moveInst.prevLocation.x, moveInst.prevLocation.y))->GetActorLocation();
-	auto dstLocation = AEnochField::GetCell(FVector2D(moveInst.postLocation.x, moveInst.postLocation.y))->GetActorLocation();
-	auto location2D = srcLocation + (dstLocation - srcLocation) * (actTime / moveInst.GetDelay());
-	SetActorLocation(location2D);// FMath::Sin(PI * (actTime / moveInst.GetDelay()) * 0.5)));
-	*/
 	auto data = GetData();
 	if (data == nullptr) return;
 	auto loc = data->GetMove().floatLocation;
@@ -277,6 +281,20 @@ void AEnochFreeLancer::MoveTick(float DeltaTime)
 	auto d = nextZero->GetActorLocation() - zero->GetActorLocation();
 	//ENLOG(Warning, TEXT("%f %f"), loc.x, loc.y);
 	auto convertedLoc = zero->GetActorLocation() + FVector( d.X * loc.x, d.Y * loc.y, 0);
+	SetActorLocation(convertedLoc);
+}
+
+void AEnochFreeLancer::JumpTick(float DeltaTime)
+{
+	auto data = GetData();
+	if (data == nullptr) return;
+	auto loc = data->GetJump().floatLocation;
+	auto zero = AEnochField::GetCell({ 0,0 });
+	auto nextZero = AEnochField::GetCell({ 1,1 });
+	auto d = nextZero->GetActorLocation() - zero->GetActorLocation();
+	//ENLOG(Warning, TEXT("%f %f"), loc.x, loc.y);
+	//data->GetJump()
+	auto convertedLoc = zero->GetActorLocation() + FVector(d.X * loc.x, d.Y * loc.y, 0);
 	SetActorLocation(convertedLoc);
 }
 
