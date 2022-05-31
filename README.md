@@ -101,7 +101,7 @@
 <img src="./Images/Enoch01.png" width="65%"></img>
 <img src="./Images/Enoch02.png" width="65%"></img><br>
 
-**[실행 예시 유튜브 영상 링크](https://youtu.be/NPYjiZS8pZE)** | https://youtu.be/NPYjiZS8pZE
+**[실행 예시 유튜브 영상 링크](https://youtu.be/eTi14pExXEk)** | https://youtu.be/eTi14pExXEk
 
 |프로젝트 명|Enoch|
 |:---|:---|
