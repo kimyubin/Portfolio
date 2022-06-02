@@ -18,7 +18,7 @@
 ## 개요
 * 포트폴리오 및 깃허브 리포지토리에 대한 설명입니다.
 * 용량 문제로 인해, 전체 프로젝트는 [깃허브 리포지토리](https://github.com/kimyubin/Portfolio)에서 확인하실 수 있습니다.
-* **PDF파일**과 **README.html**, **README.md**의 내용은 동일합니다.
+* **PDF파일**과 **README.html**, **README**.**md**의 내용은 동일합니다.
 * [포트폴리오 리포지토리 링크](https://github.com/kimyubin/Portfolio) (https://github.com/kimyubin/Portfolio) 
    
 
@@ -76,7 +76,7 @@
     * 기본적인 기능 활용 및 게임 개발이 가능합니다.
     * UGUI를 활용한 UI구성, 개발이 가능합니다.
     * 간단한 점프 게임을 구글 플레이 스토어에 출시한 경험이 있습니다.
-        * 게임명 : [BeyondtheSky(하늘 너머로)](#3-beyondthesky)
+        * 게임명 : [BeyondtheSky(하늘 너머로)](#3-beyondthesky하늘-너머로)
         * 폴더명 : `3. BeyondtheSky`
 
 ### Tools
