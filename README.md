@@ -5,13 +5,13 @@
 1. [개요](#개요)
 1. [소개](#소개)
 1. [기술 스택](#기술-스택)    
-    1. [Languages](#Languages)
-    1. [Game Engines](#Game-Engines)
-    1. [Tools](#Tools)
+    1. [Languages](#languages)
+    1. [Game Engines](#game-engines)
+    1. [Tools](#tools)
 1. [게임 목록](#게임-목록)
-    1. [Enoch](#1-Enoch)
-    1. [FlatformLand](#2-FlatformLand)    
-    1. [savethechickentower(BeyondtheSky)](#3-savethechickentower)
+    1. [Enoch](#1-enoch)
+    1. [FlatformLand](#2-flatformland)    
+    1. [BeyondtheSky(하늘 너머로)](#3-beyondthesky하늘-너머로)
     1. [tentacles](#4-tentacles)
     1. [yubintest](#5-yubintest)
 
@@ -66,8 +66,7 @@
 * **Unreal Engine**
     * 기본적인 기능 사용이 가능하고, 엔진 구조에 대한 개괄적인 이해를 갖추고 있습니다.
     * C++ 기반 프로그래밍이 가능합니다. 
-    * UMG(UI)를 C++ 기반으로 개발할 수 있습니다.
-    * UI에 3D 모델을 적용할 수 있습니다.
+    * UMG(UI) 개발이 가능합니다.
     * C++코드와 블루프린트의 차이를 이해하고 있고, 각자의 역할에 따라 사용할 수 있습니다.
     * 블루프린트로 짜여진 로직을 C++로 재구성할 수 있습니다. 
     * 엔진 코드를 참고하고, 구조를 파악하면서 코딩할 수 있습니다.
@@ -77,8 +76,8 @@
     * 기본적인 기능 활용 및 게임 개발이 가능합니다.
     * UGUI를 활용한 UI구성, 개발이 가능합니다.
     * 간단한 점프 게임을 구글 플레이 스토어에 출시한 경험이 있습니다.
-        * 게임명 : `Beyond the Sky`
-        * 폴더명 : `3. savethechickentower`
+        * 게임명 : [BeyondtheSky(하늘 너머로)](#3-beyondthesky)
+        * 폴더명 : `3. BeyondtheSky`
 
 ### Tools
 * **Visual Studio Code** : 기본 코딩 및 Unity 개발용
@@ -93,7 +92,6 @@
 ## 게임 목록
 * 최근 프로젝트부터 역순으로 정렬되어 있습니다. 항목명은 폴더명을 기준으로 작성되어져 있습니다.
 * Enoch 프로젝트는 현재 진행 중입니다.
-* ```savethechickentower``` 폴더는 실제 발매된 게임의 이름과 폴더명이 상이합니다. 실제 발매된 게임은 `BeyondtheSky(하늘 너머로)`입니다.
 
 <br>
 
@@ -202,7 +200,7 @@
 
 <br><br><div style="page-break-after: always;"></div>
 
-### 3. savethechickentower
+### 3. BeyondtheSky(하늘 너머로)
 <img src="./Images/BeyondtheSky000.png" width="60%"></img>
 <img src="./Images/BeyondtheSky001.png" width="60%"></img>
 
@@ -214,11 +212,11 @@
 |개발 인원|1명|
 |개발 목적| 구글 플레이 스토어 출시 |
 |엔진 버전 | Unity 2019.3.0f3|
-|다운로드 링크|[구글 플레이스토어](https://play.google.com/store/apps/details?id=com.KimFriedChicken.beyondthesky)|
+|다운로드 링크|[구글 플레이스토어](https://play.google.com/store/apps/details?id=com.KimFriedChicken.beyondthesky) <br>https://play.google.com/store/apps/details?id=com.KimFriedChicken.beyondthesky|
 
 
 * **설명**
-    * 초기 컨샙이 변경되어 폴더명과 실제 프로젝트명이 다릅니다.
+    * 초기 컨셉이 변경되어 내부 프로젝트명(savethechickentower)과 실제 출시된 게임의 이름이 다릅니다.
     * 두들 점프와 비슷한 점프 게임이며, 어린왕자와 사막 여우 이야기를 각색했습니다.
 * **구현 목록**
     * 기울기 센서 대신 터치로 좌우 이동
