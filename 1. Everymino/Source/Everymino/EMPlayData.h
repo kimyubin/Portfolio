@@ -87,12 +87,19 @@ public:
 	uint8 GetMaxBoardX() const { return CustomGameBoard.front().size(); }
 	uint8 GetMaxBoardY() const { return CustomGameBoard.size(); }
 	FVector2D GetDropStartPoint(EDropStartDirection InStartDirection);	//드롭 브릭 시작 지점.
+
+	/** 좌우 자동 이동 발생까지 기준 시간. */
 	float GetDelayedAutoShift() const { return DelayedAutoShift; }
+	/** 브릭 자동 이동 시간. 좌우 자동 이동 시 브릭이 움직이는 시간 간격. */
 	float GetAutoRepeatRate() const { return AutoRepeatRate; }
+	/** 자동 소프트 드랍 간격 */
 	float GetAutoSoftDropTime() const { return AutoSoftDropTime; }
+	/** 비비기 할때 강제로 고정되는 시간 */
 	float GetLockdownDelay() const { return LockdownDelay; }
+	/** 비비기 할때 강제로 고정될 때까지 최대 횟수 */
 	uint8 GetLockdownCount() const { return LockdownCount; }
-	uint8 GetAerialLockdownCount() const { return AerialLockdownCount; }	
+	/** 공중 비비기할때 강제로 고정되는 시간 */
+	uint8 GetAerialLockdownCount() const { return AerialLockdownCount; }
 	
 private:
 
@@ -136,19 +143,19 @@ private:
 	
 	////기준 시간
 	
-	/** 자동 이동 발생까지 기준 시간. */
+	/** 좌우 자동 이동 발생까지 기준 시간. */
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "RefTime")
 	float DelayedAutoShift;
-	/** 이동 발생 후 브릭이 1칸 움직일때 사용하는 시간. */
+	/** 브릭 자동 이동 시간. 좌우 자동 이동 시 브릭이 움직이는 시간 간격. */
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "RefTime")	
 	float AutoRepeatRate;
-	/** 1칸 내려가는 시간 */
+	/** 자동 소프트 드랍 간격 */
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "RefTime")	
 	float AutoSoftDropTime;
 	/** 비비기 할때 강제로 고정되는 시간 */
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "RefTime")	
 	float LockdownDelay;
-	/** 비비기 할때 강제로 고정되는 카운터 */
+	/** 비비기 할때 강제로 고정될 때까지 최대 횟수 */
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "RefTime")	
 	uint8 LockdownCount;
 	/** 공중 비비기할때 강제로 고정되는 시간 */

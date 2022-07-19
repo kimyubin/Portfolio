@@ -20,6 +20,7 @@ AEMDropBrick::AEMDropBrick()
 	MyBrickType = BrickType::T;
 	MyBrickDirection = BrickDirection::UP;
 	Brick = vector<vector<UnitSkin>>();
+	SoftDropCumulativeTime = 0.f;
 }
 
 void AEMDropBrick::BeginPlay()
@@ -30,6 +31,11 @@ void AEMDropBrick::BeginPlay()
 void AEMDropBrick::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	SoftDropCumulativeTime += DeltaTime;
+	
+	if(SoftDropCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetAutoSoftDropTime())	
+		MoveSoftDrop();
+	
 }
 
 void AEMDropBrick::InitBrick(ABrickBoardManager* InOwnerBoardManager, EDropStartDirection InStartDirection)
@@ -86,20 +92,56 @@ void AEMDropBrick::NewBrick()
 	default: break;
 	}
 	Brick = OwnerBoardManager->GetPlayerDataPtr()->GetBrickShape(MyBrickType, MyBrickDirection);
-	UpdateDroppingBrick();
+	UpdateDropBrick();
 }
 
-void AEMDropBrick::InputHandler(EMInput InInput)
+void AEMDropBrick::PassInput(EMInput InInput)
 {
+	switch (MyStartDirection)
+	{
+	case EDropStartDirection::North:
+		if(InInput==EMInput::DownMove)
+		{
+			MoveSoftDrop();
+			return;
+		}					
+		break;
+	case EDropStartDirection::East:
+		if(InInput==EMInput::LeftMove)
+		{
+			MoveSoftDrop();
+			return;
+		}
+		break;
+	case EDropStartDirection::South:
+		if(InInput==EMInput::UpMove)
+		{
+			MoveSoftDrop();
+			return;
+		}
+		break;
+	case EDropStartDirection::West:
+		if(InInput==EMInput::RightMove)
+		{
+			MoveSoftDrop();
+			return;
+		}
+		break;
+	default:
+		break;
+	}	
 	switch (InInput)
 	{
 	case EMInput::AntiClockwise:
 	case EMInput::Clockwise:
+		SpinDropBrick(InInput);
 		break;
+	case EMInput::UpMove:
+	case EMInput::DownMove:
 	case EMInput::LeftMove:
 	case EMInput::RightMove:
+		MoveDropBrick(InInput);
 		break;
-	case EMInput::SoftDrop:
 	case EMInput::HardDrop:
 		break;
 	default:
@@ -107,35 +149,60 @@ void AEMDropBrick::InputHandler(EMInput InInput)
 	}
 }
 
-void AEMDropBrick::SpinBrick(BrickDirection Dir)
-{
-	MyBrickDirection = Dir;
-	Brick = OwnerBoardManager->GetPlayerDataPtr()->GetBrickShape(MyBrickType, MyBrickDirection);
-}
-
 void AEMDropBrick::SpinBrick(EMInput SpinInput)
 {
-	int tempDir = EnumToInt(MyBrickDirection);
-	int MaxSize = EnumToInt(BrickDirection::Size);
+	int TempDir = EnumToInt(MyBrickDirection);
+	constexpr int MaxSize = EnumToInt(BrickDirection::Size);
 
 	if (SpinInput == EMInput::Clockwise)
-		tempDir = (tempDir + 1) % MaxSize;
+		TempDir = (TempDir + 1) % MaxSize;
 	else if (SpinInput == EMInput::AntiClockwise) //-1,0,1,2에 4를 더하고 나머지 연산하면 3,0,1,2
-		tempDir = ((tempDir - 1) + MaxSize) % MaxSize;
+		TempDir = ((TempDir - 1) + MaxSize) % MaxSize;
 	else
 		return;
 
-	SpinBrick(static_cast<BrickDirection>(tempDir));
+	MyBrickDirection = static_cast<BrickDirection>(TempDir);
+	Brick = OwnerBoardManager->GetPlayerDataPtr()->GetBrickShape(MyBrickType, MyBrickDirection);	
 }
 
-void AEMDropBrick::UpdateDroppingBrick()
+void AEMDropBrick::SpinDropBrick(EMInput InInput)
+{
+	//브릭 데이터 회전 후 검증
+	SpinBrick(InInput);
+
+	if (CheckBoard())
+	{
+		UpdateDropBrick();
+		return;
+	}
+
+	//회전 실패시 이동 후 검증.
+	const FVector2D PrevBasePoint = BasePoint;
+	for (int tryNum = 0; tryNum < 5; ++tryNum)
+	{
+		BasePoint += BrickTemplate::GetWallKickData(MyBrickType, MyBrickDirection, InInput, tryNum, MyStartDirection);
+		if (CheckBoard())
+		{
+			UpdateDropBrick();
+			return;
+		}
+		BasePoint = PrevBasePoint;
+	}
+	//모두 실패시 회전 원상복귀
+	if(InInput==EMInput::Clockwise)
+		SpinBrick(EMInput::AntiClockwise);
+	else
+		SpinBrick(EMInput::Clockwise);
+}
+
+void AEMDropBrick::UpdateDropBrick()
 {
 	for (int dpY = 0; dpY < DropBrickUnits.size(); ++dpY)
 	{
 		for (int dpX = 0; dpX < DropBrickUnits[dpY].size(); ++dpX)
 		{
-			UnitSkin DataSkin = GetUnitSkin(dpX, dpY);
-			FVector2D UnitLoc = GetUnitLocation(dpX, dpY);
+			const UnitSkin DataSkin = GetUnitSkin(dpX, dpY);
+			const FVector2D UnitLoc = GetUnitLocation(dpX, dpY);
 
 			//실제 유닛있는데, 비어야하면 파괴.
 			//있어야하면, 이동 후 스킨 변경
@@ -155,38 +222,8 @@ void AEMDropBrick::UpdateDroppingBrick()
 	}
 }
 
-void AEMDropBrick::SpinDroppingBrick(EMInput InInput)
-{
-	//실제 브릭 회전하는 함수.
 
-	SpinBrick(InInput);
-
-	if (CheckBoard())
-	{
-		UpdateDroppingBrick();
-		return;
-	}
-
-	//회전 실패시 이동 후 검증.
-	FVector2D prevBasePoint = BasePoint;
-	for (int tryNum = 0; tryNum < 5; ++tryNum)
-	{
-		BasePoint += BrickTemplate::GetWallKickData(MyBrickType, MyBrickDirection, InInput, tryNum, MyStartDirection);
-		if (CheckBoard())
-		{
-			UpdateDroppingBrick();
-			return;
-		}
-		BasePoint = prevBasePoint;
-	}
-	//모두 실패시 회전 원상복귀
-	if(InInput==EMInput::Clockwise)
-		SpinBrick(EMInput::AntiClockwise);
-	else
-		SpinBrick(EMInput::Clockwise);
-}
-
-void AEMDropBrick::MoveDroppingBrick(EMInput InInput)
+void AEMDropBrick::MoveDropBrick(EMInput InInput)
 {
 	auto PrvBasePoint = BasePoint;
 
@@ -253,6 +290,10 @@ void AEMDropBrick::MoveBasePoint(EMInput InInput)
 void AEMDropBrick::MoveSoftDrop()
 {
 	EMInput Temp = EMInput::None;
+
+	if (SoftDropCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetAutoSoftDropTime())
+		SoftDropCumulativeTime = 0.f;
+
 	switch (MyStartDirection)
 	{
 	case EDropStartDirection::North:
@@ -291,8 +332,8 @@ void AEMDropBrick::MoveBrickUnits()
 		{
 			if (DropBrickUnits[dpY][dpX] != nullptr)
 			{
-				FVector2D UnitLoc = GetUnitLocation(dpX, dpY);
-				DropBrickUnits[dpY][dpX]->SetPosition(UnitLoc.X, UnitLoc.Y);
+				const FVector2D UnitLoc = GetUnitLocation(dpX, dpY);
+				DropBrickUnits[dpY][dpX]->SetPosition(UnitLoc);
 			}
 		}
 	}

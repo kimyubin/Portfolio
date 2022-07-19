@@ -26,20 +26,24 @@ void AEMUnitBrick::Tick(float DeltaTime)
 
 }
 
-void AEMUnitBrick::SetSkinMesh(uint8 SkinNum)
-{		
-	SetSkinMesh(static_cast<UnitSkin>(EnumToInt(SkinNum)));
-}
 void AEMUnitBrick::SetSkinMesh(UnitSkin SkinEnum)
 {
 	UStaticMesh* Mesh = Cast<UEMGameInstance>(GetGameInstance())->GetPlayerData()->GetUnitSkinMesh(SkinEnum);
 	CubeStaticMeshComponent->SetStaticMesh(Mesh);
+}
+void AEMUnitBrick::SetSkinMesh(uint8 SkinNum)
+{		
+	SetSkinMesh(static_cast<UnitSkin>(EnumToInt(SkinNum)));
 }
 
 void AEMUnitBrick::SetPositionAndSkin(int InX, int InY, UnitSkin SkinEnum)
 {	
 	SetSkinMesh(SkinEnum);
 	SetPosition(InX, InY);
+}
+void AEMUnitBrick::SetPositionAndSkin(FVector2D InPosition, UnitSkin SkinEnum)
+{
+	SetPositionAndSkin(InPosition.X, InPosition.Y, SkinEnum);
 }
 
 void AEMUnitBrick::SetPosition(int InX, int InY)
@@ -48,11 +52,16 @@ void AEMUnitBrick::SetPosition(int InX, int InY)
 	// 전부 부모 액터 = BrickBoardManager 기준 상대 위치로 변경
 	// 맨 위에서부터 읽는데, 숫자가 커질수록 위로 올라감. = 위로 올가가면서 그림 = 거꾸로 스폰.
 	// 역수를 곱해줘서 위아래 뒤집음.
-	
-	int CalX = (InX * BrickTemplate::UNIT_SIZE);	
-	int CalY = (InY * - BrickTemplate::UNIT_SIZE);
+
 	MyPosition = FVector2D(InX, InY);
+
+	const int CalX = (InX * BrickTemplate::UNIT_SIZE);	
+	const int CalY = (InY * - BrickTemplate::UNIT_SIZE);
 
 	SetActorRelativeLocation(FVector(CalX, 0, CalY));
 	SetActorRelativeRotation(FRotator::ZeroRotator);
+}
+void AEMUnitBrick::SetPosition(FVector2D InPosition)
+{
+	SetPosition(InPosition.X,InPosition.Y);
 }

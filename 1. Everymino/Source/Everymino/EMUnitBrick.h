@@ -21,12 +21,16 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
-	void SetSkinMesh(uint8 SkinNum = 0);
 	void SetSkinMesh(UnitSkin SkinEnum);
+	void SetSkinMesh(uint8 SkinNum = 0);
 	void SetPositionAndSkin(int InX, int InY, UnitSkin SkinEnum);
+	void SetPositionAndSkin(FVector2D InPosition, UnitSkin SkinEnum);
 
 	/** 유닛의 상대좌표를 실제 좌표로 변환해서 셋팅*/
 	void SetPosition(int InX, int InY);
+
+	/** 유닛의 상대좌표를 실제 좌표로 변환해서 셋팅*/
+	void SetPosition(FVector2D InPosition);
 	
 	UnitSkin MySkinNum;
 	

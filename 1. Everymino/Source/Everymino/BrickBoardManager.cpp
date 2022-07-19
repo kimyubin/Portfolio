@@ -54,35 +54,37 @@ void ABrickBoardManager::Tick(float DeltaTime)
 	CumulativeTime = FMath::Clamp(CumulativeTime + DeltaTime, 0.f, PlayerDataPtr->GetDelayedAutoShift() + 1.f);
 
 	LockDownCheck();
-	
+
+	//todo 입력을 각 브릭으로 직접 토스해서, 브릭 tick에서 직접 컨트롤하게 변경. 
 	if (CumulativeTime >= PlayerDataPtr->GetDelayedAutoShift())
 	{
 		if(PressInputBS.any())
 		{
 			//동시 입력계산을 위해 비트셋 사용
 			if (PressInputBS.test(EnumToInt(EMInput::AntiClockwise)))
-				DropBricks[EnumToInt(CurrentControlZone)]->SpinDroppingBrick(EMInput::AntiClockwise);
+				DropBricks[EnumToInt(CurrentControlZone)]->PassInput(EMInput::AntiClockwise);
 			if (PressInputBS.test(EnumToInt(EMInput::Clockwise)))
-				DropBricks[EnumToInt(CurrentControlZone)]->SpinDroppingBrick(EMInput::Clockwise);
+				DropBricks[EnumToInt(CurrentControlZone)]->PassInput(EMInput::Clockwise);
 
-			if (PressInputBS.test(EnumToInt(EMInput::SoftDrop)))
-				DropBricks[EnumToInt(CurrentControlZone)]->MoveDroppingBrick(EMInput::SoftDrop);
-			if (PressInputBS.test(EnumToInt(EMInput::HardDrop)))
-				DropBricks[EnumToInt(CurrentControlZone)]->MoveDroppingBrick(EMInput::HardDrop);
 			if (PressInputBS.test(EnumToInt(EMInput::LeftMove)))
-				DropBricks[EnumToInt(CurrentControlZone)]->MoveDroppingBrick(EMInput::LeftMove);
+				DropBricks[EnumToInt(CurrentControlZone)]->PassInput(EMInput::LeftMove);
 			if (PressInputBS.test(EnumToInt(EMInput::RightMove)))
-				DropBricks[EnumToInt(CurrentControlZone)]->MoveDroppingBrick(EMInput::RightMove);
+				DropBricks[EnumToInt(CurrentControlZone)]->PassInput(EMInput::RightMove);
 			if (PressInputBS.test(EnumToInt(EMInput::UpMove)))
-				DropBricks[EnumToInt(CurrentControlZone)]->MoveDroppingBrick(EMInput::UpMove);
+				DropBricks[EnumToInt(CurrentControlZone)]->PassInput(EMInput::UpMove);
 			if (PressInputBS.test(EnumToInt(EMInput::DownMove)))
-				DropBricks[EnumToInt(CurrentControlZone)]->MoveDroppingBrick(EMInput::DownMove);
+				DropBricks[EnumToInt(CurrentControlZone)]->PassInput(EMInput::DownMove);
 			
 			CumulativeTime = 0.f;
 		}
 		//PressInputBS.any() or 소프트 드롭 직후에만 계산.
-		LineClearCheck();
 	}
+	
+	if (PressInputBS.test(EnumToInt(EMInput::HardDrop)))
+		DropBricks[EnumToInt(CurrentControlZone)]->MoveDropBrick(EMInput::HardDrop);
+
+	LineClearCheck();
+
 }
 
 void ABrickBoardManager::InitSpawnBoard()

@@ -23,7 +23,7 @@ AEMPlayData::AEMPlayData()
 		FUnitSkinData temp = FUnitSkinData(static_cast<UnitSkin>(i));
 		UnitSkinMeshes.Push(temp);
 	}	
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Skin(TEXT("/Engine/VREditor/BasicMeshes/SM_Cube_01"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Skin(TEXT("/Game/Cube_01.Cube_01"));
 	UnitSkinMeshes[EnumToInt(UnitSkin::Default)].StaticMesh = Skin.Object;
 
 	//기준 시간 초기화
