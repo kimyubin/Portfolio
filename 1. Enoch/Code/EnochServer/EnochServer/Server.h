@@ -10,7 +10,7 @@ public:
 	PROCRESULT CompleteRecvPacket(Session* session);
 	bool SendPacket(LONGLONG sessionID, Header header, Packet& p);
 
-	void OnRecv(LONGLONG sessionID, Packet& p, MessageType type = MessageType::DEFAULT);
+	Packet* OnRecv(LONGLONG sessionID, Packet& p, MessageType type = MessageType::DEFAULT);
 
 	void OnClientLeave(LONGLONG sessionID);
 
@@ -25,6 +25,7 @@ public:
 	bool AcceptThread(void);
 
 private:
+	Config config;
 	HANDLE hcp;
 	HANDLE hAcceptThread;
 	HANDLE *hWorkerThread;

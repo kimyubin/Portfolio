@@ -1,10 +1,16 @@
 #ifndef __ENOCH_SERVER__
 #define __ENOCH_SERVER__
+#define _CRT_SECURE_NO_WARNINGS
 #pragma comment(lib, "ws2_32")
 #include <iostream>
 #include <WinSock2.h>
 #include <process.h>
 #include <map>
+#include <string>
+#include <mysql.h>
+#include "ConfigParser.h"
+#include "Config.h"
+#include "LogUtil.h"
 #include "Packet.h"
 #include "RingBuffer.h"
 #include "Session.h"

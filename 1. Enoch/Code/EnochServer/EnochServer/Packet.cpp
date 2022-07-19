@@ -2,13 +2,13 @@
 #include "Packet.h"
 
 Packet::Packet()
-	: err(E_NOERROR), front(0), rear(0), size(DEFAULT_PACKET_SIZE)
+	: err(PacketError::E_NOERROR), front(0), rear(0), size(DEFAULT_PACKET_SIZE)
 {
 	buf = new char[DEFAULT_PACKET_SIZE];
 }
 
 Packet::Packet(int iBufferSize)
-	: err(E_NOERROR), front(0), rear(0), size(iBufferSize)
+	: err(PacketError::E_NOERROR), front(0), rear(0), size(iBufferSize)
 {
 	buf = new char[iBufferSize];
 }
@@ -55,6 +55,17 @@ int Packet::MoveReadPos(int iSize)
 	return iSize;
 }
 
+Packet* Packet::newPacket()
+{
+	//TODO 추후 메모리풀 추가시 메모리풀에서 꺼내도록 조치
+	return new Packet();
+}
+
+void Packet::delPacket(Packet* packet)
+{
+	delete packet;
+}
+
 int Packet::GetData(char* chpDest, int iSize)
 {
 	int useSize = GetDataSize();
@@ -73,7 +84,7 @@ int Packet::PutData(char* chpSrc, int iSrcSize)
 	int freeSize = GetBufferSize() - rear;
 	if (freeSize < iSrcSize)
 	{
-		err = E_PUTDATA_ERROR;
+		err = PacketError::E_PUTDATA_ERROR;
 		return -1;
 	}
 
@@ -105,7 +116,7 @@ Packet& Packet::operator << (char chValue)
 	}
 	else
 	{
-		err = E_PUTDATA_ERROR;
+		err = PacketError::E_PUTDATA_ERROR;
 	}
 
 	return *this;
@@ -120,7 +131,7 @@ Packet& Packet::operator << (short shValue)
 	}
 	else
 	{
-		err = E_PUTDATA_ERROR;
+		err = PacketError::E_PUTDATA_ERROR;
 	}
 
 	return *this;
@@ -136,7 +147,7 @@ Packet& Packet::operator << (int iValue)
 	}
 	else
 	{
-		err = E_PUTDATA_ERROR;
+		err = PacketError::E_PUTDATA_ERROR;
 	}
 
 	return *this;
@@ -151,7 +162,7 @@ Packet& Packet::operator << (float fValue)
 	}
 	else
 	{
-		err = E_PUTDATA_ERROR;
+		err = PacketError::E_PUTDATA_ERROR;
 	}
 
 	return *this;
@@ -166,7 +177,7 @@ Packet& Packet::operator << (__int64 iValue)
 	}
 	else
 	{
-		err = E_PUTDATA_ERROR;
+		err = PacketError::E_PUTDATA_ERROR;
 	}
 
 	return *this;
@@ -180,7 +191,7 @@ Packet& Packet::operator << (double dValue)
 	}
 	else
 	{
-		err = E_PUTDATA_ERROR;
+		err = PacketError::E_PUTDATA_ERROR;
 	}
 
 	return *this;
@@ -196,7 +207,7 @@ Packet& Packet::operator >> (char& chValue)
 	}
 	else
 	{
-		err = E_GETDATA_ERROR;
+		err = PacketError::E_GETDATA_ERROR;
 	}
 
 	return *this;
@@ -211,7 +222,7 @@ Packet& Packet::operator >> (short& shValue)
 	}
 	else
 	{
-		err = E_GETDATA_ERROR;
+		err = PacketError::E_GETDATA_ERROR;
 	}
 
 	return *this;
@@ -226,7 +237,7 @@ Packet& Packet::operator >> (int& iValue)
 	}
 	else
 	{
-		err = E_GETDATA_ERROR;
+		err = PacketError::E_GETDATA_ERROR;
 	}
 
 	return *this;
@@ -241,7 +252,7 @@ Packet& Packet::operator >> (float& fValue)
 	}
 	else
 	{
-		err = E_GETDATA_ERROR;
+		err = PacketError::E_GETDATA_ERROR;
 	}
 
 	return *this;
@@ -256,7 +267,7 @@ Packet& Packet::operator >> (__int64& iValue)
 	}
 	else
 	{
-		err = E_GETDATA_ERROR;
+		err = PacketError::E_GETDATA_ERROR;
 	}
 
 	return *this;
@@ -270,7 +281,7 @@ Packet& Packet::operator >> (double& dValue)
 	}
 	else
 	{
-		err = E_GETDATA_ERROR;
+		err = PacketError::E_GETDATA_ERROR;
 	}
 
 	return *this;

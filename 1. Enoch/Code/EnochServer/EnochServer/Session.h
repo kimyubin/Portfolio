@@ -28,6 +28,9 @@ public:
 	void Lock();
 	void Unlock();
 
+	static Session* newSession(SOCKET s, SOCKADDR_IN& sAddr, LONGLONG ID);
+	static void delSession(Session *session);
+
 private:
 	SOCKET sock;
 	LONGLONG sessionID;

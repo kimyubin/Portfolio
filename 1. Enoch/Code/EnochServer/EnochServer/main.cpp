@@ -8,7 +8,7 @@ int main()
 	//initNetwork();
 	//InitContents();
 
-	//여기서while걸지말고 listen쪽 스레드를 메인이 먹도록 수정??
+	//TODO 모니터링출력
 	while (1)
 	{
 		//system("pause");

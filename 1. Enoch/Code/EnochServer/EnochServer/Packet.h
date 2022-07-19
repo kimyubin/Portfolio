@@ -3,7 +3,7 @@
 
 #define DEFAULT_PACKET_SIZE 5000
 
-enum PacketError { E_NOERROR = 0, E_PUTDATA_ERROR, E_GETDATA_ERROR };
+enum class PacketError { E_NOERROR = 0, E_PUTDATA_ERROR, E_GETDATA_ERROR };
 
 class Packet
 {
@@ -23,9 +23,8 @@ public:
 	int MoveWritePos(int iSize);
 	int MoveReadPos(int iSize);
 
-
-
-
+	static Packet* newPacket();
+	static void delPacket(Packet *packet);
 
 
 	// 연산자 오버로딩

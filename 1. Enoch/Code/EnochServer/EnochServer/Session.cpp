@@ -119,3 +119,14 @@ void Session::Unlock()
 {
 	ReleaseSRWLockExclusive(&sessionLock);
 }
+
+Session* Session::newSession(SOCKET s, SOCKADDR_IN& sAddr, LONGLONG ID)
+{
+	//TODO 추후 풀 추가 시 풀에서 꺼내도록 수정
+	return new Session(s, sAddr, ID);
+}
+
+void Session::delSession(Session* session)
+{
+	delete session;
+}

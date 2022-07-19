@@ -6,7 +6,7 @@ Packet *Echo(LONGLONG sessionID, Packet& p)
 	Player* player = (*playerList.find(sessionID)).second;
 	ReleaseSRWLockExclusive(&playerListLock);
 
-	Packet* packet = new Packet();
+	Packet* packet = Packet::newPacket();
 	*packet = p;
 
 	//헤더 타입을 packet에 추가??

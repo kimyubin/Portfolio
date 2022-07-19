@@ -2,24 +2,24 @@
 
 bool Server::initServer()
 {
+	config.init();
+
 	//protoSessionManager 사용중 -> 임시 세션매니저니 추후 변경할 것
 	sessionManager = new ProtoSessionManager();
 
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) return false;
 
-	hcp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, RUNNING_CNT);
+	hcp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, config.getRunningCnt());
 
 	if (hcp == NULL) return false;
-
-	HANDLE hThread;
 
 	hAcceptThread = (HANDLE)_beginthreadex(NULL, 0, AcceptThreadInit, this, 0, NULL);
 	if (hAcceptThread == NULL) return false;
 
-	hWorkerThread = new HANDLE[THREAD_CNT];
+	hWorkerThread = new HANDLE[config.getThreadCnt()];
 
-	for (int i = 0; i < THREAD_CNT; i++)
+	for (int i = 0; i < config.getThreadCnt(); i++)
 	{
 		hWorkerThread[i] = (HANDLE)_beginthreadex(NULL, 0, WorkerThreadInit, this, 0, NULL);
 		if (hWorkerThread[i] == NULL) return false;
@@ -49,7 +49,12 @@ PROCRESULT Server::CompleteRecvPacket(Session* session)
 	if (session->GetRecvQ().Dequeue(payload, header.len) != header.len)
 		return PROCRESULT::FAIL;
 
-	OnRecv(session->GetID(), payload, header.messageType);
+	Packet *packet = OnRecv(session->GetID(), payload, header.messageType);
+
+	if (packet != NULL)
+	{
+		Packet::delPacket(packet);
+	}
 
 	return PROCRESULT::SUCCESS;
 }
@@ -80,18 +85,21 @@ bool Server::SendPacket(LONGLONG sessionID, Header header, Packet& p)
 	return true;
 }
 
-void Server::OnRecv(LONGLONG sessionID, Packet& p, MessageType type)
+Packet* Server::OnRecv(LONGLONG sessionID, Packet& p, MessageType type)
 {
+	Packet* packet = NULL;
 	switch (type)
 	{
 		//요부분 header와 패킷을 합쳐서 헤더조립도 각 메시지에 대응될 수 있도록 수정 필요함
 	case MessageType::REQ_ECHO:
-		Packet *packet =Echo(sessionID, p);
+		packet =Echo(sessionID, p);
 		Header header;
 		header.messageType = MessageType::RES_ECHO;
 		SendPacket(sessionID, header, *packet);
 		break;
 	}
+
+	return packet;
 }
 
 void Server::OnClientLeave(LONGLONG sessionID)
@@ -192,7 +200,7 @@ bool Server::WorkerThread()
 
 			InterlockedExchange8((CHAR*)&session->GetSocketActive(), FALSE);
 			closesocket(session->GetSocket());
-			printf("transffer 0 %lu\n", session->GetSocket());
+			printf("transffer 0 %lu\n", (unsigned long)session->GetSocket());
 		}
 
 		if (pOverlapped->type == TYPE::RECV)
@@ -241,27 +249,27 @@ bool Server::AcceptThread()
 	if (listenSock == INVALID_SOCKET)
 	{
 		printf("socket error\n");
-		return -1;
+		return false;
 	}
 
 	SOCKADDR_IN serveraddr;
 	ZeroMemory(&serveraddr, sizeof(serveraddr));
 	serveraddr.sin_family = AF_INET;
 	serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	serveraddr.sin_port = htons(PORT);
+	serveraddr.sin_port = htons(config.getPort());
 	int retval = bind(listenSock, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
 
 	if (retval == SOCKET_ERROR)
 	{
 		printf("bind error\n");
-		return -1;
+		return false;
 	}
 
 	retval = listen(listenSock, SOMAXCONN);
 	if (retval == SOCKET_ERROR)
 	{
 		printf("listen error\n");
-		return -1;
+		return false;
 	}
 
 	//Session* session;

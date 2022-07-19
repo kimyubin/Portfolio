@@ -33,6 +33,9 @@
     <Filter Include="소스 파일\NetWork\Server">
       <UniqueIdentifier>{edd3dd83-6c9a-4ba0-aae8-8eff6200dcdc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\DB">
+      <UniqueIdentifier>{789975e8-5406-4f21-b48b-6a0af65a2d27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -58,6 +61,15 @@
     </ClCompile>
     <ClCompile Include="Server.cpp">
       <Filter>소스 파일\NetWork\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="LogUtil.cpp">
+      <Filter>소스 파일\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigParser.cpp">
+      <Filter>소스 파일\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>소스 파일\Config</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +105,15 @@
     </ClInclude>
     <ClInclude Include="Server.h">
       <Filter>소스 파일\NetWork\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="LogUtil.h">
+      <Filter>소스 파일\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigParser.h">
+      <Filter>소스 파일\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>소스 파일\Config</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

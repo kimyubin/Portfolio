@@ -16,6 +16,7 @@ class ENOCH_API ULevelDefaultMainUI : public UUserWidget
 	GENERATED_BODY()
 public:
 	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 	
 	UPROPERTY(BlueprintReadOnly)
 	class APulicSlotImgArr* PublicSlotImgArrActor;

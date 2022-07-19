@@ -9,7 +9,7 @@ ProtoSessionManager::ProtoSessionManager() {
 Session *ProtoSessionManager::createSession(SOCKET s, SOCKADDR_IN& sAddr) {
 
 	LONGLONG id = InterlockedIncrement64(&lastSessionId);
-	Session* session = new Session(s, sAddr, id);
+	Session* session = Session::newSession(s, sAddr, id);
 	InterlockedAdd((LONG*)&session->GetIOCount(), 1);
 
 	return session;
@@ -49,5 +49,5 @@ void ProtoSessionManager::removeSession(Session& session) {
 }
 
 void ProtoSessionManager::deleteSession(Session& session) {
-	delete &session;
+	Session::delSession(&session);
 }
