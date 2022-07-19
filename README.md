@@ -9,11 +9,12 @@
     1. [Game Engines](#game-engines)
     1. [Tools](#tools)
 1. [게임 목록](#게임-목록)
-    1. [Enoch](#1-enoch)
-    1. [FlatformLand](#2-flatformland)    
-    1. [BeyondtheSky(하늘 너머로)](#3-beyondthesky하늘-너머로)
-    1. [tentacles](#4-tentacles)
-    1. [yubintest](#5-yubintest)
+    1. [Everymino](#1-everymino)
+    1. [Enoch](#2-enoch)
+    1. [FlatformLand](#3-flatformland)    
+    1. [BeyondtheSky(하늘 너머로)](#4-beyondthesky하늘-너머로)
+    1. [tentacles](#5-tentacles)
+    1. [yubintest](#6-yubintest)
 
 ## 개요
 * 포트폴리오 및 깃허브 리포지토리에 대한 설명입니다.
@@ -63,15 +64,15 @@
     * 기본 문법을 이해하고 활용할 수 있습니다.
 
 ### Game Engines
-* **Unreal Engine**
+* **Unreal Engine 4/5**
     * 기본적인 기능 사용이 가능하고, 엔진 구조에 대한 개괄적인 이해를 갖추고 있습니다.
     * C++ 기반 프로그래밍이 가능합니다. 
     * UMG(UI) 개발이 가능합니다.
     * C++코드와 블루프린트의 차이를 이해하고 있고, 각자의 역할에 따라 사용할 수 있습니다.
     * 블루프린트로 짜여진 로직을 C++로 재구성할 수 있습니다. 
     * 엔진 코드를 참고하고, 구조를 파악하면서 코딩할 수 있습니다.
-    * 현재 취미용 팀 프로젝트를 진행하고 있습니다.
-
+    * 현재 취미용 팀 프로젝트([Enoch](#2-enoch))와 개인 프로젝트([Everymino](#1-everymino))를 진행하고 있습니다.
+<br>
 * **Unity**
     * 기본적인 기능 활용 및 게임 개발이 가능합니다.
     * UGUI를 활용한 UI구성, 개발이 가능합니다.
@@ -91,11 +92,41 @@
 
 ## 게임 목록
 * 최근 프로젝트부터 역순으로 정렬되어 있습니다. 항목명은 폴더명을 기준으로 작성되어져 있습니다.
-* Enoch 프로젝트는 현재 진행 중입니다.
+* Enoch, Everymino 프로젝트는 현재 진행 중입니다.
 
+
+### 1. Everymino
+<img src="./Images/Everymino01.png" width="40%"></img>
+
+|프로젝트 명|Everymino|
+|:---|:---|
+|유형|언리얼 엔진 개인 프로젝트|
+|개발 목적|취미|
+|개발 기간|2022.06 ~ 진행중|
+|엔진 버전|Unreal Engine 5.0.2|
 <br>
 
-### 1. Enoch
+* **설명**
+    * 4방향 테트리스
+    * 상하좌우에서 내려오는 블록으로 중앙 정사각형 공간을 채워, 특정 모양을 만들면 블록이 지워지는 게임
+    * 프로젝트 초기라 미구현된 항목이 많습니다.
+<br>
+
+* **구현 목록**
+    * 마우스 휠을 통한 카메라 줌인, 줌아웃
+    * WASD로 4방향에서 내려오는 블록 선택
+    * 방향키로 블록 이동
+    * X,C키로 블록 회전 
+    * 벽, 바닥에 닿은 상태에서 회전(Wall Kick)<sup id="f0">[w](#fn0)</sup> 구현
+    * 추후 키변경 기능(미구현)을 위한 중간 로직 구현
+    * 블루프린트에서 게임보드 규격 변경(BP_EMPlayData)    
+    * 1칸 단위로 블록 스킨 변경 기능(단위 블록(Unit))
+
+><b id="fn0">w.</b> 참고자료: https://tetris.fandom.com/wiki/Wall_kick [↩](#f0)    
+
+<br><div style="page-break-after: always;"></div>
+
+### 2. Enoch
 <img src="./Images/Enoch01.png" width="65%"></img>
 <img src="./Images/Enoch02.png" width="65%"></img><br>
 
@@ -177,7 +208,7 @@
 
 <br><br><div style="page-break-after: always;"></div>
 
-### 2. FlatformLand
+### 3. FlatformLand
 <img src="./Images/FlatformLand01.png" width="65%"></img>
 <img src="./Images/FlatformLand02.png" width="65%"></img>
 
@@ -200,7 +231,7 @@
 
 <br><br><div style="page-break-after: always;"></div>
 
-### 3. BeyondtheSky(하늘 너머로)
+### 4. BeyondtheSky(하늘 너머로)
 <img src="./Images/BeyondtheSky000.png" width="60%"></img>
 <img src="./Images/BeyondtheSky001.png" width="60%"></img>
 
@@ -228,7 +259,7 @@
 
 <br><br><div style="page-break-after: always;"></div>
 
-### 4. tentacles
+### 5. tentacles
 <img src="./Images/tentacles01.PNG" width="65%"></img>
 <img src="./Images/tentacles02.PNG" width="65%"></img>
 
@@ -259,7 +290,7 @@
 
 <br><br>
 
-### 5. yubintest
+### 6. yubintest
 <img src="./Images/yubintest01.PNG" width="65%"></img>
 
 |프로젝트 명|yubintest|
