@@ -30,4 +30,21 @@ public:
 
 	/** 유닛 파괴 처리. 파괴하고 nullptr처리까지함.*/
 	static void DestroyUnit(AEMUnitBrick** InUnit);
+
+	/**
+	 * 덧셈 오버플러우 방지. 
+	 * T 타입의 최대값보다 큰 값이 들어오면 최대값만 적용.
+	 * InOutAugend(피가수)에 Addend(가수)를 대입 연산함
+	 * @param InOutAugend 더해지는 대상. 값이 변함
+	 * @param Addend 더하고 싶은 수
+	 */
+	template< typename T >
+	static void MaxLimitAdder(T &InOutAugend, const T& Addend)
+	{
+		T Sub = TNumericLimits<T>::Max() - Addend;
+		if(InOutAugend < Sub)
+			InOutAugend += Addend;
+		else	
+			InOutAugend = TNumericLimits<T>::Max();	
+	}
 };

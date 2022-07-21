@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <bitset>
+
 #include "CoreMinimal.h"
 #include "BrickTemplate.h"
 #include "GameFramework/Actor.h"
@@ -23,50 +25,67 @@ public:
 	
 	void InitBrick(class ABrickBoardManager* InOwnerBoardManager, EDropStartDirection InStartDirection);
 	
+	/** 초기 위치로 이동 후 새로운 브릭으로 재구성*/
 	void NewBrick();
-
-	/** 인풋 정보 취합 후 행동 결정*/
-	void PassInput(EMInput InInput);
-	
-	/** DropBrickData 회전 */
-	void SpinBrick(EMInput SpinInput);
-	/** 데이터 검증 후 Brick유닛 위치까지 변경.*/
-	void SpinDropBrick(EMInput InInput);
 	
 	/**
 	 * DropBrick정보를 바탕으로 DroppingUnits을 업데이트함.
 	 * 변경점이 있는 경우만 업데이트 그외에는 기존 유닛 사용
 	 */
 	void UpdateDropBrick();
-		
-	/** DropBrickData 이동 좌,우, 소프트, 하드 드롭 지정	 */
-	void MoveDropBrick(EMInput InInput);
 
-	/** 베이스 포인트만 이동*/
-	void MoveBasePoint(EMInput InInput);
+	/** 인풋 정보 취합 후 행동 결정*/
+	void PassInput(bitset<32> InPressInputBS);
+	
+
+	/** DropBrickData 회전 */
+	void SpinBrickData(EMInput SpinInput);
+	
+	/** 데이터 검증 후 Brick유닛 위치까지 변경.*/
+	void SpinDropBrick(EMInput InInput);
+	
+	/**
+	 * 베이스 포인트만 이동
+	 * @return 이동 성공하면 이동 후 true, 실패하면 이동하지 않고 false
+	 */
+	bool MoveBasePoint(EMInput InInput);
+	
+	/** DropBrickData 이동 좌,우만 제어	 */
+	void ShiftDropBrick(EMInput InInput);
 
 	/** 호출 시 각 브릭의 시작 위치에 따른 소프트 드롭 방향으로 1칸 이동*/
 	void MoveSoftDrop();
+	
 	void MoveHardDrop();
 
 	/** 지정된 위치로 유닛 이동*/
 	void MoveBrickUnits();
 
+	/** 예상 투하 위치 표시*/
+	void DrawGhostBrick();
+
 	bool CheckBoard();
 
+	/** 현재 선택되어 조작 중인 브릭인지 판단*/
+	void SetIsSelected(bool InSelected);
+	/** 이동 버튼 뗄 때 발동*/
+	void SetMoveButtonRelease();
+	
 	/** 인덱스 값에 대한 스킨 정보*/
-	UnitSkin GetUnitSkin(int InX, int InY) const { return Brick[InY][InX]; }
+	UnitSkin GetUnitSkin(int InX, int InY) const;
 
 	/** 원점 대비 유닛의 상대좌표.*/
 	FVector2D GetUnitLocation(int InX, int InY) const;
 
+	//Variables
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USceneComponent> TransformComponent;
 	
 	UPROPERTY()
 	class ABrickBoardManager* OwnerBoardManager;
-	
+
+
 	EDropStartDirection MyStartDirection;	//떨어지는 곳. 사분면.	
 	FVector2D BasePoint;					//브릭의 위치의 기준이 되는 좌표. 브릭의 좌상단임.
 	BrickType MyBrickType;					//현재 브릭 모양
@@ -77,6 +96,11 @@ public:
 	vector<vector<class AEMUnitBrick*>> DropBrickUnits;
 
 private:
-	//소프트 드랍용 누적 시간
-	float SoftDropCumulativeTime;
+	bool IsSelected;						//현재 선택되어 조작 중인 브릭인지 판단
+	
+	float AutoFallingCumulativeTime;		//자동 낙하 측정용 누적 시간	
+	float SoftDropFactorCumulativeTime;		//소프트 드랍 간격 측정용 누적 시간
+	float DelayedAutoShiftCumulativeTime;	//자동 이동 대기 측정용 누적 시간. 버튼 누른시간
+	float AutoRepeatRateCumulativeTime;		//자동 이동 간격  측정용 누적 시간
+	bool IsDasFirstMove;					//DAS 측정시 최초 1회는 즉각 반응하기 위함. 최초 입력에서 true를 유지하기 위해, IsSelected가 false가 될 때 true로 초기화. 이동 버튼 뗄때 true로 초기화.
 };

@@ -45,15 +45,14 @@ public:
 	 */
 	pair<bool, int> LineClearCheck();
 	
-	void DrawGhostBrick();
-	
 	/** 입력 처리*/
-	void SetPressInput(EMInput InInput) { PressInputBS.set(EnumToInt(InInput)); }
-	void SetReleasedInput(EMInput InInput) { PressInputBS.reset(EnumToInt(InInput)); }
-	void SetCurrentControlZone(EDropStartDirection InZone) { CurrentControlZone = InZone; }
+	void SetPressInput(EMInput InInput);
+	void SetReleasedInput(EMInput InInput);
+	void PressedRotateInput(EMInput InInput);
+	void PressedHardDrop();
+	void SetCurrentControlZone(EDropStartDirection InZone);
 
-	class AEMPlayData* GetPlayerDataPtr() { return PlayerDataPtr; }
-
+	class AEMPlayData* GetPlayerDataPtr();
 
 private:
 
@@ -74,9 +73,6 @@ private:
 	/** 키입력 데이터 모음 비트셋. 다중입력을 위해 비트플래그 사용 */
 	bitset<32> PressInputBS;
 	
-	/** 누적된 시간. */
-	float CumulativeTime;
-
 	/** 현재 조작하고 있는 사면*/
 	EDropStartDirection CurrentControlZone;
 	

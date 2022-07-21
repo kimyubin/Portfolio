@@ -20,7 +20,6 @@ ABrickBoardManager::ABrickBoardManager()
 	TransformComponent = CreateDefaultSubobject<USceneComponent>(TEXT("TransformComp"));
 	RootComponent = TransformComponent;
 	HoldBrickType = BrickType::None;
-	CumulativeTime = 0.f;
 	PressInputBS.reset();
 	CurrentControlZone = EDropStartDirection::North;
 }
@@ -43,48 +42,21 @@ void ABrickBoardManager::BeginPlay()
 		DropBricks[i]->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		DropBricks[i]->InitBrick(this, static_cast<EDropStartDirection>(i));
 	}
-	
+	//선택된 사분면 정보전달.
+	DropBricks[EnumToInt(CurrentControlZone)]->SetIsSelected(true);
 }
 
 void ABrickBoardManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	//오버플로우 방지
-	CumulativeTime = FMath::Clamp(CumulativeTime + DeltaTime, 0.f, PlayerDataPtr->GetDelayedAutoShift() + 1.f);
-
 	LockDownCheck();
 
-	//todo 입력을 각 브릭으로 직접 토스해서, 브릭 tick에서 직접 컨트롤하게 변경. 
-	if (CumulativeTime >= PlayerDataPtr->GetDelayedAutoShift())
-	{
-		if(PressInputBS.any())
-		{
-			//동시 입력계산을 위해 비트셋 사용
-			if (PressInputBS.test(EnumToInt(EMInput::AntiClockwise)))
-				DropBricks[EnumToInt(CurrentControlZone)]->PassInput(EMInput::AntiClockwise);
-			if (PressInputBS.test(EnumToInt(EMInput::Clockwise)))
-				DropBricks[EnumToInt(CurrentControlZone)]->PassInput(EMInput::Clockwise);
-
-			if (PressInputBS.test(EnumToInt(EMInput::LeftMove)))
-				DropBricks[EnumToInt(CurrentControlZone)]->PassInput(EMInput::LeftMove);
-			if (PressInputBS.test(EnumToInt(EMInput::RightMove)))
-				DropBricks[EnumToInt(CurrentControlZone)]->PassInput(EMInput::RightMove);
-			if (PressInputBS.test(EnumToInt(EMInput::UpMove)))
-				DropBricks[EnumToInt(CurrentControlZone)]->PassInput(EMInput::UpMove);
-			if (PressInputBS.test(EnumToInt(EMInput::DownMove)))
-				DropBricks[EnumToInt(CurrentControlZone)]->PassInput(EMInput::DownMove);
-			
-			CumulativeTime = 0.f;
-		}
-		//PressInputBS.any() or 소프트 드롭 직후에만 계산.
-	}
-	
-	if (PressInputBS.test(EnumToInt(EMInput::HardDrop)))
-		DropBricks[EnumToInt(CurrentControlZone)]->MoveDropBrick(EMInput::HardDrop);
+	//상하 좌우 이동만 제어
+	if (PressInputBS.any())	
+		DropBricks[EnumToInt(CurrentControlZone)]->PassInput(PressInputBS);	
 
 	LineClearCheck();
-
 }
 
 void ABrickBoardManager::InitSpawnBoard()
@@ -236,13 +208,47 @@ pair<bool, int> ABrickBoardManager::LineClearCheck()
 	return pair<bool, int>(false, 0);
 	
 }
-void ABrickBoardManager::DrawGhostBrick()
+
+void ABrickBoardManager::SetPressInput(EMInput InInput)
 {
-	// auto ghostBrick = DropBrickData;
-	// while(CheckBoard())
-	// {
-	// 	ghostBrick.BasePoint.Y++;			
-	// }
-	// ghostBrick.BasePoint.Y--;
-	
+	PressInputBS.set(EnumToInt(InInput));
 }
+
+void ABrickBoardManager::SetReleasedInput(EMInput InInput)
+{
+	PressInputBS.reset(EnumToInt(InInput));
+	
+	switch (InInput)
+	{
+	case EMInput::LeftMove:
+	case EMInput::RightMove:
+	case EMInput::UpMove:
+	case EMInput::DownMove:
+		DropBricks[EnumToInt(CurrentControlZone)]->SetMoveButtonRelease();
+		break;
+	default:break;
+	}	
+}
+
+void ABrickBoardManager::PressedRotateInput(EMInput InInput)
+{
+	DropBricks[EnumToInt(CurrentControlZone)]->SpinDropBrick(InInput);
+}
+void ABrickBoardManager::PressedHardDrop()
+{
+	DropBricks[EnumToInt(CurrentControlZone)]->MoveHardDrop();
+}
+
+void ABrickBoardManager::SetCurrentControlZone(EDropStartDirection InZone)
+{
+	//선택된 사분면 변경 및 해당 브릭에 정보 전달.
+	DropBricks[EnumToInt(CurrentControlZone)]->SetIsSelected(false);
+	CurrentControlZone = InZone;
+	DropBricks[EnumToInt(CurrentControlZone)]->SetIsSelected(true);
+}
+
+AEMPlayData* ABrickBoardManager::GetPlayerDataPtr()
+{
+	return PlayerDataPtr;
+}
+

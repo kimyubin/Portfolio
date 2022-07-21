@@ -8,8 +8,12 @@ FKey EBindKey::MoveUp = EKeys::Up;
 FKey EBindKey::MoveRight = EKeys::Right;
 FKey EBindKey::MoveDown = EKeys::Down;
 FKey EBindKey::MoveLeft = EKeys::Left;
+
+FKey EBindKey::HardDrop = EKeys::SpaceBar;
+
 FKey EBindKey::Clockwise = EKeys::C;
 FKey EBindKey::AntiClockwise = EKeys::X;
+
 FKey EBindKey::SelectNorth = EKeys::W;
 FKey EBindKey::SelectEast = EKeys::D;
 FKey EBindKey::SelectSouth = EKeys::S;

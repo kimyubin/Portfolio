@@ -130,8 +130,12 @@ struct EBindKey
 	static FKey MoveRight;
 	static FKey MoveDown;
 	static FKey MoveLeft;
+
+	static FKey HardDrop;
+	
 	static FKey Clockwise;
 	static FKey AntiClockwise;
+	
 	static FKey SelectNorth;
 	static FKey SelectEast;
 	static FKey SelectSouth;
@@ -145,8 +149,12 @@ struct EBindKey
 				MoveRight,
 				MoveDown,
 				MoveLeft,
+
+				HardDrop,
+			
 				Clockwise,
 				AntiClockwise,
+			
 				SelectNorth,
 				SelectEast,
 				SelectSouth,
@@ -162,8 +170,12 @@ struct EBindKey
 		MoveRight = InKeys[EnumToInt(EControlName::MoveRight)];
 		MoveDown = InKeys[EnumToInt(EControlName::MoveDown)];
 		MoveLeft = InKeys[EnumToInt(EControlName::MoveLeft)];
+
+		HardDrop = InKeys[EnumToInt(EControlName::HardDrop)];
+		
 		Clockwise = InKeys[EnumToInt(EControlName::Clockwise)];
 		AntiClockwise = InKeys[EnumToInt(EControlName::AntiClockwise)];
+		
 		SelectNorth = InKeys[EnumToInt(EControlName::SelectNorth)];
 		SelectEast = InKeys[EnumToInt(EControlName::SelectEast)];
 		SelectSouth = InKeys[EnumToInt(EControlName::SelectSouth)];
@@ -172,12 +184,17 @@ struct EBindKey
 	
 	enum class EControlName
 	{
+		
 		MoveUp,
 		MoveRight,
 		MoveDown,
 		MoveLeft,
+
+		HardDrop,
+			
 		Clockwise,
 		AntiClockwise,
+			
 		SelectNorth,
 		SelectEast,
 		SelectSouth,

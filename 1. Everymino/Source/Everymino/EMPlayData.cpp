@@ -29,7 +29,8 @@ AEMPlayData::AEMPlayData()
 	//기준 시간 초기화
 	DelayedAutoShift = 0.1f;
 	AutoRepeatRate = 0.05f;
-	AutoSoftDropTime = 0.f;
+	SoftDropFactor = 0.1f;
+	AutoFallingSpeed = 0.8f;
 	LockdownDelay = 0.f;
 	LockdownCount = 0.f;
 	AerialLockdownCount = 0.f;

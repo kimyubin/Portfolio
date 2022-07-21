@@ -88,12 +88,14 @@ public:
 	uint8 GetMaxBoardY() const { return CustomGameBoard.size(); }
 	FVector2D GetDropStartPoint(EDropStartDirection InStartDirection);	//드롭 브릭 시작 지점.
 
-	/** 좌우 자동 이동 발생까지 기준 시간. */
+	/** 꾹눌렀을 때, 좌우 자동 이동 발생까지의 지연되는 시간. */
 	float GetDelayedAutoShift() const { return DelayedAutoShift; }
-	/** 브릭 자동 이동 시간. 좌우 자동 이동 시 브릭이 움직이는 시간 간격. */
+	/** 꾹 눌렀을 때, 좌우 이동 시간 간격. 작을 수록 좌우 이동 속도 빨라짐.*/
 	float GetAutoRepeatRate() const { return AutoRepeatRate; }
-	/** 자동 소프트 드랍 간격 */
-	float GetAutoSoftDropTime() const { return AutoSoftDropTime; }
+	/** 수동 소프트 드랍 속도. 시간 간격. 소프트 드랍은 딜레이 없이 바로 움직임*/
+	float GetSoftDropFactor() const { return SoftDropFactor; }
+	/** 브릭 낙하속도 */
+	float GetAutoFallingSpeed() const { return AutoFallingSpeed; }
 	/** 비비기 할때 강제로 고정되는 시간 */
 	float GetLockdownDelay() const { return LockdownDelay; }
 	/** 비비기 할때 강제로 고정될 때까지 최대 횟수 */
@@ -143,15 +145,20 @@ private:
 	
 	////기준 시간
 	
-	/** 좌우 자동 이동 발생까지 기준 시간. */
+	/** 꾹 눌렀을 때, 좌우 자동 이동 발생까지의 지연되는 시간. */
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "RefTime")
 	float DelayedAutoShift;
-	/** 브릭 자동 이동 시간. 좌우 자동 이동 시 브릭이 움직이는 시간 간격. */
+	/** 꾹 눌렀을 때, 좌우 이동 시간 간격. 작을 수록 좌우 이동 속도 빨라짐.*/
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "RefTime")	
 	float AutoRepeatRate;
-	/** 자동 소프트 드랍 간격 */
+	
+	/** 수동 소프트 드랍 속도. 시간 간격. 소프트 드랍은 딜레이 없이 바로 움직임*/
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "RefTime")	
-	float AutoSoftDropTime;
+	float SoftDropFactor;	
+	/** 브릭 낙하속도 */
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "RefTime")	
+	float AutoFallingSpeed;
+	
 	/** 비비기 할때 강제로 고정되는 시간 */
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "RefTime")	
 	float LockdownDelay;

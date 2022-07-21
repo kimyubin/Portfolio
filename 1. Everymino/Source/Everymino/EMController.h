@@ -42,6 +42,9 @@ private:
 	void PressMoveRightKey();
 	void PressMoveDownKey();
 	void PressMoveLeftKey();
+
+	void PressHardDropKey();
+	
 	void PressClockwiseKey();
 	void PressAntiClockwiseKey();
 
@@ -49,8 +52,6 @@ private:
 	void ReleaseMoveRightKey();
 	void ReleaseMoveDownKey();
 	void ReleaseMoveLeftKey();
-	void ReleaseClockwiseKey();
-	void ReleaseAntiClockwiseKey();
 
 	/** 키 맵핑 델리게이트*/
 	FInputKeysDelegate InputKeysDelegate;

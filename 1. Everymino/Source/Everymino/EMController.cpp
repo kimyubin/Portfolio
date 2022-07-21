@@ -57,6 +57,9 @@ void AEMController::SetupBoardManagerInput()
 	BindPressKey(EBindKey::MoveRight, &AEMController::PressMoveRightKey);
 	BindPressKey(EBindKey::MoveDown, &AEMController::PressMoveDownKey);
 	BindPressKey(EBindKey::MoveLeft, &AEMController::PressMoveLeftKey);
+
+	BindPressKey(EBindKey::HardDrop, &AEMController::PressHardDropKey);
+	
 	BindPressKey(EBindKey::Clockwise, &AEMController::PressClockwiseKey);
 	BindPressKey(EBindKey::AntiClockwise, &AEMController::PressAntiClockwiseKey);
 
@@ -64,9 +67,6 @@ void AEMController::SetupBoardManagerInput()
 	BindReleaseKey(EBindKey::MoveRight, &AEMController::ReleaseMoveRightKey);
 	BindReleaseKey(EBindKey::MoveDown, &AEMController::ReleaseMoveDownKey);
 	BindReleaseKey(EBindKey::MoveLeft, &AEMController::ReleaseMoveLeftKey);
-	BindReleaseKey(EBindKey::Clockwise, &AEMController::ReleaseClockwiseKey);
-	BindReleaseKey(EBindKey::AntiClockwise, &AEMController::ReleaseAntiClockwiseKey);
-
 
     //https://gist.github.com/samuelmaddock/c0582aa8bf53c1ccd86a38463de261d3
 	// InputKeysDelegate.BindUFunction(this,FName("PressKey"));
@@ -109,12 +109,13 @@ void AEMController::PressMoveUpKey() { MyBoardManager->SetPressInput(EMInput::Up
 void AEMController::PressMoveRightKey() { MyBoardManager->SetPressInput(EMInput::RightMove); }
 void AEMController::PressMoveDownKey() { MyBoardManager->SetPressInput(EMInput::DownMove); }
 void AEMController::PressMoveLeftKey() { MyBoardManager->SetPressInput(EMInput::LeftMove); }
-void AEMController::PressClockwiseKey() { MyBoardManager->SetPressInput(EMInput::Clockwise); }
-void AEMController::PressAntiClockwiseKey() { MyBoardManager->SetPressInput(EMInput::AntiClockwise); }
+
+void AEMController::PressHardDropKey() { MyBoardManager->PressedHardDrop(); }
+
+void AEMController::PressClockwiseKey() { MyBoardManager->PressedRotateInput(EMInput::Clockwise); }
+void AEMController::PressAntiClockwiseKey() { MyBoardManager->PressedRotateInput(EMInput::AntiClockwise); }
 
 void AEMController::ReleaseMoveUpKey() { MyBoardManager->SetReleasedInput(EMInput::UpMove); }
 void AEMController::ReleaseMoveRightKey() { MyBoardManager->SetReleasedInput(EMInput::RightMove); }
 void AEMController::ReleaseMoveDownKey() { MyBoardManager->SetReleasedInput(EMInput::DownMove); }
 void AEMController::ReleaseMoveLeftKey() { MyBoardManager->SetReleasedInput(EMInput::LeftMove); }
-void AEMController::ReleaseClockwiseKey() { MyBoardManager->SetReleasedInput(EMInput::Clockwise); }
-void AEMController::ReleaseAntiClockwiseKey() { MyBoardManager->SetReleasedInput(EMInput::AntiClockwise); }

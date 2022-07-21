@@ -8,6 +8,7 @@
 #include "BrickBoardManager.h"
 #include "EMGamePlayStatics.h"
 #include "EMPlayData.h"
+#include "Everymino.h"
 
 AEMDropBrick::AEMDropBrick()
 {
@@ -20,7 +21,13 @@ AEMDropBrick::AEMDropBrick()
 	MyBrickType = BrickType::T;
 	MyBrickDirection = BrickDirection::UP;
 	Brick = vector<vector<UnitSkin>>();
-	SoftDropCumulativeTime = 0.f;
+	
+	AutoFallingCumulativeTime = 0.f;
+	SoftDropFactorCumulativeTime = 0.f;
+	DelayedAutoShiftCumulativeTime = 0.f;
+	AutoRepeatRateCumulativeTime = 0.f;
+	IsSelected = false;
+	IsDasFirstMove = true;
 }
 
 void AEMDropBrick::BeginPlay()
@@ -31,11 +38,25 @@ void AEMDropBrick::BeginPlay()
 void AEMDropBrick::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	SoftDropCumulativeTime += DeltaTime;
 	
-	if(SoftDropCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetAutoSoftDropTime())	
+	UEMGamePlayStatics::MaxLimitAdder(SoftDropFactorCumulativeTime, DeltaTime);
+	
+	UEMGamePlayStatics::MaxLimitAdder(AutoFallingCumulativeTime, DeltaTime);	
+	if(AutoFallingCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetAutoFallingSpeed())
+	{
 		MoveSoftDrop();
-	
+		AutoFallingCumulativeTime = 0.f;
+	}
+
+	//선택된 경우에만 카운팅
+	if(IsSelected)
+	{
+		UEMGamePlayStatics::MaxLimitAdder(DelayedAutoShiftCumulativeTime, DeltaTime);
+
+		//대기 시간 이후부터 카운팅.
+		if(DelayedAutoShiftCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetDelayedAutoShift())
+			UEMGamePlayStatics::MaxLimitAdder(AutoRepeatRateCumulativeTime, DeltaTime);
+	}
 }
 
 void AEMDropBrick::InitBrick(ABrickBoardManager* InOwnerBoardManager, EDropStartDirection InStartDirection)
@@ -67,8 +88,8 @@ void AEMDropBrick::InitBrick(ABrickBoardManager* InOwnerBoardManager, EDropStart
 
 		for (int dpX = 0; dpX < Brick[dpY].size(); ++dpX)
 		{
-			UnitSkin DataSkin = GetUnitSkin(dpX, dpY);
-			FVector2D UnitLoc = GetUnitLocation(dpX, dpY);
+			const UnitSkin DataSkin = GetUnitSkin(dpX, dpY);
+			const FVector2D UnitLoc = GetUnitLocation(dpX, dpY);
 			DropBrickUnits.back().push_back(UEMGamePlayStatics::SpawnUnit(UnitLoc, DataSkin, this));
 		}
 	}
@@ -93,106 +114,6 @@ void AEMDropBrick::NewBrick()
 	}
 	Brick = OwnerBoardManager->GetPlayerDataPtr()->GetBrickShape(MyBrickType, MyBrickDirection);
 	UpdateDropBrick();
-}
-
-void AEMDropBrick::PassInput(EMInput InInput)
-{
-	switch (MyStartDirection)
-	{
-	case EDropStartDirection::North:
-		if(InInput==EMInput::DownMove)
-		{
-			MoveSoftDrop();
-			return;
-		}					
-		break;
-	case EDropStartDirection::East:
-		if(InInput==EMInput::LeftMove)
-		{
-			MoveSoftDrop();
-			return;
-		}
-		break;
-	case EDropStartDirection::South:
-		if(InInput==EMInput::UpMove)
-		{
-			MoveSoftDrop();
-			return;
-		}
-		break;
-	case EDropStartDirection::West:
-		if(InInput==EMInput::RightMove)
-		{
-			MoveSoftDrop();
-			return;
-		}
-		break;
-	default:
-		break;
-	}	
-	switch (InInput)
-	{
-	case EMInput::AntiClockwise:
-	case EMInput::Clockwise:
-		SpinDropBrick(InInput);
-		break;
-	case EMInput::UpMove:
-	case EMInput::DownMove:
-	case EMInput::LeftMove:
-	case EMInput::RightMove:
-		MoveDropBrick(InInput);
-		break;
-	case EMInput::HardDrop:
-		break;
-	default:
-		break;
-	}
-}
-
-void AEMDropBrick::SpinBrick(EMInput SpinInput)
-{
-	int TempDir = EnumToInt(MyBrickDirection);
-	constexpr int MaxSize = EnumToInt(BrickDirection::Size);
-
-	if (SpinInput == EMInput::Clockwise)
-		TempDir = (TempDir + 1) % MaxSize;
-	else if (SpinInput == EMInput::AntiClockwise) //-1,0,1,2에 4를 더하고 나머지 연산하면 3,0,1,2
-		TempDir = ((TempDir - 1) + MaxSize) % MaxSize;
-	else
-		return;
-
-	MyBrickDirection = static_cast<BrickDirection>(TempDir);
-	Brick = OwnerBoardManager->GetPlayerDataPtr()->GetBrickShape(MyBrickType, MyBrickDirection);	
-}
-
-void AEMDropBrick::SpinDropBrick(EMInput InInput)
-{
-	//브릭 데이터 회전 후 검증
-	SpinBrick(InInput);
-
-	if (CheckBoard())
-	{
-		UpdateDropBrick();
-		return;
-	}
-
-	//회전 실패시 이동 후 검증.
-	const FVector2D PrevBasePoint = BasePoint;
-	for (int tryNum = 0; tryNum < 5; ++tryNum)
-	{
-		BasePoint += BrickTemplate::GetWallKickData(MyBrickType, MyBrickDirection, InInput, tryNum, MyStartDirection);
-		if (CheckBoard())
-		{
-			UpdateDropBrick();
-			return;
-		}
-		BasePoint = PrevBasePoint;
-	}
-	//모두 실패시 회전 원상복귀
-	if(InInput==EMInput::Clockwise)
-		SpinBrick(EMInput::AntiClockwise);
-	else
-		SpinBrick(EMInput::Clockwise);
 }
 
 void AEMDropBrick::UpdateDropBrick()
@@ -222,42 +143,96 @@ void AEMDropBrick::UpdateDropBrick()
 	}
 }
 
-
-void AEMDropBrick::MoveDropBrick(EMInput InInput)
+void AEMDropBrick::PassInput(bitset<32> InPressInputBS)
 {
-	auto PrvBasePoint = BasePoint;
-
-	switch (InInput)
+	//소프트 드랍 최소 간격마다 이동하게 제어
+	if (SoftDropFactorCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetSoftDropFactor())
 	{
-	case EMInput::LeftMove:
-	case EMInput::RightMove:
-	case EMInput::UpMove:
-	case EMInput::DownMove:
-		MoveBasePoint(InInput);
-		break;
-	case EMInput::HardDrop:
-		while (CheckBoard())
-		{
-			BasePoint.Y++;
-		}
-		BasePoint.Y--;
-		MoveBrickUnits();
-	//SetReleasedInput(EMInput::HardDrop);
-		return;
-		break;
-	default:
-		break;
-	};
+		SoftDropFactorCumulativeTime = 0.f;
 
-	if (CheckBoard())
-		MoveBrickUnits();
-	else
-		BasePoint = PrvBasePoint;
+		switch (MyStartDirection)
+		{
+		case EDropStartDirection::North:
+			if (InPressInputBS.test(EnumToInt(EMInput::DownMove)))
+				MoveSoftDrop();
+			break;
+		case EDropStartDirection::East:
+			if (InPressInputBS.test(EnumToInt(EMInput::LeftMove)))
+				MoveSoftDrop();
+			break;
+		case EDropStartDirection::South:
+			if (InPressInputBS.test(EnumToInt(EMInput::UpMove)))
+				MoveSoftDrop();
+			break;
+		case EDropStartDirection::West:
+			if (InPressInputBS.test(EnumToInt(EMInput::RightMove)))
+				MoveSoftDrop();
+			break;
+		default:
+			break;
+		}
+	}
+
+	//좌우 이동만 제어
+	if (InPressInputBS.test(EnumToInt(EMInput::DownMove)))
+		ShiftDropBrick(EMInput::DownMove);
+	if (InPressInputBS.test(EnumToInt(EMInput::LeftMove)))
+		ShiftDropBrick(EMInput::LeftMove);
+	if (InPressInputBS.test(EnumToInt(EMInput::UpMove)))
+		ShiftDropBrick(EMInput::UpMove);
+	if (InPressInputBS.test(EnumToInt(EMInput::RightMove)))
+		ShiftDropBrick(EMInput::RightMove);
 }
 
-void AEMDropBrick::MoveBasePoint(EMInput InInput)
+void AEMDropBrick::SpinBrickData(EMInput SpinInput)
 {
-	auto PrvBasePoint = BasePoint;
+	int TempDir = EnumToInt(MyBrickDirection);
+	constexpr int MaxSize = EnumToInt(BrickDirection::Size);
+
+	if (SpinInput == EMInput::Clockwise)
+		TempDir = (TempDir + 1) % MaxSize;
+	else if (SpinInput == EMInput::AntiClockwise) //-1,0,1,2에 4를 더하고 나머지 연산하면 3,0,1,2
+		TempDir = ((TempDir - 1) + MaxSize) % MaxSize;
+	else
+		return;
+
+	MyBrickDirection = static_cast<BrickDirection>(TempDir);
+	Brick = OwnerBoardManager->GetPlayerDataPtr()->GetBrickShape(MyBrickType, MyBrickDirection);	
+}
+
+void AEMDropBrick::SpinDropBrick(EMInput InInput)
+{
+	//브릭 데이터 회전 후 검증
+	SpinBrickData(InInput);
+
+	if (CheckBoard())
+	{
+		UpdateDropBrick();
+		return;
+	}
+
+	//회전 실패시 이동 후 검증.
+	const FVector2D PrevBasePoint = BasePoint;
+	for (int tryNum = 0; tryNum < 5; ++tryNum)
+	{
+		BasePoint += BrickTemplate::GetWallKickData(MyBrickType, MyBrickDirection, InInput, tryNum, MyStartDirection);
+		if (CheckBoard())
+		{
+			UpdateDropBrick();
+			return;
+		}
+		BasePoint = PrevBasePoint;
+	}
+	//모두 실패시 회전 원상복귀
+	if(InInput==EMInput::Clockwise)
+		SpinBrickData(EMInput::AntiClockwise);
+	else
+		SpinBrickData(EMInput::Clockwise);
+}
+
+bool AEMDropBrick::MoveBasePoint(EMInput InInput)
+{
+	const auto PrvBasePoint = BasePoint;
 
 	switch (InInput)
 	{
@@ -280,19 +255,66 @@ void AEMDropBrick::MoveBasePoint(EMInput InInput)
 	default:
 		break;
 	};
-	// if(CheckBoard())	
-	// 	MoveBrickUnits();
-	// else
+	
 	if (!CheckBoard())
+	{
 		BasePoint = PrvBasePoint;
+		return false;
+	}
+	return true;		
+}
+
+void AEMDropBrick::ShiftDropBrick(EMInput InInput)
+{
+	//좌우 이동만 허용 그 외엔 리턴.
+	//소프트 다운 입력에서 IsDasFirstMove이 false가 되는 현상 방지하므로써,
+	//소프트 다운과 좌우 이동 동시 입력 지원.
+	bool IsValidInput = false;
+	switch (MyStartDirection)
+	{
+	case EDropStartDirection::North:
+		if(InInput == EMInput::LeftMove||InInput == EMInput::RightMove)
+			IsValidInput = true;
+		break;
+	case EDropStartDirection::East:
+		if(InInput == EMInput::UpMove||InInput == EMInput::DownMove)
+			IsValidInput = true;
+		break;
+	case EDropStartDirection::South:
+		if(InInput == EMInput::LeftMove||InInput == EMInput::RightMove)
+			IsValidInput = true;
+		break;
+	case EDropStartDirection::West:
+		if(InInput == EMInput::UpMove||InInput == EMInput::DownMove)
+			IsValidInput = true;
+		break;
+	default:
+		break;
+	}
+	
+	if(!IsValidInput)
+		return;
+	
+	//IsDasFirstMove, 최초 입력시 바로 시작하고, 대기 시간 이후에는 일정 간격으로 이동..
+	if (IsDasFirstMove ||
+		DelayedAutoShiftCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetDelayedAutoShift())
+	{
+		if (IsDasFirstMove ||
+			AutoRepeatRateCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetAutoRepeatRate())
+		{
+			IsDasFirstMove = false;
+			AutoRepeatRateCumulativeTime = 0.f;
+
+			//이동 성공시에만 유닛 이동.
+			if (MoveBasePoint(InInput))
+				MoveBrickUnits();
+		}
+	}
 }
 
 void AEMDropBrick::MoveSoftDrop()
 {
 	EMInput Temp = EMInput::None;
-
-	if (SoftDropCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetAutoSoftDropTime())
-		SoftDropCumulativeTime = 0.f;
 
 	switch (MyStartDirection)
 	{
@@ -311,16 +333,37 @@ void AEMDropBrick::MoveSoftDrop()
 	default:
 		break;
 	}
-	MoveBasePoint(Temp);
-	MoveBrickUnits();
+	if(MoveBasePoint(Temp))
+		MoveBrickUnits();
 }
 
 void AEMDropBrick::MoveHardDrop()
 {
-	while (CheckBoard())
+	EMInput Inside = EMInput::None;
+	switch (MyStartDirection)
 	{
-		MoveSoftDrop();
+	case EDropStartDirection::North:
+		Inside = EMInput::DownMove;
+		break;
+	case EDropStartDirection::East:
+		Inside = EMInput::LeftMove;
+		break;
+	case EDropStartDirection::South:
+		Inside = EMInput::UpMove;
+		break;
+	case EDropStartDirection::West:
+		Inside = EMInput::RightMove;
+		break;
+	default:
+		break;
 	}
+	
+	bool IsMoveSuccess = true;
+	while (IsMoveSuccess)
+	{
+		IsMoveSuccess = MoveBasePoint(Inside);	
+	}
+	
 	MoveBrickUnits();
 }
 
@@ -339,9 +382,40 @@ void AEMDropBrick::MoveBrickUnits()
 	}
 }
 
+void AEMDropBrick::DrawGhostBrick()
+{
+	// auto ghostBrick = DropBrickData;
+	// while(CheckBoard())
+	// {
+	// 	ghostBrick.BasePoint.Y++;			
+	// }
+	// ghostBrick.BasePoint.Y--;
+	
+}
+
 bool AEMDropBrick::CheckBoard()
 {
 	return OwnerBoardManager->CheckBoard(this);
+}
+
+void AEMDropBrick::SetIsSelected(bool InSelected)
+{
+	IsSelected = InSelected;
+
+	//선택 변경 시 초기화.
+	if(!InSelected)
+		IsDasFirstMove = true;
+}
+
+void AEMDropBrick::SetMoveButtonRelease()
+{
+	IsDasFirstMove = true;
+	DelayedAutoShiftCumulativeTime = 0.f; 
+}
+
+UnitSkin AEMDropBrick::GetUnitSkin(int InX, int InY) const
+{
+	return Brick[InY][InX]; 
 }
 
 FVector2D AEMDropBrick::GetUnitLocation(int InX, int InY) const
