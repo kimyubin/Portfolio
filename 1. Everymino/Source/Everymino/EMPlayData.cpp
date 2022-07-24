@@ -6,6 +6,7 @@
 #include <random>
 
 #include "EMController.h"
+#include "EMSaveKeySettings.h"
 #include "Kismet/GameplayStatics.h"
 
 AEMPlayData::AEMPlayData()
@@ -85,8 +86,8 @@ vector<vector<UnitSkin>> AEMPlayData::GenerateGameBoard(uint16 InCenterWidth, ui
 	//샤프트 기준값 및 센터 기준값.
 	const int FrontShaftPoint = (TotalWidth - InShaftWidth) / 2 - 1;
 	const int BackShaftPoint = (TotalWidth + InShaftWidth) / 2;
-	const int FrontCenterPoint = TotalWidth - InCenterWidth - InShaftHeight - 1 - VanishZone;
-	const int BackCenterPoint = TotalWidth - InShaftHeight - VanishZone;
+	FrontCenterPoint = TotalWidth - InCenterWidth - InShaftHeight - 1 - VanishZone;
+	BackCenterPoint = TotalWidth - InShaftHeight - VanishZone;
 
 	//전체 초기화
 	vector<vector<UnitSkin>> Res(TotalWidth, vector<UnitSkin>(TotalWidth, UnitSkin::InvisibleWall));
@@ -268,13 +269,17 @@ void AEMPlayData::ChangeSaveKeySetting(EBindKey::EControlName TargetBindControl,
 	
 	Cast<AEMController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))->SetupBoardManagerInput();
 	
-	//todo 세이브 파일 변경 로직 추가
+	//셋팅 세이브
+	UEMSaveKeySettings* SaveObj = NewObject<UEMSaveKeySettings>();
+	SaveObj->SaveKeySettings();
 }
 
 void AEMPlayData::LoadKeySettings()
 {
-	//todo 저장 데이터에서 키세팅 불러오기. TArray<FKey>로 저장 관리할 예정
-	
+	UEMSaveKeySettings* LoadObj = Cast<UEMSaveKeySettings>(UGameplayStatics::LoadGameFromSlot(FString("KeySettings"), 0));
+	if(LoadObj!=nullptr)
+		LoadObj->LoadKeySettings();
+
 }
 
 

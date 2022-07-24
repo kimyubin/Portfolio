@@ -64,6 +64,12 @@ public:
 	/** 예상 투하 위치 표시*/
 	void DrawGhostBrick();
 
+	/**
+	 * 락다운 체크하고, 락다운이면 게임판에 부착 후 새 브릭 생성
+	 * @return 락다운이면 true
+	 */
+	bool LockDownCheck();
+	
 	bool CheckBoard();
 
 	/** 현재 선택되어 조작 중인 브릭인지 판단*/

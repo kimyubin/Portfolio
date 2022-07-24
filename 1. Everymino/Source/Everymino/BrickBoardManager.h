@@ -36,8 +36,9 @@ public:
 	/** DropBrick이 움직인 직후 유효성 검사 */
 	bool CheckBoard(class AEMDropBrick* InDropBrick);
 	
-	/** 강제 고정 확인 후 새 브릭 소환 */
-	bool LockDownCheck();
+
+	/** 드롭 브릭을 게임판에 부착 후 새 브릭 소환.*/
+	void AttachDropBrick(class AEMDropBrick* InDropBrick);
 	
 	/**
 	 * 라인이 지워지는지 확인.

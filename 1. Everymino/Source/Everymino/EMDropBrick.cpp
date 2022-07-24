@@ -8,7 +8,6 @@
 #include "BrickBoardManager.h"
 #include "EMGamePlayStatics.h"
 #include "EMPlayData.h"
-#include "Everymino.h"
 
 AEMDropBrick::AEMDropBrick()
 {
@@ -38,6 +37,8 @@ void AEMDropBrick::BeginPlay()
 void AEMDropBrick::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	LockDownCheck();
 	
 	UEMGamePlayStatics::MaxLimitAdder(SoftDropFactorCumulativeTime, DeltaTime);
 	
@@ -149,28 +150,11 @@ void AEMDropBrick::PassInput(bitset<32> InPressInputBS)
 	if (SoftDropFactorCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetSoftDropFactor())
 	{
 		SoftDropFactorCumulativeTime = 0.f;
-
-		switch (MyStartDirection)
-		{
-		case EDropStartDirection::North:
-			if (InPressInputBS.test(EnumToInt(EMInput::DownMove)))
-				MoveSoftDrop();
-			break;
-		case EDropStartDirection::East:
-			if (InPressInputBS.test(EnumToInt(EMInput::LeftMove)))
-				MoveSoftDrop();
-			break;
-		case EDropStartDirection::South:
-			if (InPressInputBS.test(EnumToInt(EMInput::UpMove)))
-				MoveSoftDrop();
-			break;
-		case EDropStartDirection::West:
-			if (InPressInputBS.test(EnumToInt(EMInput::RightMove)))
-				MoveSoftDrop();
-			break;
-		default:
-			break;
-		}
+		
+		EMInput MyInside = UEMGamePlayStatics::GetInsideDirection(MyStartDirection);
+		
+		if (InPressInputBS.test(EnumToInt(MyInside)))
+			MoveSoftDrop();
 	}
 
 	//좌우 이동만 제어
@@ -237,20 +221,16 @@ bool AEMDropBrick::MoveBasePoint(EMInput InInput)
 	switch (InInput)
 	{
 	case EMInput::UpMove:
-		if (MyStartDirection != EDropStartDirection::North)
-			BasePoint.Y--;
+		BasePoint.Y--;
 		break;
 	case EMInput::DownMove:
-		if (MyStartDirection != EDropStartDirection::South)
-			BasePoint.Y++;
+		BasePoint.Y++;
 		break;
 	case EMInput::RightMove:
-		if (MyStartDirection != EDropStartDirection::East)
-			BasePoint.X++;
+		BasePoint.X++;
 		break;
 	case EMInput::LeftMove:
-		if (MyStartDirection != EDropStartDirection::West)
-			BasePoint.X--;
+		BasePoint.X--;
 		break;
 	default:
 		break;
@@ -296,11 +276,11 @@ void AEMDropBrick::ShiftDropBrick(EMInput InInput)
 		return;
 	
 	//IsDasFirstMove, 최초 입력시 바로 시작하고, 대기 시간 이후에는 일정 간격으로 이동..
-	if (IsDasFirstMove ||
-		DelayedAutoShiftCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetDelayedAutoShift())
+	if (IsDasFirstMove
+		|| DelayedAutoShiftCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetDelayedAutoShift())
 	{
-		if (IsDasFirstMove ||
-			AutoRepeatRateCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetAutoRepeatRate())
+		if (IsDasFirstMove
+			|| AutoRepeatRateCumulativeTime >= OwnerBoardManager->GetPlayerDataPtr()->GetAutoRepeatRate())
 		{
 			IsDasFirstMove = false;
 			AutoRepeatRateCumulativeTime = 0.f;
@@ -314,49 +294,15 @@ void AEMDropBrick::ShiftDropBrick(EMInput InInput)
 
 void AEMDropBrick::MoveSoftDrop()
 {
-	EMInput Temp = EMInput::None;
+	const EMInput Inside = UEMGamePlayStatics::GetInsideDirection(MyStartDirection);
 
-	switch (MyStartDirection)
-	{
-	case EDropStartDirection::North:
-		Temp = EMInput::DownMove;
-		break;
-	case EDropStartDirection::East:
-		Temp = EMInput::LeftMove;
-		break;
-	case EDropStartDirection::South:
-		Temp = EMInput::UpMove;
-		break;
-	case EDropStartDirection::West:
-		Temp = EMInput::RightMove;
-		break;
-	default:
-		break;
-	}
-	if(MoveBasePoint(Temp))
+	if(MoveBasePoint(Inside))
 		MoveBrickUnits();
 }
 
 void AEMDropBrick::MoveHardDrop()
 {
-	EMInput Inside = EMInput::None;
-	switch (MyStartDirection)
-	{
-	case EDropStartDirection::North:
-		Inside = EMInput::DownMove;
-		break;
-	case EDropStartDirection::East:
-		Inside = EMInput::LeftMove;
-		break;
-	case EDropStartDirection::South:
-		Inside = EMInput::UpMove;
-		break;
-	case EDropStartDirection::West:
-		Inside = EMInput::RightMove;
-		break;
-	default:
-		break;
-	}
+	const EMInput Inside = UEMGamePlayStatics::GetInsideDirection(MyStartDirection);
 	
 	bool IsMoveSuccess = true;
 	while (IsMoveSuccess)
@@ -391,6 +337,27 @@ void AEMDropBrick::DrawGhostBrick()
 	// }
 	// ghostBrick.BasePoint.Y--;
 	
+}
+bool AEMDropBrick::LockDownCheck()
+{
+	const EMInput Inside = UEMGamePlayStatics::GetInsideDirection(MyStartDirection);
+
+	//베이스 포인트 하강 가능한지 확인.
+	if(MoveBasePoint(Inside))
+	{
+		//이동 가능. 락다운 아님
+		//베이스 포인트 원상복귀 
+		MoveBasePoint(UEMGamePlayStatics::GetOutsideDirection(MyStartDirection));
+		
+		return false;
+	}
+	else
+	{
+		//이동불가. 락다운 후 드롭 브릭 붙임. 
+		OwnerBoardManager->AttachDropBrick(this);
+
+		return true;	
+	}	
 }
 
 bool AEMDropBrick::CheckBoard()

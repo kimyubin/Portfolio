@@ -83,11 +83,15 @@ public:
 	/** 새로운 브릭 생성. 14bag으로 셔플 */
 	BrickType GetNewBrickType();
 
+	
 	/** getter */
 	uint8 GetMaxBoardX() const { return CustomGameBoard.front().size(); }
 	uint8 GetMaxBoardY() const { return CustomGameBoard.size(); }
 	FVector2D GetDropStartPoint(EDropStartDirection InStartDirection);	//드롭 브릭 시작 지점.
 
+	uint16 GetFrontCenterPoint() const { return FrontCenterPoint; }
+	uint16 GetBackCenterPoint() const { return BackCenterPoint; }
+	
 	/** 꾹눌렀을 때, 좌우 자동 이동 발생까지의 지연되는 시간. */
 	float GetDelayedAutoShift() const { return DelayedAutoShift; }
 	/** 꾹 눌렀을 때, 좌우 이동 시간 간격. 작을 수록 좌우 이동 속도 빨라짐.*/
@@ -134,16 +138,20 @@ private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "GameBoard")
 	uint16 ShaftHeight;
 	
-	/** 전체 게임판 한 변의 크기. ShaftHeight*2+CenterWidth로 계산됨. */
-	uint16 GameBoardWidth;
-	
 	/** 상하 좌우 여백 */
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "GameBoard")
 	uint16 VanishZone;
 
-
+	//계산된 값
 	
-	////기준 시간
+	/** 전체 게임판 한 변의 크기. ShaftHeight*2+CenterWidth로 계산됨. */
+	uint16 GameBoardWidth;
+	/** 중앙판 좌상단 좌표 */
+	uint16 FrontCenterPoint;
+	/** 중앙판 우하단 좌표 */
+	uint16 BackCenterPoint;
+	
+	//기준 시간
 	
 	/** 꾹 눌렀을 때, 좌우 자동 이동 발생까지의 지연되는 시간. */
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), Category = "RefTime")

@@ -50,8 +50,6 @@ void ABrickBoardManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	LockDownCheck();
-
 	//상하 좌우 이동만 제어
 	if (PressInputBS.any())	
 		DropBricks[EnumToInt(CurrentControlZone)]->PassInput(PressInputBS);	
@@ -112,6 +110,13 @@ bool ABrickBoardManager::CheckBoard(AEMDropBrick* InDropBrick)
 {
 	//각 드롭브릭이랑 검사도 추가해야함.
 	const vector<vector<UnitSkin>> InBrick = InDropBrick->Brick;
+
+	//중앙판 벽 위치
+	const uint16 CenterNorthBorder = PlayerDataPtr->GetFrontCenterPoint();
+	const uint16 CenterEastBorder = PlayerDataPtr->GetBackCenterPoint();
+	const uint16 CenterSouthBorder = PlayerDataPtr->GetBackCenterPoint();
+	const uint16 CenterWestBorder = PlayerDataPtr->GetFrontCenterPoint();
+	
 	for(int dby = 0; dby < InBrick.size();++dby)
 	{
 		for(int dbx = 0; dbx < InBrick[dby].size();++dbx)
@@ -119,13 +124,28 @@ bool ABrickBoardManager::CheckBoard(AEMDropBrick* InDropBrick)
 			//드롭 유닛이 존재하면
 			if (InBrick[dby][dbx] != UnitSkin::Empty)
 			{
-				FVector2D DropBrickPos = InDropBrick->GetUnitLocation(dbx,dby);
+				const FVector2D DropBrickPos = InDropBrick->GetUnitLocation(dbx,dby);
 				//경계 검사.
 				if (DropBrickPos.Y >= GameBoardData.size()
 					|| DropBrickPos.X >= GameBoardData.front().size()
 					|| DropBrickPos.Y < 0
 					|| DropBrickPos.X < 0)
-						return false;
+					return false;
+				//중앙판 경계 검사
+				//각 경계는 해당 사면에서 출발하는 브릭만 통과할 수 있음
+				if (InDropBrick->MyStartDirection != EDropStartDirection::North
+					&& DropBrickPos.Y <= CenterNorthBorder)
+					return false;
+				if (InDropBrick->MyStartDirection != EDropStartDirection::East
+					&& DropBrickPos.X >= CenterEastBorder)
+					return false;
+				if (InDropBrick->MyStartDirection != EDropStartDirection::South
+					&& DropBrickPos.Y >= CenterSouthBorder)
+					return false;
+				if (InDropBrick->MyStartDirection != EDropStartDirection::West
+					&& DropBrickPos.X <= CenterWestBorder)
+					return false;
+
 				// 유닛 겹침 검사.
 				if (GameBoardData[DropBrickPos.Y][DropBrickPos.X] != UnitSkin::Empty)
 					return false;
@@ -135,38 +155,25 @@ bool ABrickBoardManager::CheckBoard(AEMDropBrick* InDropBrick)
 	return true;
 }
 
-bool ABrickBoardManager::LockDownCheck()
+void ABrickBoardManager::AttachDropBrick(AEMDropBrick* InDropBrick)
 {
-	//내려갈 칸이 있는지 확인.
-	DropBricks[0]->BasePoint.Y++;
-		
-	bool isMoreDown = CheckBoard(DropBricks[0]);	
-	DropBricks[0]->BasePoint.Y--;
-	
-	//더이상 내려갈 수 없음
-	if(!isMoreDown)
+	for(int dby = 0; dby < InDropBrick->Brick.size();++dby)
 	{
-		//브릭을 게임판에 부착. 기존 유닛 재사용.
-		for(int dby = 0; dby < DropBricks[0]->Brick.size();++dby)
-		{
-			for(int dbx = 0; dbx < DropBricks[0]->Brick[dby].size();++dbx)
-			{			
-				if (DropBricks[0]->GetUnitSkin(dbx, dby) != UnitSkin::Empty)
-				{
-					FVector2D DropBrickPos = DropBricks[0]->GetUnitLocation(dbx,dby);
-					GameBoardData[DropBrickPos.Y][DropBrickPos.X] = DropBricks[0]->Brick[dby][dbx];
-					GameBoardUnits[DropBrickPos.Y][DropBrickPos.X] = DropBricks[0]->DropBrickUnits[dby][dbx];
-					GameBoardUnits[DropBrickPos.Y][DropBrickPos.X]->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
-					DropBricks[0]->DropBrickUnits[dby][dbx] = nullptr;
-				}
+		for(int dbx = 0; dbx < InDropBrick->Brick[dby].size();++dbx)
+		{			
+			if (InDropBrick->GetUnitSkin(dbx, dby) != UnitSkin::Empty)
+			{
+				FVector2D DropBrickPos = InDropBrick->GetUnitLocation(dbx,dby);
+				GameBoardData[DropBrickPos.Y][DropBrickPos.X] = InDropBrick->Brick[dby][dbx];
+				GameBoardUnits[DropBrickPos.Y][DropBrickPos.X] = InDropBrick->DropBrickUnits[dby][dbx];
+				GameBoardUnits[DropBrickPos.Y][DropBrickPos.X]->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+				InDropBrick->DropBrickUnits[dby][dbx] = nullptr;
 			}
 		}
-		//RebuildBoard();
-		DropBricks[0]->NewBrick();
 	}
-	
-	return !isMoreDown;
+	InDropBrick->NewBrick();
 }
+
 pair<bool, int> ABrickBoardManager::LineClearCheck()
 {
 	int LastClearFloor = 0;

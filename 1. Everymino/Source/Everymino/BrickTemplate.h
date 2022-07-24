@@ -18,7 +18,7 @@ enum class BrickType:uint8;
 enum class BrickDirection:uint8;
 enum class UnitSkin:uint8;
 enum class EMInput:uint8;
-enum class EDropStartDirection;
+enum class EDropStartDirection:uint8;
 /**
  * 브릭 좌상단 위치, 모양, 방향, 각 유닛의 상대 위치 보관
  */
@@ -113,7 +113,7 @@ enum class EMInput:uint8
 
 /** 드롭 시작 위치 지정. 북쪽부터 시계방향*/
 UENUM()
-enum class EDropStartDirection
+enum class EDropStartDirection:uint8
 {
 	North,	//북, 상
 	East,	//동, 우

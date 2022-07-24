@@ -25,3 +25,50 @@ void UEMGamePlayStatics::DestroyUnit(AEMUnitBrick** InUnit)
 	(*InUnit)->Destroy();
 	*InUnit = nullptr;
 }
+EMInput UEMGamePlayStatics::GetInsideDirection(EDropStartDirection InStartDirection)
+{
+	EMInput Res = EMInput::None;
+	
+	switch (InStartDirection)
+	{
+	case EDropStartDirection::North:
+		Res = EMInput::DownMove;
+		break;
+	case EDropStartDirection::East:
+		Res = EMInput::LeftMove;
+		break;
+	case EDropStartDirection::South:
+		Res = EMInput::UpMove;
+		break;
+	case EDropStartDirection::West:
+		Res = EMInput::RightMove;
+		break;
+	default:
+		break;
+	}
+	return Res;
+}
+
+EMInput UEMGamePlayStatics::GetOutsideDirection(EDropStartDirection InStartDirection)
+{
+	EMInput Res = EMInput::None;
+	
+	switch (InStartDirection)
+	{
+	case EDropStartDirection::North:
+		Res = EMInput::UpMove;
+		break;
+	case EDropStartDirection::East:
+		Res = EMInput::RightMove;
+		break;
+	case EDropStartDirection::South:
+		Res = EMInput::DownMove;
+		break;
+	case EDropStartDirection::West:
+		Res = EMInput::LeftMove;
+		break;
+	default:
+		break;
+	}
+	return Res;
+}
